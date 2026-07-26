@@ -1,0 +1,6 @@
+{
+  "name": "ChrisXauusd",
+  "description": "ChrisXauusd — Signaux de trading Or. Terminal de trading et générateur de signaux scalping XAU/USD en temps réel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

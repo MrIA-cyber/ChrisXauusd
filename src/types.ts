@@ -1,0 +1,113 @@
+export type TradeType = 'BUY' | 'SELL';
+
+export type TradeStatus = 'ACTIVE' | 'TP_HIT' | 'SL_HIT';
+
+export interface TradeSetup {
+  id: string;
+  ticketNumber: string;
+  timestamp: string; // ISO string or formatted HH:mm:ss
+  type: TradeType;
+  timeframe: 'M1' | 'M5' | 'M15';
+  entryPrice: number;
+  stopLoss: number;
+  takeProfit: number;
+  takeProfit2?: number;
+  rrRatio: number; // e.g. 1.85
+  riskPips: number;
+  rewardPips: number;
+  status: TradeStatus;
+  confluence: string[];
+  notes?: string;
+  closedAt?: string;
+  closedPrice?: number;
+  pnlPips?: number;
+  pnlAmount?: number; // e.g., +$180 or -$100 based on standard lot
+  entryReason: string;
+}
+
+export interface PriceTick {
+  timestamp: number;
+  price: number;
+  bid: number;
+  ask: number;
+  spread: number;
+  high24h: number;
+  low24h: number;
+  change24h: number;
+  changePercent24h: number;
+}
+
+export interface Candle {
+  time: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  isGreen: boolean;
+}
+
+export interface MarketSession {
+  name: string;
+  city: string;
+  status: 'OPEN' | 'CLOSED';
+  openTimeGmt: string; // e.g. "08:00"
+  closeTimeGmt: string; // e.g. "17:00"
+  isActiveNow: boolean;
+}
+
+export interface DailyStats {
+  totalSetups: number;
+  winners: number;
+  losers: number;
+  active: number;
+  winRate: number; // e.g. 71.4%
+  totalPips: number; // e.g. +142.5 pips
+  profitFactor: number; // e.g. 2.45
+  avgRR: number; // e.g. 1:2.1
+}
+
+export interface RiskCalculatorParams {
+  accountBalance: number;
+  riskPercentage: number;
+  stopLossPips: number;
+  contractSize: number; // Default 100 oz per lot for XAU/USD
+}
+
+// Subscription & Auth Types
+export type SubscriptionStatus = 'VISITOR' | 'ACTIVE' | 'EXPIRING_SOON' | 'EXPIRED';
+
+export interface UserSubscription {
+  status: SubscriptionStatus;
+  startDate: string | null; // ISO string
+  expirationDate: string | null; // ISO string
+  daysRemaining: number;
+  paymentMethod?: string;
+  amountFcfa: number; // Default 700 000
+}
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  phone?: string;
+  name: string;
+  subscription: UserSubscription;
+}
+
+// News & Education Types
+export type NewsCategory = 'MACRO' | 'SCALPING_GUIDE' | 'STORIES' | 'ANALYSIS';
+
+export interface NewsArticle {
+  id: string;
+  title: string;
+  summary: string;
+  content: string;
+  category: NewsCategory;
+  categoryLabel: string;
+  date: string;
+  readTime: string;
+  imageUrl?: string;
+  author: string;
+  tags: string[];
+}
+
