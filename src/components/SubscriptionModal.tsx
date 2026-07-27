@@ -156,7 +156,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
               <div className="w-12 h-12 rounded-full border-2 border-blue-600 border-t-transparent animate-spin mx-auto" />
               <div className="space-y-1">
                 <p className="text-sm font-bold text-blue-900">
-                  Traitement de la transaction simulée...
+                  Traitement de la transaction en cours...
                 </p>
                 <p className="text-xs text-slate-500">
                   Validation auprès de la passerelle Mobile Money / Carte ({formatFcfa(SUBSCRIPTION_PRICE_FCFA)})
@@ -200,9 +200,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
               <form onSubmit={handleSimulatePayment} className="space-y-4">
                 
                 <div className="space-y-2">
-                  <label className="text-xs font-mono text-slate-700 flex items-center justify-between">
-                    <span>SELECTIONNEZ LE MOYEN DE PAIEMENT :</span>
-                    <span className="text-blue-600 text-[11px] font-semibold">Paiement Simulé (Démo)</span>
+                  <label className="text-xs font-mono font-bold text-slate-800 block">
+                    SELECTIONNEZ LE MOYEN DE PAIEMENT :
                   </label>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -236,33 +235,53 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
                 {/* Operator selector if Mobile Money */}
                 {paymentMethod === 'MOBILE_MONEY' && (
-                  <div className="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-600">
-                      <span>Opérateur Mobile Money :</span>
-                      <span className="text-slate-400 text-[10px]">
-                        Disponibles pour {selectedCountry.flag} {selectedCountry.name}
+                  <div className="space-y-2 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-700">
+                      <span className="font-bold">Opérateur Mobile Money :</span>
+                      <span className="text-blue-900 font-bold bg-blue-100 border border-blue-300 px-2.5 py-1 rounded-md text-[10px] inline-flex items-center gap-1 shadow-2xs">
+                        <span>Disponibles pour {selectedCountry.flag} {selectedCountry.name}</span>
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
-                      {ALL_OPERATORS.map((op) => {
-                        const isRecommended = selectedCountry.recommendedOperators.includes(op.id);
-                        return (
-                          <button
-                            key={op.id}
-                            type="button"
-                            onClick={() => setMobileOperator(op.id)}
-                            className={`py-2 px-1.5 rounded-lg text-[10px] sm:text-[11px] font-mono font-bold border text-center transition-all flex flex-col items-center justify-center gap-0.5 ${
-                              mobileOperator === op.id
-                                ? 'bg-blue-600 text-white border-blue-700 shadow-2xs'
-                                : isRecommended
-                                ? 'bg-white border-blue-200 text-slate-800 hover:bg-blue-50/50'
-                                : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-100 opacity-80'
-                            }`}
-                          >
-                            <span>{op.name}</span>
-                          </button>
-                        );
-                      })}
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+                      {[...ALL_OPERATORS]
+                        .sort((a, b) => {
+                          const aRec = selectedCountry.recommendedOperators.includes(a.id);
+                          const bRec = selectedCountry.recommendedOperators.includes(b.id);
+                          if (aRec && !bRec) return -1;
+                          if (!aRec && bRec) return 1;
+                          return 0;
+                        })
+                        .map((op) => {
+                          const isRecommended = selectedCountry.recommendedOperators.includes(op.id);
+                          return (
+                            <button
+                              key={op.id}
+                              type="button"
+                              onClick={() => setMobileOperator(op.id)}
+                              className={`py-2.5 px-2 rounded-xl text-xs font-mono font-bold border transition-all flex items-center justify-between gap-1.5 ${
+                                mobileOperator === op.id
+                                  ? 'bg-blue-600 text-white border-blue-700 shadow-sm'
+                                  : isRecommended
+                                  ? 'bg-white border-blue-300 text-slate-900 hover:bg-blue-50/70 shadow-2xs'
+                                  : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-100 opacity-75'
+                              }`}
+                            >
+                              <span>{op.name}</span>
+                              {isRecommended && (
+                                <span
+                                  className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-sans font-bold ${
+                                    mobileOperator === op.id
+                                      ? 'bg-blue-800 text-blue-100'
+                                      : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                  }`}
+                                >
+                                  {selectedCountry.code === 'CI' ? '🇨🇮 N°1' : 'Inclus'}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
                     </div>
                   </div>
                 )}
@@ -299,7 +318,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     <label className="text-[11px] font-mono text-slate-600 block mb-1">
                       {paymentMethod === 'MOBILE_MONEY'
                         ? 'Pays d\'Afrique & Numéro Mobile Money :'
-                        : 'Numéro de carte bancaire (Démo) :'}
+                        : 'Numéro de carte bancaire :'}
                     </label>
 
                     {paymentMethod === 'MOBILE_MONEY' ? (
