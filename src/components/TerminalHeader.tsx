@@ -3,6 +3,7 @@ import { Volume2, VolumeX, Play, Pause, Zap, Calculator, Clock, Globe, UserCheck
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
+import { useLongPress } from '../lib/useLongPress';
 
 interface TerminalHeaderProps {
   soundEnabled: boolean;
@@ -18,6 +19,7 @@ interface TerminalHeaderProps {
   onOpenLoginModal: () => void;
   onChangeProfile: () => void;
   onLogout: () => void;
+  onTriggerSecretAdmin?: () => void;
 }
 
 export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
@@ -34,8 +36,17 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   onOpenLoginModal,
   onChangeProfile,
   onLogout,
+  onTriggerSecretAdmin,
 }) => {
   const [currentTime, setCurrentTime] = useState<string>('');
+
+  // 5-second long press hook for secret administrator portal trigger
+  const { isPressing, progress, handlers } = useLongPress({
+    onLongPress: () => {
+      if (onTriggerSecretAdmin) onTriggerSecretAdmin();
+    },
+    ms: 5000,
+  });
 
   useEffect(() => {
     const updateTime = () => {
@@ -63,8 +74,29 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
         
         {/* Left: Branding & Session Status */}
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
-          <div className="flex items-center gap-2.5">
-            <ChrisXauusdLogoIcon className="w-9 h-9" />
+          <div
+            {...handlers}
+            className="flex items-center gap-2.5 cursor-pointer select-none relative group"
+            title="ChrisXauusd Terminal"
+          >
+            <div className="relative">
+              <ChrisXauusdLogoIcon className="w-9 h-9" />
+              {isPressing && (
+                <svg className="absolute -inset-1 w-[44px] h-[44px] pointer-events-none z-20">
+                  <circle
+                    cx="22"
+                    cy="22"
+                    r="19"
+                    fill="none"
+                    stroke="#F59E0B"
+                    strokeWidth="2.5"
+                    strokeDasharray="120"
+                    strokeDashoffset={120 - (120 * progress) / 100}
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
+            </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base font-bold tracking-tight text-white flex items-center gap-1.5">
@@ -117,7 +149,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                 <div className="flex items-center gap-1.5">
                   <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-emerald-300 font-bold truncate max-w-[130px]">
-                    {userSession?.name || 'Abonné Actif'}
+                    {userSession?.name || 'Abonné VIP'}
                   </span>
                   <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.2 rounded font-bold">
                     {subscription.daysRemaining}j
@@ -145,20 +177,22 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={onOpenSubscribeModal}
-                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold px-3.5 py-1.5 rounded-lg text-xs shadow-md shadow-blue-600/30 active:scale-[0.97] transition-all"
+                className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold font-mono px-3.5 py-1.5 rounded-xl text-xs shadow-md shadow-amber-500/20 active:scale-[0.97] transition-all"
               >
-                <Sparkles className="w-3.5 h-3.5 fill-current" />
-                <span>S'abonner – {formatFcfa(SUBSCRIPTION_PRICE_FCFA)}</span>
+                <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
+                <span>{userSession ? 'Passer au Premium' : `S'abonner – ${formatFcfa(SUBSCRIPTION_PRICE_FCFA)}`}</span>
               </button>
 
-              <button
-                onClick={onOpenLoginModal}
-                className="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 text-blue-300 border border-blue-500/30 px-2.5 py-1.5 rounded-lg text-xs font-mono active:scale-[0.97] transition-all"
-                title="Espace membre abonné"
-              >
-                <LogIn className="w-3.5 h-3.5 text-blue-400" />
-                <span className="hidden sm:inline">Connexion</span>
-              </button>
+              {!userSession && (
+                <button
+                  onClick={onOpenLoginModal}
+                  className="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 px-2.5 py-1.5 rounded-lg text-xs font-mono active:scale-[0.97] transition-all"
+                  title="Espace membre abonné"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="hidden sm:inline">Connexion</span>
+                </button>
+              )}
 
               <button
                 onClick={onChangeProfile}

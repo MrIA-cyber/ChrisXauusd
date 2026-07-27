@@ -1,27 +1,39 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Award, CheckCircle2 } from 'lucide-react';
+import { useLongPress } from '../lib/useLongPress';
 
 interface ChrisBioBubbleProps {
   isVisible: boolean;
   onClose: () => void;
   profileType?: 'VISITOR' | 'TRADER' | null;
+  onTriggerSecretAdmin?: () => void;
 }
 
 export const ChrisBioBubble: React.FC<ChrisBioBubbleProps> = ({
   isVisible,
   onClose,
   profileType,
+  onTriggerSecretAdmin,
 }) => {
+  const { isPressing, progress, handlers } = useLongPress({
+    onLongPress: () => {
+      if (onTriggerSecretAdmin) onTriggerSecretAdmin();
+    },
+    ms: 5000,
+  });
+
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
-        onClose();
-      }, 3800); // Disparaît automatiquement après ~3.8 secondes
+        if (!isPressing) {
+          onClose();
+        }
+      }, 5500); // Allow enough time for 5s long press if active
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, onClose]);
+  }, [isVisible, onClose, isPressing]);
 
   return (
     <AnimatePresence>
@@ -43,14 +55,34 @@ export const ChrisBioBubble: React.FC<ChrisBioBubbleProps> = ({
               <X className="w-4 h-4" />
             </button>
 
-            {/* Avatar Circle with Initial "C" */}
-            <div className="relative shrink-0 mt-0.5">
+            {/* Avatar Circle with Initial "C" and Long Press Gesture */}
+            <div
+              {...handlers}
+              className="relative shrink-0 mt-0.5 cursor-pointer select-none group"
+              title="Trader Lead Profile"
+            >
               <div className="w-11 h-11 rounded-full bg-blue-900 text-white border-2 border-blue-200 font-mono font-black text-lg flex items-center justify-center shadow-md shadow-blue-900/20">
                 C
               </div>
               <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center">
                 <CheckCircle2 className="w-2.5 h-2.5 text-white" />
               </div>
+
+              {isPressing && (
+                <svg className="absolute -inset-1 w-[52px] h-[52px] pointer-events-none z-20">
+                  <circle
+                    cx="26"
+                    cy="26"
+                    r="23"
+                    fill="none"
+                    stroke="#F59E0B"
+                    strokeWidth="3"
+                    strokeDasharray="145"
+                    strokeDashoffset={145 - (145 * progress) / 100}
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
             </div>
 
             {/* Bio Content */}

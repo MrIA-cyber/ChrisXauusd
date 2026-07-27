@@ -314,18 +314,36 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
 
         {/* Visitor Blur Overlay for Table (Informative Only) */}
         {isVisitor && (
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-2">
-            <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shadow-xs">
-              <Lock className="w-5 h-5" />
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4 font-mono z-20 overflow-hidden">
+            <div className="relative">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400/20 via-amber-500/20 to-blue-600/30 border border-amber-400/50 flex items-center justify-center text-amber-400 shadow-xl shadow-amber-500/10">
+                <Lock className="w-7 h-7" />
+              </div>
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500" />
+              </span>
             </div>
-            <div className="space-y-1">
-              <h3 className="text-xs sm:text-sm font-bold font-mono text-slate-900">
-                JOURNAL DE TRADING DÉTAILLÉ RÉSERVÉ AUX ABONNÉS
+
+            <div className="space-y-1.5 max-w-md">
+              <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-950/90 text-amber-300 border border-amber-500/40 uppercase tracking-wider">
+                JOURNAL D'AUDIT COMPLET DÉBLOQUÉ SUR ABONNEMENT
+              </span>
+              <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                Accédez à l'Historique Exact des Entrées & Gains en Pips
               </h3>
-              <p className="text-[11px] text-slate-600 max-w-md font-sans">
-                Abonnez-vous via l'en-tête pour débloquer l'historique complet des prix d'entrée, pips gagnés, Stop Loss et bilans d'audit.
+              <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                Abonnez-vous pour afficher le journal de trading audité en temps réel avec tous les Stop Loss et Take Profits.
               </p>
             </div>
+
+            <button
+              onClick={() => onOpenSubscribeModal?.()}
+              className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-mono font-bold py-2.5 px-6 rounded-xl text-xs sm:text-sm shadow-xl shadow-amber-500/20 transform hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+            >
+              <Sparkles className="w-4 h-4 fill-current text-slate-950" />
+              <span>Débloquer le Journal VIP</span>
+            </button>
           </div>
         )}
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Target, CheckCircle2, XCircle, Percent, ShieldCheck, Scale, Award, Sparkles, Layers } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Target, CheckCircle2, XCircle, Percent, ShieldCheck, Scale, Award, Sparkles, Layers, ArrowUpRight, Lock } from 'lucide-react';
 import { DailyStats } from '../types';
 
 interface StatsGridProps {
@@ -8,157 +9,240 @@ interface StatsGridProps {
 
 export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-3 space-y-3">
+    <div className="max-w-7xl mx-auto px-4 py-3 space-y-4">
+      
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        
         {/* 1. Setups Générés */}
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 relative overflow-hidden group hover:border-blue-400 hover:shadow-md transition-all">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          className="bg-white border border-slate-200/90 rounded-2xl p-4 relative overflow-hidden group hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600" />
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Total Setups Aujourd'hui</span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Total Setups</span>
+            <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center text-blue-600 shadow-2xs group-hover:scale-110 transition-transform">
               <Target className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black font-mono text-slate-900">
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-black font-mono text-slate-900 tracking-tight">
               {stats.totalSetups}
             </span>
-            <span className="text-xs font-mono text-slate-500 font-medium">
-              ({stats.active} en cours)
+            <span className="text-xs font-mono text-blue-800 font-bold bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+              {stats.active} en cours
             </span>
           </div>
-          <div className="mt-2 flex items-center gap-1.5 text-[11px] text-blue-700 font-mono font-medium">
-            <ShieldCheck className="w-3 h-3 text-blue-600" />
+          <div className="mt-3 flex items-center gap-1.5 text-[11px] text-blue-700 font-mono font-bold">
+            <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
             <span>Strictement R:R ≥ 1:1.5</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* 2. Gagnants (TP) */}
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 relative overflow-hidden group hover:border-emerald-400 hover:shadow-md transition-all">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="bg-white border border-slate-200/90 rounded-2xl p-4 relative overflow-hidden group hover:border-emerald-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-600" />
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Gagnants (TP Atteint)</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Gagnants (TP)</span>
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-600 shadow-2xs group-hover:scale-110 transition-transform">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black font-mono text-emerald-600">
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-black font-mono text-emerald-600 tracking-tight">
               {stats.winners}
             </span>
-            <span className="text-xs font-mono text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+            <span className="text-xs font-mono text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
               +{stats.totalPips > 0 ? stats.totalPips : 0} pips
             </span>
           </div>
-          <div className="mt-2 flex items-center gap-1.5 text-[11px] text-emerald-700 font-mono font-medium">
-            <Award className="w-3 h-3 text-emerald-600" />
-            <span>Pips nets gagnés</span>
+          <div className="mt-3 flex items-center gap-1.5 text-[11px] text-emerald-700 font-mono font-bold">
+            <Award className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Objectifs TP Validés</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* 3. Perdants (SL) */}
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 relative overflow-hidden group hover:border-rose-400 hover:shadow-md transition-all">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.15 }}
+          className="bg-white border border-slate-200/90 rounded-2xl p-4 relative overflow-hidden group hover:border-rose-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-500 to-red-600" />
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Perdants (SL Atteint)</span>
-            <div className="w-8 h-8 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
+            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Perdants (SL)</span>
+            <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-200/80 flex items-center justify-center text-rose-600 shadow-2xs group-hover:scale-110 transition-transform">
               <XCircle className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black font-mono text-rose-600">
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-black font-mono text-rose-600 tracking-tight">
               {stats.losers}
             </span>
-            <span className="text-xs font-mono text-slate-500 font-medium">
-              (Transparence 100%)
+            <span className="text-xs font-mono text-slate-600 font-bold bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
+              100% Transparence
             </span>
           </div>
-          <div className="mt-2 flex items-center gap-1.5 text-[11px] text-rose-700 font-mono font-medium">
-            <ShieldCheck className="w-3 h-3 text-rose-600" />
-            <span>Stop Loss obligatoire</span>
+          <div className="mt-3 flex items-center gap-1.5 text-[11px] text-rose-700 font-mono font-bold">
+            <ShieldCheck className="w-3.5 h-3.5 text-rose-600" />
+            <span>SL Réellement Exécuté</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* 4. Taux de Réussite (%) */}
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 relative overflow-hidden group hover:border-blue-400 hover:shadow-md transition-all">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="bg-white border border-slate-200/90 rounded-2xl p-4 relative overflow-hidden group hover:border-purple-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Taux Réel Calculé</span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+            <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">Taux Réel Calculé</span>
+            <div className="w-9 h-9 rounded-xl bg-purple-50 border border-purple-200/80 flex items-center justify-center text-purple-600 shadow-2xs group-hover:scale-110 transition-transform">
               <Percent className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black font-mono text-blue-700">
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-black font-mono text-purple-700 tracking-tight">
               {stats.winRate}%
             </span>
-            <span className="text-xs font-mono text-blue-800 font-bold bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">
+            <span className="text-xs font-mono text-purple-800 font-bold bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">
               {stats.totalPips >= 0 ? `+${stats.totalPips}` : stats.totalPips} pips
             </span>
           </div>
-          <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500 font-mono font-medium">
+          <div className="mt-3 flex items-center justify-between text-[11px] text-slate-600 font-mono font-bold">
             <span className="flex items-center gap-1">
-              <Scale className="w-3 h-3 text-blue-600" /> Profit Factor: <strong className="text-slate-900">{stats.profitFactor}</strong>
+              <Scale className="w-3.5 h-3.5 text-purple-600" /> PF: <strong className="text-slate-900">{stats.profitFactor}</strong>
             </span>
-            <span>R:R Moyen: <strong className="text-slate-900">1:{stats.avgRR}</strong></span>
+            <span>R:R: <strong className="text-slate-900">1:{stats.avgRR}</strong></span>
           </div>
-        </div>
+        </motion.div>
+
       </div>
 
       {/* Grade Performance Breakdown (A+, A, B) */}
       {stats.byGrade && (
-        <div className="bg-white border border-slate-200 rounded-xl p-3 space-y-2 text-xs font-mono">
-          <div className="flex items-center justify-between text-slate-700 font-bold border-b border-slate-100 pb-2">
-            <span className="flex items-center gap-1.5">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.25 }}
+          className="bg-white border border-slate-200/90 rounded-2xl p-4 space-y-3 text-xs font-mono shadow-sm"
+        >
+          <div className="flex items-center justify-between text-slate-900 font-bold border-b border-slate-100 pb-2.5">
+            <span className="flex items-center gap-2 text-xs sm:text-sm">
               <Layers className="w-4 h-4 text-blue-600" />
-              JOURNAL DES PERFORMANCES PAR QUALITÉ DE SETUP (CONFLUENCE)
+              <span>JOURNAL DES PERFORMANCES PAR QUALITÉ DE SETUP</span>
             </span>
-            <span className="text-[10px] text-slate-500 font-normal">Basé sur les résultats réels</span>
+            <span className="text-[11px] text-slate-500 font-mono font-normal hidden sm:inline">
+              Audit en temps réel
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+            
             {/* Grade A+ */}
-            <div className="bg-amber-50/70 border border-amber-200 p-2.5 rounded-lg flex items-center justify-between">
-              <div className="space-y-0.5">
-                <span className="inline-flex items-center gap-1 font-bold text-amber-900">
-                  <Sparkles className="w-3 h-3 text-amber-600 fill-amber-400" /> Setup A+ (5/5)
+            <div className="bg-gradient-to-br from-amber-50/90 via-amber-50/50 to-white border border-amber-200/90 p-3.5 rounded-xl space-y-2 relative overflow-hidden group hover:shadow-md transition-all">
+              <div className="flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 font-bold text-amber-900 text-xs">
+                  <Sparkles className="w-4 h-4 text-amber-600 fill-amber-400" />
+                  <span>Setup A+ (5/5)</span>
                 </span>
-                <p className="text-[10px] text-slate-500">{stats.byGrade.A_PLUS.total} setups émis</p>
+                <span className="text-xs font-black text-amber-900 font-mono bg-amber-100/80 px-2 py-0.5 rounded border border-amber-300/80">
+                  {stats.byGrade.A_PLUS.winRate}% TP
+                </span>
               </div>
-              <div className="text-right">
-                <span className="text-sm font-black text-amber-900">{stats.byGrade.A_PLUS.winRate}% TP</span>
-                <p className="text-[10px] font-bold text-emerald-700">+{stats.byGrade.A_PLUS.pips} pips</p>
+
+              {/* Progress Bar */}
+              <div className="space-y-1">
+                <div className="w-full bg-amber-100 rounded-full h-2 overflow-hidden border border-amber-200">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${stats.byGrade.A_PLUS.winRate}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    className="bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full"
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-slate-600">
+                  <span>{stats.byGrade.A_PLUS.total} setups émis</span>
+                  <span className="font-bold text-emerald-700">+{stats.byGrade.A_PLUS.pips} pips</span>
+                </div>
               </div>
             </div>
 
             {/* Grade A */}
-            <div className="bg-blue-50/70 border border-blue-200 p-2.5 rounded-lg flex items-center justify-between">
-              <div className="space-y-0.5">
-                <span className="inline-flex items-center gap-1 font-bold text-blue-900">
-                  <Award className="w-3 h-3 text-blue-600" /> Setup A (4/5)
+            <div className="bg-gradient-to-br from-blue-50/90 via-blue-50/50 to-white border border-blue-200/90 p-3.5 rounded-xl space-y-2 relative overflow-hidden group hover:shadow-md transition-all">
+              <div className="flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 font-bold text-blue-900 text-xs">
+                  <Award className="w-4 h-4 text-blue-600" />
+                  <span>Setup A (4/5)</span>
                 </span>
-                <p className="text-[10px] text-slate-500">{stats.byGrade.A.total} setups émis</p>
+                <span className="text-xs font-black text-blue-900 font-mono bg-blue-100/80 px-2 py-0.5 rounded border border-blue-300/80">
+                  {stats.byGrade.A.winRate}% TP
+                </span>
               </div>
-              <div className="text-right">
-                <span className="text-sm font-black text-blue-900">{stats.byGrade.A.winRate}% TP</span>
-                <p className="text-[10px] font-bold text-emerald-700">+{stats.byGrade.A.pips} pips</p>
+
+              {/* Progress Bar */}
+              <div className="space-y-1">
+                <div className="w-full bg-blue-100 rounded-full h-2 overflow-hidden border border-blue-200">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${stats.byGrade.A.winRate}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full"
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-slate-600">
+                  <span>{stats.byGrade.A.total} setups émis</span>
+                  <span className="font-bold text-emerald-700">+{stats.byGrade.A.pips} pips</span>
+                </div>
               </div>
             </div>
 
             {/* Grade B */}
-            <div className="bg-slate-50 border border-slate-200 p-2.5 rounded-lg flex items-center justify-between">
-              <div className="space-y-0.5">
-                <span className="inline-flex items-center gap-1 font-bold text-slate-800">
-                  <ShieldCheck className="w-3 h-3 text-slate-600" /> Setup B (3/5)
+            <div className="bg-gradient-to-br from-slate-50 via-slate-50/50 to-white border border-slate-200/90 p-3.5 rounded-xl space-y-2 relative overflow-hidden group hover:shadow-md transition-all">
+              <div className="flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 font-bold text-slate-800 text-xs">
+                  <ShieldCheck className="w-4 h-4 text-slate-600" />
+                  <span>Setup B (3/5)</span>
                 </span>
-                <p className="text-[10px] text-slate-500">{stats.byGrade.B.total} setups émis</p>
+                <span className="text-xs font-black text-slate-800 font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-300">
+                  {stats.byGrade.B.winRate}% TP
+                </span>
               </div>
-              <div className="text-right">
-                <span className="text-sm font-black text-slate-800">{stats.byGrade.B.winRate}% TP</span>
-                <p className="text-[10px] font-bold text-slate-700">+{stats.byGrade.B.pips} pips</p>
+
+              {/* Progress Bar */}
+              <div className="space-y-1">
+                <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${stats.byGrade.B.winRate}%` }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                    className="bg-gradient-to-r from-slate-400 to-slate-600 h-full rounded-full"
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-slate-600">
+                  <span>{stats.byGrade.B.total} setups émis</span>
+                  <span className="font-bold text-slate-700">+{stats.byGrade.B.pips} pips</span>
+                </div>
               </div>
             </div>
+
           </div>
-        </div>
+        </motion.div>
       )}
+
     </div>
   );
 };
+
 

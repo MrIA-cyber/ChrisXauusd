@@ -40,10 +40,14 @@ import { SubscriptionModal } from './components/SubscriptionModal';
 import { LoginModal } from './components/LoginModal';
 import { ExpirationAlertModal } from './components/ExpirationAlertModal';
 import { NewsAndEducationSection } from './components/NewsAndEducationSection';
+import { UserReviewsSection } from './components/UserReviewsSection';
+import { AdminPortal } from './components/admin/AdminPortal';
+import { SecretAdminModal } from './components/admin/SecretAdminModal';
 import { OnboardingProfileSelector } from './components/OnboardingProfileSelector';
 import { ChrisBioBubble } from './components/ChrisBioBubble';
 
-import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export default function App() {
   // 1. Initial Market State Setup
@@ -81,6 +85,41 @@ export default function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isExpirationAlertOpen, setIsExpirationAlertOpen] = useState<boolean>(false);
   const [expiredDateForAlert, setExpiredDateForAlert] = useState<string | null>(null);
+  const [isSecretAdminModalOpen, setIsSecretAdminModalOpen] = useState<boolean>(false);
+
+  // Admin Portal Mode State (Triggered via /admin.chris or Ctrl+Shift+A)
+  const [isAdminMode, setIsAdminMode] = useState<boolean>(() => {
+    const path = window.location.pathname;
+    const search = window.location.search;
+    const hash = window.location.hash;
+    return path.includes('admin.chris') || search.includes('admin.chris') || hash.includes('admin.chris');
+  });
+
+  useEffect(() => {
+    const checkAdminRoute = () => {
+      const path = window.location.pathname;
+      const search = window.location.search;
+      const hash = window.location.hash;
+      if (path.includes('admin.chris') || search.includes('admin.chris') || hash.includes('admin.chris')) {
+        setIsAdminMode(true);
+      }
+    };
+    checkAdminRoute();
+    window.addEventListener('popstate', checkAdminRoute);
+    return () => window.removeEventListener('popstate', checkAdminRoute);
+  }, []);
+
+  // Keyboard shortcut (Ctrl + Shift + A) for discrete admin portal access
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        setIsAdminMode((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Chris Animated Bio Bubble State
   const [showBioBubble, setShowBioBubble] = useState<boolean>(false);
@@ -418,6 +457,11 @@ export default function App() {
   const displayedTicket = activeSetup || trades[0];
   const recentClosedTickets = trades.filter((t) => t.status !== 'ACTIVE').slice(0, 3);
 
+  // Render Private Admin Portal if route is /admin.chris or shortcut active
+  if (isAdminMode) {
+    return <AdminPortal onExitAdmin={() => setIsAdminMode(false)} />;
+  }
+
   // Render Onboarding Profile Selection View if active
   if (isOnboardingView) {
     return (
@@ -471,6 +515,7 @@ export default function App() {
         isVisible={showBioBubble}
         onClose={() => setShowBioBubble(false)}
         profileType={bioProfileType}
+        onTriggerSecretAdmin={() => setIsSecretAdminModalOpen(true)}
       />
       
       {/* 1. Persistent J-3 Expiration Warning Banner */}
@@ -494,6 +539,7 @@ export default function App() {
         onOpenLoginModal={() => setIsLoginModalOpen(true)}
         onChangeProfile={handleChangeProfile}
         onLogout={handleLogout}
+        onTriggerSecretAdmin={() => setIsSecretAdminModalOpen(true)}
       />
 
       {/* 4. Live Price Banner */}
@@ -502,21 +548,54 @@ export default function App() {
       {/* Main Content Dashboard */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-4 space-y-6">
         
-        {/* Global Sticky Visitor Information Banner (Purely Informative) */}
+        {/* Global Sticky Visitor Information Banner (Premium Glassmorphic Redesign) */}
         {isVisitor && (
-          <div className="sticky top-2 z-30 bg-blue-900/95 border border-blue-700 text-white rounded-xl p-3 sm:p-3.5 shadow-xl backdrop-blur-md flex items-center gap-3 font-mono transition-shadow">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-800 border border-blue-600 flex items-center justify-center text-blue-200 shrink-0">
-              <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
-            </div>
-            <div className="text-xs">
-              <div className="text-white font-bold flex items-center gap-2 text-xs sm:text-sm leading-tight">
-                <span>🔒 Mode Visiteur — Débloquez tous les signaux (700 000 FCFA/mois)</span>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="sticky top-2 z-30 bg-slate-900/95 border border-amber-500/40 text-white rounded-2xl p-3.5 sm:p-4 shadow-2xl backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-3 font-mono transition-all overflow-hidden"
+          >
+            {/* Ambient Background Lights */}
+            <div className="absolute -top-12 -left-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+
+            <div className="flex items-start sm:items-center gap-3 relative z-10">
+              <div className="relative shrink-0">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-400/20 via-amber-500/20 to-amber-700/30 border border-amber-400/50 flex items-center justify-center text-amber-400 shadow-md">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500" />
+                </span>
               </div>
-              <p className="text-[10px] sm:text-[11px] text-blue-200 mt-0.5 font-sans sm:font-mono">
-                Accès instantané aux sens Achat/Vente, prix d'entrée exacts, Stop Loss et Take Profit en temps réel. Utilisez le bouton S'abonner dans l'en-tête pour débloquer.
-              </p>
+
+              <div className="space-y-0.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-white font-bold text-xs sm:text-sm tracking-tight flex items-center gap-1.5">
+                    MODE VISITEUR — ACCÈS LIMITÉ
+                  </span>
+                  <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-500/40">
+                    700 000 FCFA / mois
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 font-sans leading-snug">
+                  Débloquez les prix d'entrée exacts, Stop Loss, Take Profits et notifications M1/M5 en temps réel.
+                </p>
+              </div>
             </div>
-          </div>
+
+            {/* Quick Action CTAs */}
+            <div className="flex items-center gap-2 shrink-0 w-full md:w-auto pt-1 md:pt-0 relative z-10">
+              <button
+                onClick={() => setIsSubscribeModalOpen(true)}
+                className="w-full md:w-auto bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 text-xs font-bold font-mono px-4 py-2 rounded-xl shadow-lg shadow-amber-500/20 transform active:scale-95 transition-all flex items-center justify-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
+                <span>{userSession ? 'Passer au Premium' : 'Débloquer l\'accès VIP'}</span>
+              </button>
+            </div>
+          </motion.div>
         )}
 
         {/* 5. Daily Statistics Cards (Visible to everyone) */}
@@ -678,6 +757,13 @@ export default function App() {
           onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
         />
 
+        {/* 9. Premium User Reviews Section ("Avis Utilisateurs") */}
+        <UserReviewsSection
+          isVisitor={isVisitor}
+          onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+          onOpenLoginModal={() => setIsLoginModalOpen(true)}
+        />
+
       </main>
 
       {/* Subscription Payment Simulation Modal */}
@@ -714,6 +800,15 @@ export default function App() {
       <RiskCalculatorModal
         isOpen={isCalculatorOpen}
         onClose={() => setIsCalculatorOpen(false)}
+      />
+
+      {/* Secret Admin Login Modal */}
+      <SecretAdminModal
+        isOpen={isSecretAdminModalOpen}
+        onClose={() => setIsSecretAdminModalOpen(false)}
+        onAdminAuthenticated={() => {
+          setIsAdminMode(true);
+        }}
       />
 
       {/* 9. Legal Footer */}
