@@ -88,24 +88,24 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: 'easeOut', delay: index * 0.06 }}
       onClick={handleTicketClick}
-      className={`trade-ticket rounded-b-xl transition-all duration-400 hover:-translate-y-0.5 cursor-pointer group relative overflow-hidden ${
+      className={`rounded-2xl border transition-all duration-300 hover:-translate-y-1 cursor-pointer group relative overflow-hidden backdrop-blur-md shadow-xl ${
         isActive
-          ? 'hover:border-blue-400 hover:shadow-lg shadow-blue-500/10'
+          ? 'bg-slate-900/90 border-amber-500/40 shadow-amber-500/10 hover:border-amber-400'
           : isTpHit
-          ? 'border-emerald-500 bg-emerald-50/20 shadow-emerald-500/10'
-          : 'border-rose-500 bg-rose-50/20 shadow-rose-500/10'
+          ? 'bg-slate-900/90 border-emerald-500/40 shadow-emerald-500/10'
+          : 'bg-slate-900/90 border-rose-500/40 shadow-rose-500/10'
       }`}
     >
-      {/* Sawtooth perforated top tear effect */}
-      <div className="ticket-top-sawtooth" />
+      {/* Top Ambient Glow accent bar */}
+      <div className={`h-1 w-full ${isActive ? 'bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600' : isTpHit ? 'bg-gradient-to-r from-emerald-400 to-teal-500' : 'bg-gradient-to-r from-rose-500 to-red-600'}`} />
 
       {/* Ticket Header */}
-      <div className="trade-ticket-header px-4 py-2.5 flex items-center justify-between gap-2">
+      <div className="bg-slate-950/70 px-4 py-2.5 flex items-center justify-between gap-2 border-b border-slate-800/80">
         <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono font-bold text-blue-700 tracking-widest uppercase">
+          <span className="text-[11px] font-mono font-bold text-amber-400 tracking-widest uppercase">
             {setup.ticketNumber}
           </span>
-          <span className="text-[10px] font-mono text-slate-600 bg-white px-1.5 py-0.5 rounded border border-slate-200 shadow-2xs">
+          <span className="text-[10px] font-mono text-slate-300 bg-slate-900 px-2 py-0.5 rounded-full border border-slate-700 shadow-sm">
             {setup.timeframe}
           </span>
         </div>
@@ -118,21 +118,21 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
               e.stopPropagation();
               setShowConfluenceDetails(!showConfluenceDetails);
             }}
-            className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border transition-transform active:scale-95 ${
+            className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border transition-transform active:scale-95 ${
               grade === 'A+'
-                ? 'bg-amber-100 text-amber-900 border-amber-300 hover:bg-amber-200'
+                ? 'bg-amber-950/80 text-amber-300 border-amber-500/40 hover:bg-amber-900/80'
                 : grade === 'A'
-                ? 'bg-blue-100 text-blue-900 border-blue-300 hover:bg-blue-200'
-                : 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+                ? 'bg-blue-950/80 text-blue-300 border-blue-500/40 hover:bg-blue-900/80'
+                : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'
             }`}
             title="Cliquez pour voir les 5 critères de confluence"
           >
             {grade === 'A+' ? (
-              <Sparkles className="w-3 h-3 text-amber-600 fill-amber-400" />
+              <Sparkles className="w-3 h-3 text-amber-400 fill-amber-400/30" />
             ) : grade === 'A' ? (
-              <Award className="w-3 h-3 text-blue-600" />
+              <Award className="w-3 h-3 text-blue-400" />
             ) : (
-              <ShieldCheck className="w-3 h-3 text-slate-600" />
+              <ShieldCheck className="w-3 h-3 text-slate-400" />
             )}
             <span>Setup {grade} ({score}/5)</span>
             <Info className="w-2.5 h-2.5 opacity-70 ml-0.5" />
@@ -140,20 +140,20 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
 
           {/* Status Badge */}
           {isActive && (
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold text-blue-800 bg-blue-100 border border-blue-300 px-2 py-0.5 rounded-full animate-pulse-badge">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping" />
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2.5 py-0.5 rounded-full animate-pulse-badge">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
               EN COURS
             </span>
           )}
           {isTpHit && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2.5 py-0.5 rounded-full">
+              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
               TP (+{setup.rewardPips}p)
             </span>
           )}
           {isSlHit && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-rose-800 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded-full">
-              <XCircle className="w-3 h-3 text-rose-600" />
+            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-rose-300 bg-rose-950/80 border border-rose-500/40 px-2.5 py-0.5 rounded-full">
+              <XCircle className="w-3 h-3 text-rose-400" />
               SL (-{setup.riskPips}p)
             </span>
           )}
@@ -168,78 +168,78 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
           {isVisitor ? (
             <div
               onClick={triggerLockedShake}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-black font-mono tracking-wider bg-blue-50 text-blue-800 border border-blue-300 shadow-2xs cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-black font-mono tracking-wider bg-amber-950/80 text-amber-300 border border-amber-500/40 shadow-sm cursor-pointer ${
                 isShaking ? 'animate-shake' : ''
               }`}
             >
-              <Lock className="w-3.5 h-3.5 text-blue-600" />
+              <Lock className="w-3.5 h-3.5 text-amber-400" />
               <span>🔒 SETUP VERROUILLÉ</span>
             </div>
           ) : (
             <div
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-black font-mono tracking-wider ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-black font-mono tracking-wider ${
                 isBuy
-                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs'
-                  : 'bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs'
+                  ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                  : 'bg-rose-950/80 text-rose-300 border border-rose-500/40 shadow-sm'
               }`}
             >
               {isBuy ? (
                 <>
-                  <ArrowUpRight className="w-4 h-4 text-emerald-600 stroke-[3]" />
+                  <ArrowUpRight className="w-4 h-4 text-emerald-400 stroke-[3]" />
                   <span>ACHAT (LONG)</span>
                 </>
               ) : (
                 <>
-                  <ArrowDownRight className="w-4 h-4 text-rose-600 stroke-[3]" />
+                  <ArrowDownRight className="w-4 h-4 text-rose-400 stroke-[3]" />
                   <span>VENTE (SHORT)</span>
                 </>
               )}
             </div>
           )}
 
-          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-md text-xs font-mono text-slate-700 font-medium">
-            <Award className="w-3.5 h-3.5 text-blue-600" />
+          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg text-xs font-mono text-slate-300 font-medium">
+            <Award className="w-3.5 h-3.5 text-amber-400" />
             <span>R:R 1:{setup.rrRatio}</span>
           </div>
         </div>
 
-        {/* Core Trading Levels Grid (Entry, SL, TP) - Masked or Blurred in Visitor Mode */}
+        {/* Core Trading Levels Grid (Entry, SL, TP) */}
         <div
           onClick={triggerLockedShake}
-          className={`grid grid-cols-3 gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200 relative transition-transform ${
+          className={`grid grid-cols-3 gap-2 bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 relative transition-transform ${
             isShaking ? 'animate-shake' : ''
           }`}
         >
           {/* Entry Price */}
           <div className="text-left">
-            <div className="text-[10px] font-mono text-slate-500 uppercase tracking-tight font-medium">ENTRÉE</div>
-            <div className={`text-sm font-bold font-mono text-slate-900 tracking-tight ${isVisitor ? 'blur-[3px] select-none text-slate-400' : ''}`}>
+            <div className="text-[10px] font-mono text-slate-400 uppercase tracking-tight font-medium">ENTRÉE</div>
+            <div className={`text-sm font-bold font-mono text-white tracking-tight ${isVisitor ? 'blur-[3px] select-none text-slate-500' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.entryPrice.toFixed(2)}`}
             </div>
           </div>
 
           {/* Stop Loss */}
-          <div className="text-left border-l border-slate-200 pl-2">
-            <div className="text-[10px] font-mono text-rose-600 font-bold uppercase tracking-tight flex items-center gap-0.5">
+          <div className="text-left border-l border-slate-800 pl-2">
+            <div className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-tight flex items-center gap-0.5">
               <ShieldAlert className="w-2.5 h-2.5" /> STOP LOSS
             </div>
-            <div className={`text-sm font-bold font-mono text-rose-600 tracking-tight ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
+            <div className={`text-sm font-bold font-mono text-rose-400 tracking-tight ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.stopLoss.toFixed(2)}`}
             </div>
-            <div className="text-[9px] font-mono text-rose-600/80 font-medium">
+            <div className="text-[9px] font-mono text-rose-400/80 font-medium">
               {isVisitor ? '-•• pips' : `-${setup.riskPips} pips`}
             </div>
           </div>
 
           {/* Take Profit */}
-          <div className="text-left border-l border-slate-200 pl-2">
-            <div className="text-[10px] font-mono text-emerald-600 font-bold uppercase tracking-tight">
+          <div className="text-left border-l border-slate-800 pl-2">
+            <div className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-tight">
               TAKE PROFIT
             </div>
-            <div className={`text-sm font-bold font-mono text-emerald-600 tracking-tight ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
+            <div className={`text-sm font-bold font-mono text-emerald-400 tracking-tight ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.takeProfit.toFixed(2)}`}
             </div>
-            <div className="text-[9px] font-mono text-emerald-600/80 font-medium">
+            <div className="text-[9px] font-mono text-emerald-400/80 font-medium">
               {isVisitor ? '+•• pips' : `+${setup.rewardPips} pips`}
             </div>
           </div>
@@ -247,14 +247,14 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
 
         {/* Dynamic Progress Bar for Active Trades */}
         {isActive && (
-          <div className="space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+          <div className="space-y-1.5 bg-slate-950/80 p-3 rounded-xl border border-slate-800/80">
             <div className="flex items-center justify-between text-[11px] font-mono">
-              <span className="text-slate-600 font-medium flex items-center gap-1">
-                <Clock className="w-3 h-3 text-blue-600 animate-pulse" /> PnL Direct:
+              <span className="text-slate-300 font-medium flex items-center gap-1">
+                <Clock className="w-3 h-3 text-amber-400 animate-pulse" /> PnL Direct:
               </span>
               <span
                 className={`font-bold ${
-                  currentPnlPips >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                  currentPnlPips >= 0 ? 'text-emerald-400' : 'text-rose-400'
                 } ${isVisitor ? 'blur-[3px] select-none' : ''}`}
               >
                 {isVisitor
@@ -266,17 +266,17 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
             </div>
 
             {/* Visual SL <--> Entry <--> TP slider */}
-            <div className="relative w-full h-2 bg-slate-200 rounded-full overflow-hidden mt-1">
-              <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400 z-10" />
+            <div className="relative w-full h-2 bg-slate-800 rounded-full overflow-hidden mt-1">
+              <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-600 z-10" />
               <div
                 className={`h-full transition-all duration-500 ease-out rounded-full ${
-                  currentPnlPips >= 0 ? 'bg-emerald-500' : 'bg-rose-500'
+                  currentPnlPips >= 0 ? 'bg-emerald-400' : 'bg-rose-400'
                 }`}
                 style={{ width: `${Math.max(2, Math.min(100, progressPercent))}%` }}
               />
             </div>
 
-            <div className="flex items-center justify-between text-[9px] font-mono text-slate-500 mt-1 font-medium">
+            <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mt-1 font-medium">
               <span>SL: {isVisitor ? '$2,3XX' : `$${setup.stopLoss.toFixed(2)}`}</span>
               <span>Entrée</span>
               <span>TP: {isVisitor ? '$2,3XX' : `$${setup.takeProfit.toFixed(2)}`}</span>
@@ -287,8 +287,8 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
         {/* Confluence Criteria Section Header */}
         <div className="space-y-1.5 pt-1">
           <div className="flex items-center justify-between">
-            <div className="text-[10px] font-mono text-slate-600 flex items-center gap-1 font-bold">
-              <Layers className="w-3 h-3 text-blue-600" /> CONFLUENCE ({score}/5 CRITÈRES VALIDÉS) :
+            <div className="text-[10px] font-mono text-slate-400 flex items-center gap-1 font-bold">
+              <Layers className="w-3 h-3 text-amber-400" /> CONFLUENCE ({score}/5 CRITÈRES VALIDÉS) :
             </div>
             <button
               type="button"
@@ -296,7 +296,7 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
                 e.stopPropagation();
                 setShowConfluenceDetails(!showConfluenceDetails);
               }}
-              className="text-[10px] font-mono text-blue-600 font-bold hover:underline flex items-center gap-0.5"
+              className="text-[10px] font-mono text-amber-400 font-bold hover:underline flex items-center gap-0.5"
             >
               <span>{showConfluenceDetails ? 'Masquer' : 'Détails'}</span>
               {showConfluenceDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -308,7 +308,7 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
             {setup.confluence.map((item, idx) => (
               <span
                 key={idx}
-                className="text-[10px] font-mono bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-200 leading-relaxed font-medium"
+                className="text-[10px] font-mono bg-slate-950 text-slate-300 px-2 py-0.5 rounded-md border border-slate-800 leading-relaxed font-medium"
               >
                 {item}
               </span>
@@ -323,10 +323,10 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="bg-slate-900 text-slate-100 p-3 rounded-xl border border-slate-800 text-[11px] font-mono space-y-2 mt-2 shadow-inner"
+                className="bg-slate-950 text-slate-100 p-3 rounded-xl border border-slate-800 text-[11px] font-mono space-y-2 mt-2 shadow-inner"
               >
                 <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-                  <span className="font-bold text-blue-400">AUDIT DE CONFLUENCE — SETUP {grade}</span>
+                  <span className="font-bold text-amber-400">AUDIT DE CONFLUENCE — SETUP {grade}</span>
                   <span className="text-[10px] text-amber-300 font-bold bg-amber-950/80 px-2 py-0.5 rounded border border-amber-500/40">
                     {score}/5 Critères
                   </span>
@@ -350,7 +350,7 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
                         )}
                         <div>
                           <span className="font-bold block text-slate-200">{factor.name}</span>
-                          <span className="text-[10px]">{factor.details}</span>
+                          <span className="text-[10px] text-slate-400">{factor.details}</span>
                         </div>
                       </div>
                     ))
@@ -366,9 +366,9 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
         </div>
 
         {/* Ticket Footer / Timestamp */}
-        <div className="pt-2 border-t border-dashed border-slate-200 flex items-center justify-between text-[10px] font-mono text-slate-500 font-medium">
+        <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400 font-medium">
           <span>Généré à {setup.timestamp}</span>
-          <span className="text-blue-600 font-semibold">Algorithme Confluence V3</span>
+          <span className="text-amber-400 font-semibold">Algorithme Confluence V3</span>
         </div>
 
       </div>

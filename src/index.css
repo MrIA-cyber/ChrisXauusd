@@ -2,97 +2,94 @@
 
 @layer base {
   :root {
-    --bg-canvas-light: #f8fafc;
-    --bg-card-white: #ffffff;
-    --bg-blue-tint: #eff6ff;
-    --border-blue-soft: #e2e8f0;
-    --blue-primary: #2563eb;
-    --blue-dark: #1e3a8a;
-    --blue-glow: rgba(37, 99, 235, 0.15);
-    --green-bull: #059669;
-    --red-bear: #dc2626;
+    --bg-obsidian: #090d16;
+    --bg-card-dark: #0f172a;
+    --bg-card-glass: rgba(15, 23, 42, 0.75);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-gold-soft: rgba(245, 158, 11, 0.3);
+    --gold-primary: #f59e0b;
+    --gold-glow: rgba(245, 158, 11, 0.2);
+    --green-bull: #10b981;
+    --red-bear: #f43f5e;
   }
 
   body {
-    background-color: #f8fafc;
-    color: #0f172a;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #070a12;
+    color: #f8fafc;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
   }
 
   /* Monospace typography enforcement for numbers, prices, timestamps & tables */
   .font-mono-numbers, .font-mono, table td, .price-display, .ticket-number {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Liberation Mono', 'Courier New', monospace !important;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
     font-variant-numeric: tabular-nums lining-nums;
   }
 }
 
-/* Blue & Gold Accent Gradient Effects */
-.blue-gradient-text {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #0284c7 100%);
+/* Master Premium Design System Utility Classes */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.25rem; /* 20px */
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.glass-panel-gold {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 1.25rem;
+  box-shadow: 0 12px 35px -10px rgba(245, 158, 11, 0.15);
+}
+
+.glass-panel-interactive {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-interactive:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -12px rgba(245, 158, 11, 0.2);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #d97706 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.blue-badge {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border: 1px solid #bfdbfe;
-  color: #1e40af;
+.btn-gold-glow {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  color: #090d16;
+  font-weight: 700;
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.35);
+  transition: all 0.2s ease;
 }
 
-/* LIGHT THEME TRADE TICKET STYLING WITH PERFORATED EDGES */
-.trade-ticket {
-  position: relative;
-  background: #ffffff;
-  border-left: 1px solid #cbd5e1;
-  border-right: 1px solid #cbd5e1;
-  border-bottom: 1px solid #cbd5e1;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+.btn-gold-glow:hover {
+  background: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #f59e0b 100%);
+  box-shadow: 0 6px 25px 0px rgba(245, 158, 11, 0.5);
+  transform: translateY(-1px);
 }
 
-/* Perforated Top Tear Line */
-.trade-ticket-header {
-  position: relative;
-  background: #f1f5f9;
-  border-bottom: 2px dashed #94a3b8;
-}
-
-/* Round punch notches on left and right sides of ticket tear line */
-.trade-ticket-header::before,
-.trade-ticket-header::after {
-  content: '';
-  position: absolute;
-  bottom: -9px;
-  width: 16px;
-  height: 16px;
-  background-color: #f8fafc; /* Matches main light canvas bg */
-  border-radius: 50%;
-  z-index: 10;
-}
-
-.trade-ticket-header::before {
-  left: -9px;
-  border-right: 1px solid #cbd5e1;
-}
-
-.trade-ticket-header::after {
-  right: -9px;
-  border-left: 1px solid #cbd5e1;
-}
-
-/* Perforated top edge saw-tooth pattern */
-.ticket-top-sawtooth {
-  background-image: radial-gradient(circle at 10px -5px, transparent 8px, #f1f5f9 9px);
-  background-size: 20px 20px;
-  background-repeat: repeat-x;
-  height: 12px;
-  width: 100%;
-  position: absolute;
-  top: -12px;
-  left: 0;
+.btn-gold-glow:active {
+  transform: translateY(0px) scale(0.98);
 }
 
 /* Keyframe Animations */
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-float {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
 @keyframes shake-horizontal {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-3px); }
@@ -118,36 +115,29 @@
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
   background-size: 200% 100%;
   animation: shimmer-move 1.5s infinite linear;
 }
 
-/* Accessibility: Disable/reduce animations for prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  .animate-pulse-badge,
-  .animate-shake,
-  .animate-shimmer {
-    animation: none !important;
-  }
-}
-
-/* Custom Scrollbar for Light Terminal Tables */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #090d16;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #1e293b;
   border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #334155;
 }
+
 
