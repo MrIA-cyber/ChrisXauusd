@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Play, Pause, Zap, Calculator, Clock, Globe, UserCheck, LogIn, LogOut, Sparkles, User, ShieldAlert, Users, RefreshCw } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
+import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 
 interface TerminalHeaderProps {
   soundEnabled: boolean;
@@ -63,9 +64,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
         {/* Left: Branding & Session Status */}
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-blue-600 p-0.5 shadow-md shadow-blue-500/20 flex items-center justify-center text-white font-black text-sm tracking-wider font-mono">
-              XAU
-            </div>
+            <ChrisXauusdLogoIcon className="w-9 h-9" />
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base font-bold tracking-tight text-white flex items-center gap-1.5">

@@ -69,32 +69,6 @@ export const NewsAndEducationSection: React.FC<NewsAndEducationSectionProps> = (
         </div>
       </div>
 
-      {/* Embedded Soft Call-to-Action Banner for Visitors */}
-      {isVisitor && (
-        <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-800 border border-blue-600 flex items-center justify-center text-blue-200 shrink-0">
-              <Sparkles className="w-5 h-5 fill-current" />
-            </div>
-            <div>
-              <h3 className="text-xs sm:text-sm font-bold font-mono text-white">
-                Passez de la théorie à la pratique avec nos signaux en direct !
-              </h3>
-              <p className="text-xs text-blue-100 mt-0.5 font-sans">
-                Obtenez les tickets d'achat/vente instantanés avec Stop Loss et Take Profit sur XAU/USD.
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={onOpenSubscribeModal}
-            className="w-full sm:w-auto bg-blue-500 hover:bg-blue-400 text-white font-bold px-4 py-2 rounded-xl text-xs font-mono shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1.5 shrink-0"
-          >
-            <span>S'abonner – {formatFcfa(SUBSCRIPTION_PRICE_FCFA)} / mois</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      )}
 
       {/* Articles Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

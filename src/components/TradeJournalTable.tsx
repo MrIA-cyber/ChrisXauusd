@@ -168,6 +168,7 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
           <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200 font-bold">
             <tr>
               <th className="px-4 py-3">Ticket / Heure</th>
+              <th className="px-4 py-3">Qualité</th>
               <th className="px-4 py-3">Sens</th>
               <th className="px-4 py-3">Prix Entrée</th>
               <th className="px-4 py-3 text-rose-600">Stop Loss</th>
@@ -182,7 +183,7 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
           <tbody className="divide-y divide-slate-100 bg-white">
             {filteredTrades.length === 0 ? (
               <tr>
-                <td colSpan={9} className="px-4 py-8 text-center text-slate-500 font-mono">
+                <td colSpan={10} className="px-4 py-8 text-center text-slate-500 font-mono">
                   Aucun setup de trade ne correspond aux critères de recherche.
                 </td>
               </tr>
@@ -192,6 +193,8 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
                 const isTpHit = t.status === 'TP_HIT';
                 const isSlHit = t.status === 'SL_HIT';
                 const isActive = t.status === 'ACTIVE';
+                const grade = t.grade || 'A+';
+                const score = t.score || 5;
 
                 return (
                   <tr
@@ -202,6 +205,21 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
                     <td className="px-4 py-3 whitespace-nowrap">
                       <div className="font-bold text-blue-700">{t.ticketNumber}</div>
                       <div className="text-[10px] text-slate-500">{t.timestamp}</div>
+                    </td>
+
+                    {/* Setup Quality Grade */}
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+                          grade === 'A+'
+                            ? 'bg-amber-100 text-amber-900 border-amber-300'
+                            : grade === 'A'
+                            ? 'bg-blue-100 text-blue-900 border-blue-300'
+                            : 'bg-slate-100 text-slate-800 border-slate-300'
+                        }`}
+                      >
+                        Setup {grade} ({score}/5)
+                      </span>
                     </td>
 
                     {/* Type BUY/SELL */}
@@ -294,27 +312,20 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
           </tbody>
         </table>
 
-        {/* Visitor Blur Overlay for Table */}
+        {/* Visitor Blur Overlay for Table (Informative Only) */}
         {isVisitor && (
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shadow-sm">
-              <Lock className="w-6 h-6" />
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-2">
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shadow-xs">
+              <Lock className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-bold font-mono text-slate-900">
+              <h3 className="text-xs sm:text-sm font-bold font-mono text-slate-900">
                 JOURNAL DE TRADING DÉTAILLÉ RÉSERVÉ AUX ABONNÉS
               </h3>
-              <p className="text-xs text-slate-600 max-w-md font-sans">
-                Débloquez l'historique complet des prix d'entrée, pips gagnés, Stop Loss et bilans d'audit.
+              <p className="text-[11px] text-slate-600 max-w-md font-sans">
+                Abonnez-vous via l'en-tête pour débloquer l'historique complet des prix d'entrée, pips gagnés, Stop Loss et bilans d'audit.
               </p>
             </div>
-            <button
-              onClick={onOpenSubscribeModal}
-              className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs font-mono shadow-md shadow-blue-600/30 active:scale-[0.97] transition-all flex items-center gap-2"
-            >
-              <Sparkles className="w-4 h-4 fill-current" />
-              <span>S'abonner – {formatFcfa(SUBSCRIPTION_PRICE_FCFA)} / mois</span>
-            </button>
           </div>
         )}
 

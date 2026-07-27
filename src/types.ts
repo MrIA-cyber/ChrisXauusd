@@ -2,6 +2,17 @@ export type TradeType = 'BUY' | 'SELL';
 
 export type TradeStatus = 'ACTIVE' | 'TP_HIT' | 'SL_HIT';
 
+export type SetupGrade = 'A+' | 'A' | 'B';
+
+export type ConfluenceFactorCategory = 'STRUCTURE' | 'ZONE' | 'MOMENTUM' | 'SESSION' | 'MTF';
+
+export interface ConfluenceFactor {
+  id: ConfluenceFactorCategory;
+  name: string;
+  met: boolean;
+  details: string;
+}
+
 export interface TradeSetup {
   id: string;
   ticketNumber: string;
@@ -17,6 +28,9 @@ export interface TradeSetup {
   rewardPips: number;
   status: TradeStatus;
   confluence: string[];
+  confluenceFactors: ConfluenceFactor[];
+  grade: SetupGrade;
+  score: number; // 3, 4, or 5 out of 5
   notes?: string;
   closedAt?: string;
   closedPrice?: number;
@@ -56,6 +70,15 @@ export interface MarketSession {
   isActiveNow: boolean;
 }
 
+export interface GradeStats {
+  grade: SetupGrade;
+  total: number;
+  winners: number;
+  losers: number;
+  winRate: number;
+  pips: number;
+}
+
 export interface DailyStats {
   totalSetups: number;
   winners: number;
@@ -65,6 +88,11 @@ export interface DailyStats {
   totalPips: number; // e.g. +142.5 pips
   profitFactor: number; // e.g. 2.45
   avgRR: number; // e.g. 1:2.1
+  byGrade: {
+    A_PLUS: GradeStats;
+    A: GradeStats;
+    B: GradeStats;
+  };
 }
 
 export interface RiskCalculatorParams {

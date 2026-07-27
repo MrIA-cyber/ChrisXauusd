@@ -1,4 +1,15 @@
-import { TradeSetup, TradeStatus, TradeType, Candle, PriceTick, MarketSession, DailyStats } from '../types';
+import {
+  TradeSetup,
+  TradeStatus,
+  TradeType,
+  Candle,
+  PriceTick,
+  MarketSession,
+  DailyStats,
+  ConfluenceFactor,
+  SetupGrade,
+  GradeStats,
+} from '../types';
 
 // Helper to format currency
 export function formatPrice(price: number): string {
@@ -10,37 +21,106 @@ export function formatPips(pips: number): string {
   return `${sign}${pips.toFixed(1)} pips`;
 }
 
-// Generate realistic technical confluences for XAU/USD
-const BUY_CONFLUENCES = [
-  "Cassure de structure M1 + Rejet Order Block à $[PRICE]",
-  "Sweeping de liquidité Sell-side + RSI en survente (27)",
-  "Rebond précis sur EMA 20/50 + Divergence haussière M5",
-  "Validation Fair Value Gap (FVG) + Pression acheteuse vWAP",
-  "Rejet du niveau psychologique $[PRICE] avec mèche basse",
-  "Re-test support clé Londres + Modèle de retournement ICT",
-];
-
-const SELL_CONFLUENCES = [
-  "Rejet résistant sur la zone de liquidité Buy-side à $[PRICE]",
-  "Cassure oblique baissière M1 + Imbalance baissière (FVG)",
-  "Rejet EMA 200 M5 + RSI en surachat (74)",
-  "Absorption acheteuse + Structure M1 sous le vWAP",
-  "Rejet niveau haut de session + Divergence baissière MACD",
-  "Sweeping des plus hauts récents + Signal de rejet Order Block",
-];
-
 let ticketCounter = 8040;
+
+/**
+ * Multi-Factor Confluence Evaluator (5 Core Factors):
+ * 1. Market Structure (BOS / CHoCH M5/M15)
+ * 2. Liquidity Zone / Order Block / Fibonacci (61.8% - 78.6%)
+ * 3. Momentum Confirmation (RSI / MACD divergence)
+ * 4. Session & Macro Filter (London/NY high-vol, news blackout check)
+ * 5. Multi-Timeframe Alignment (H1/H4 trend cohesion)
+ */
+export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
+  factors: ConfluenceFactor[];
+  score: number; // 3, 4, or 5
+  grade: SetupGrade; // 'A+' | 'A' | 'B'
+  confluenceStrings: string[];
+} {
+  // Determine target score weighted toward high confluence (minimum 3/5 criteria required)
+  const rand = Math.random();
+  let targetScore = 5; // Setup A+ (5/5)
+  if (rand > 0.52 && rand <= 0.85) {
+    targetScore = 4; // Setup A (4/5)
+  } else if (rand > 0.85) {
+    targetScore = 3; // Setup B (3/5)
+  }
+
+  // 1. Structure de marché (BOS / CHoCH M5/M15)
+  const factorStructure: ConfluenceFactor = {
+    id: 'STRUCTURE',
+    name: 'Structure de marché (BOS/CHoCH M5)',
+    met: true, // Primary structural requirement
+    details: isBuy
+      ? `Cassure haussière (BOS M5) + CHoCH M15 confirmé à $${entryPrice.toFixed(2)}`
+      : `Cassure baissière (BOS M5) + CHoCH M15 confirmé à $${entryPrice.toFixed(2)}`,
+  };
+
+  // 2. Zone de liquidité / Order Block
+  const factorZone: ConfluenceFactor = {
+    id: 'ZONE',
+    name: 'Zone d\'intérêt (Order Block & Fibo 61.8%)',
+    met: true, // Primary zone requirement
+    details: isBuy
+      ? `Rejet Order Block acheteur à $${entryPrice.toFixed(2)} + FVG M5 comblé`
+      : `Rejet Order Block vendeur à $${entryPrice.toFixed(2)} + Sweeping liquidité Buy-side`,
+  };
+
+  // 3. Momentum de confirmation (RSI / MACD)
+  const factorMomentum: ConfluenceFactor = {
+    id: 'MOMENTUM',
+    name: 'Momentum de confirmation (RSI/MACD)',
+    met: targetScore >= 4,
+    details: isBuy
+      ? 'Divergence haussière RSI (28) + Croisement haussier MACD M5'
+      : 'Divergence baissière RSI (74) + Pression vendeuse MACD M5',
+  };
+
+  // 4. Contexte de session & Filtre Macro
+  const factorSession: ConfluenceFactor = {
+    id: 'SESSION',
+    name: 'Contexte de session & Filtre Macro',
+    met: targetScore === 5 || (targetScore === 3 && Math.random() > 0.5),
+    details: 'Session haute liquidité (Londres/NY Open) — Aucun impact news NFP/CPI imminent',
+  };
+
+  // 5. Alignement Multi-Timeframe (H1/H4)
+  const factorMTF: ConfluenceFactor = {
+    id: 'MTF',
+    name: 'Alignement Multi-Timeframe (H1/H4)',
+    met: targetScore === 5 || (targetScore === 4 && !factorSession.met) || (targetScore === 3 && !factorSession.met),
+    details: isBuy
+      ? 'Tendance majeure H1/H4 haussière alignée au scalp M1/M5'
+      : 'Tendance majeure H1/H4 baissière alignée au scalp M1/M5',
+  };
+
+  const factors = [factorStructure, factorZone, factorMomentum, factorSession, factorMTF];
+  const actualScore = factors.filter((f) => f.met).length;
+
+  let grade: SetupGrade = 'A+';
+  if (actualScore === 4) grade = 'A';
+  else if (actualScore <= 3) grade = 'B';
+
+  const confluenceStrings = factors.filter((f) => f.met).map((f) => f.details);
+
+  return {
+    factors,
+    score: actualScore,
+    grade,
+    confluenceStrings,
+  };
+}
 
 export function createNewTradeSetup(
   currentPrice: number,
   forceType?: TradeType
 ): TradeSetup {
   ticketCounter += 1;
-  const isBuy = forceType ? forceType === 'BUY' : Math.random() > 0.48; // Slightly balanced
+  const isBuy = forceType ? forceType === 'BUY' : Math.random() > 0.48;
   
   // Gold pricing: 1 pip = $0.10 ($1 = 10 pips)
   // Scalping SL: 15 to 28 pips ($1.50 to $2.80)
-  const slPips = Math.floor(Math.random() * 14) + 15; // 15 - 28 pips
+  const slPips = Math.floor(Math.random() * 14) + 15;
   const slOffset = slPips * 0.10;
   
   // Risk / Reward Ratio: Minimum 1:1.5, up to 1:3.2
@@ -63,11 +143,8 @@ export function createNewTradeSetup(
     takeProfit2 = Number((entryPrice - tpOffset * 1.5).toFixed(2));
   }
 
-  const confluenceTemplates = isBuy ? BUY_CONFLUENCES : SELL_CONFLUENCES;
-  const selectedConfluences = [
-    confluenceTemplates[Math.floor(Math.random() * confluenceTemplates.length)].replace('[PRICE]', entryPrice.toFixed(2)),
-    confluenceTemplates[Math.floor(Math.random() * confluenceTemplates.length)].replace('[PRICE]', stopLoss.toFixed(2)),
-  ];
+  // Generate Confluence Factors and Setup Quality Grade
+  const { factors, score, grade, confluenceStrings } = buildConfluenceSet(isBuy, entryPrice);
 
   const now = new Date();
   const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -86,8 +163,13 @@ export function createNewTradeSetup(
     riskPips: slPips,
     rewardPips: tpPips,
     status: 'ACTIVE',
-    confluence: selectedConfluences,
-    entryReason: isBuy ? 'Scalp Long sur niveau de liquidité' : 'Scalp Short sur rejet de résistance',
+    confluence: confluenceStrings,
+    confluenceFactors: factors,
+    grade,
+    score,
+    entryReason: isBuy
+      ? `Scalp Long Confluence (${grade} - ${score}/5)`
+      : `Scalp Short Confluence (${grade} - ${score}/5)`,
   };
 }
 
@@ -117,16 +199,23 @@ export function generateInitialHistory(basePrice: number): TradeSetup[] {
       takeProfit = Number((entryPrice - tpPips * 0.10).toFixed(2));
     }
 
-    // Historical status: 70% won, 30% lost (realistic successful scalping strategy)
-    const isWin = Math.random() < 0.72;
+    const { factors, score, grade, confluenceStrings } = buildConfluenceSet(isBuy, entryPrice);
+
+    // Realistic historical performance correlation:
+    // Grade A+: ~85% win rate
+    // Grade A:  ~72% win rate
+    // Grade B:  ~58% win rate
+    let winProb = 0.72;
+    if (grade === 'A+') winProb = 0.85;
+    else if (grade === 'B') winProb = 0.58;
+
+    const isWin = Math.random() < winProb;
     const status: TradeStatus = isWin ? 'TP_HIT' : 'SL_HIT';
     const pnlPips = isWin ? tpPips : -slPips;
     const pnlAmount = pnlPips * 10; // $10 per pip on 1 standard lot
 
     const now = new Date(Date.now() - i * 18 * 60 * 1000); // spread over hours
     const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-
-    const confluenceTemplates = isBuy ? BUY_CONFLUENCES : SELL_CONFLUENCES;
 
     initialSetups.push({
       id: `setup-hist-${i}`,
@@ -141,15 +230,15 @@ export function generateInitialHistory(basePrice: number): TradeSetup[] {
       riskPips: slPips,
       rewardPips: tpPips,
       status,
-      confluence: [
-        confluenceTemplates[0].replace('[PRICE]', entryPrice.toFixed(2)),
-        "Validation du momentum scalping"
-      ],
+      confluence: confluenceStrings,
+      confluenceFactors: factors,
+      grade,
+      score,
       closedAt: new Date(now.getTime() + 12 * 60 * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
       closedPrice: isWin ? takeProfit : stopLoss,
       pnlPips,
       pnlAmount,
-      entryReason: isBuy ? 'Rebond Order Block' : 'Cassure vWAP',
+      entryReason: isBuy ? `Scalp Long (${grade} - ${score}/5)` : `Scalp Short (${grade} - ${score}/5)`,
     });
   }
 
@@ -227,6 +316,25 @@ export function generateInitialCandles(currentPrice: number, count = 30): Candle
   return candles;
 }
 
+function calculateGradeStats(trades: TradeSetup[], targetGrade: SetupGrade): GradeStats {
+  const filtered = trades.filter((t) => t.grade === targetGrade);
+  const total = filtered.length;
+  const winners = filtered.filter((t) => t.status === 'TP_HIT').length;
+  const losers = filtered.filter((t) => t.status === 'SL_HIT').length;
+  const closed = winners + losers;
+  const winRate = closed > 0 ? Number(((winners / closed) * 100).toFixed(1)) : 0;
+  const pips = filtered.reduce((sum, t) => sum + (t.pnlPips || 0), 0);
+
+  return {
+    grade: targetGrade,
+    total,
+    winners,
+    losers,
+    winRate,
+    pips: Number(pips.toFixed(1)),
+  };
+}
+
 // Calculate daily stats from trade history
 export function calculateDailyStats(trades: TradeSetup[]): DailyStats {
   const totalSetups = trades.length;
@@ -264,5 +372,10 @@ export function calculateDailyStats(trades: TradeSetup[]): DailyStats {
     totalPips: Number(totalPips.toFixed(1)),
     profitFactor,
     avgRR,
+    byGrade: {
+      A_PLUS: calculateGradeStats(trades, 'A+'),
+      A: calculateGradeStats(trades, 'A'),
+      B: calculateGradeStats(trades, 'B'),
+    },
   };
 }

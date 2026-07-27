@@ -6,6 +6,11 @@ export const LegalFooter: React.FC = () => {
     <footer className="bg-slate-100 border-t border-slate-200 text-slate-600 text-xs py-8 px-4 mt-12 font-mono">
       <div className="max-w-7xl mx-auto space-y-6">
         
+        {/* Discrete Risk Disclaimer */}
+        <p className="text-[11px] sm:text-xs text-slate-500 text-center sm:text-left leading-relaxed">
+          Le trading comporte un risque de perte en capital. Ces signaux sont fournis à titre informatif, pas comme un conseil en investissement.
+        </p>
+
         {/* Main Disclaimer Banner */}
         <div className="bg-white border border-blue-200 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center gap-3 shadow-2xs">
           <div className="w-10 h-10 rounded-lg bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0">

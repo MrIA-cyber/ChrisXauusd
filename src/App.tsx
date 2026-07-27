@@ -26,7 +26,6 @@ import {
   generateActiveSubscription,
 } from './lib/subscriptionService';
 
-import { RiskWarningBanner } from './components/RiskWarningBanner';
 import { TerminalHeader } from './components/TerminalHeader';
 import { LivePriceBanner } from './components/LivePriceBanner';
 import { StatsGrid } from './components/StatsGrid';
@@ -480,10 +479,7 @@ export default function App() {
         onOpenRenewalModal={() => setIsSubscribeModalOpen(true)}
       />
 
-      {/* 2. Permanent Risk Warning Banner */}
-      <RiskWarningBanner />
-
-      {/* 3. Terminal Header */}
+      {/* 2. Terminal Header */}
       <TerminalHeader
         soundEnabled={soundEnabled}
         onToggleSound={() => setSoundEnabled(!soundEnabled)}
@@ -506,29 +502,20 @@ export default function App() {
       {/* Main Content Dashboard */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-4 space-y-6">
         
-        {/* Global Sticky Visitor Subscription Banner (Single Unique Banner) */}
+        {/* Global Sticky Visitor Information Banner (Purely Informative) */}
         {isVisitor && (
-          <div className="sticky top-2 z-30 bg-blue-900/95 border border-blue-700 text-white rounded-xl p-3 sm:p-3.5 shadow-xl backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-3 font-mono transition-shadow">
-            <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-800 border border-blue-600 flex items-center justify-center text-blue-200 shrink-0 mt-0.5 sm:mt-0">
-                <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
-              </div>
-              <div className="text-xs">
-                <div className="text-white font-bold flex items-center gap-2 text-xs sm:text-sm leading-tight">
-                  <span>🔒 Mode Visiteur — Débloquez tous les signaux (700 000 FCFA/mois)</span>
-                </div>
-                <p className="text-[10px] sm:text-[11px] text-blue-200 mt-0.5 font-sans sm:font-mono">
-                  Accès instantané aux sens Achat/Vente, prix d'entrée exacts, Stop Loss et Take Profit en temps réel.
-                </p>
-              </div>
+          <div className="sticky top-2 z-30 bg-blue-900/95 border border-blue-700 text-white rounded-xl p-3 sm:p-3.5 shadow-xl backdrop-blur-md flex items-center gap-3 font-mono transition-shadow">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-800 border border-blue-600 flex items-center justify-center text-blue-200 shrink-0">
+              <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <button
-              onClick={() => setIsSubscribeModalOpen(true)}
-              className="w-full md:w-auto bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-xl text-xs shadow-md active:scale-[0.97] transition-all flex items-center justify-center gap-1.5 shrink-0"
-            >
-              <Sparkles className="w-4 h-4 fill-current text-blue-200" />
-              <span>S'abonner maintenant</span>
-            </button>
+            <div className="text-xs">
+              <div className="text-white font-bold flex items-center gap-2 text-xs sm:text-sm leading-tight">
+                <span>🔒 Mode Visiteur — Débloquez tous les signaux (700 000 FCFA/mois)</span>
+              </div>
+              <p className="text-[10px] sm:text-[11px] text-blue-200 mt-0.5 font-sans sm:font-mono">
+                Accès instantané aux sens Achat/Vente, prix d'entrée exacts, Stop Loss et Take Profit en temps réel. Utilisez le bouton S'abonner dans l'en-tête pour débloquer.
+              </p>
+            </div>
           </div>
         )}
 

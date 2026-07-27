@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Eye, Sparkles, CheckCircle2, Lock, ArrowRight, ShieldCheck, Smartphone, CreditCard, LogIn, RefreshCw, Zap } from 'lucide-react';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
+import { ChrisXauusdHomeLogo } from './ChrisXauusdLogo';
 
 interface OnboardingProfileSelectorProps {
   onSelectVisitor: () => void;
@@ -19,27 +20,14 @@ export const OnboardingProfileSelector: React.FC<OnboardingProfileSelectorProps>
       
       <div className="max-w-5xl w-full space-y-6 sm:space-y-8">
         
-        {/* Header Branding */}
+        {/* Crafted Logo Header Display */}
         <motion.div
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="text-center space-y-3"
+          className="w-full flex justify-center"
         >
-          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 px-3.5 py-1.5 rounded-full shadow-2xs max-w-full">
-            <div className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-ping shrink-0" />
-            <span className="text-[10px] sm:text-xs font-mono font-bold text-blue-900 uppercase tracking-wider truncate">
-              CHRISXAUUSD • SIGNAUX DE TRADING OR
-            </span>
-          </div>
-
-          <h1 className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-black font-mono tracking-tight text-slate-900 leading-tight">
-            BIENVENUE SUR CHRISXAUUSD
-          </h1>
-
-          <p className="text-xs sm:text-base text-slate-600 max-w-xl mx-auto font-sans leading-relaxed px-2">
-            ChrisXauusd — Signaux de trading Or. Choisissez votre profil pour accéder au terminal de scalping XAU/USD en temps réel.
-          </p>
+          <ChrisXauusdHomeLogo />
         </motion.div>
 
         {/* Profile Choice Grid (2 Large Cards Side-by-Side on md+, Stacked on Mobile) */}
@@ -201,10 +189,13 @@ export const OnboardingProfileSelector: React.FC<OnboardingProfileSelectorProps>
         </div>
 
         {/* Legal & Security Footnote */}
-        <div className="text-center text-xs font-mono text-slate-500 space-y-1">
+        <div className="text-center text-xs font-mono text-slate-500 space-y-2">
           <p className="flex items-center justify-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-600 inline" />
             <span>Paiements sécurisés via Mobile Money (Orange, Wave, MTN, Moov) & Carte Bancaire</span>
+          </p>
+          <p className="text-[11px] text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            Le trading comporte un risque de perte en capital. Ces signaux sont fournis à titre informatif, pas comme un conseil en investissement.
           </p>
           <p className="text-[11px] text-slate-400">
             Vous pourrez changer de profil ou réviser votre abonnement à tout moment depuis le terminal.
