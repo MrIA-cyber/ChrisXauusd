@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Play, Pause, Zap, Calculator, Clock, Globe, UserCheck, LogIn, LogOut, Sparkles, User, ShieldAlert, Users, RefreshCw } from 'lucide-react';
+import { Volume2, VolumeX, Play, Pause, Zap, Calculator, Clock, Globe, UserCheck, LogIn, LogOut, Sparkles, User, ShieldAlert, Users, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
@@ -145,14 +145,14 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
           {/* Subscription / User Auth Pill & Switch Profile Button */}
           {isSubscriberActive ? (
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 bg-slate-800 border border-emerald-500/50 px-3 py-1.5 rounded-xl text-xs font-mono">
+              <div className="flex items-center gap-2 bg-emerald-950/90 border border-emerald-500/50 px-3 py-1.5 rounded-xl text-xs font-mono shadow-md backdrop-blur-md">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-emerald-300 font-bold truncate max-w-[130px]">
-                    {userSession?.name || 'Abonné VIP'}
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span className="text-emerald-300 font-bold tracking-tight">
+                    Abonnement Premium actif
                   </span>
-                  <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.2 rounded font-bold">
-                    {subscription.daysRemaining}j
+                  <span className="text-[10px] bg-emerald-900/90 text-emerald-200 border border-emerald-400/50 px-2 py-0.5 rounded-full font-bold ml-1">
+                    J-{subscription.daysRemaining}
                   </span>
                 </div>
                 <button
@@ -177,10 +177,10 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={onOpenSubscribeModal}
-                className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold font-mono px-3.5 py-1.5 rounded-xl text-xs shadow-md shadow-amber-500/20 active:scale-[0.97] transition-all"
+                className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold font-mono px-3.5 py-1.5 rounded-xl text-xs shadow-md shadow-amber-500/20 active:scale-[0.97] hover:shadow-amber-500/30 transition-all"
               >
                 <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
-                <span>{userSession ? 'Passer au Premium' : `S'abonner – ${formatFcfa(SUBSCRIPTION_PRICE_FCFA)}`}</span>
+                <span>Voir les offres Premium</span>
               </button>
 
               {!userSession && (

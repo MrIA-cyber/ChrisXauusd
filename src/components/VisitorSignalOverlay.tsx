@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Lock, Sparkles, LogIn, CheckCircle2, ShieldCheck, Zap, ArrowRight, Shield } from 'lucide-react';
-import { formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
+import { Lock, Sparkles, LogIn, CheckCircle2, ShieldCheck, Zap, ArrowRight } from 'lucide-react';
 
 interface VisitorSignalOverlayProps {
   onOpenSubscribeModal: () => void;
@@ -14,8 +13,8 @@ interface VisitorSignalOverlayProps {
 export const VisitorSignalOverlay: React.FC<VisitorSignalOverlayProps> = ({
   onOpenSubscribeModal,
   onOpenLoginModal,
-  title = 'Abonnez-vous pour débloquer les signaux en temps réel',
-  description = "Accédez aux prix d'entrée exacts, Stop Loss, Take Profits et notifications de scalping XAU/USD M1/M5.",
+  title = 'Mode Visiteur',
+  description = "Vous consultez un aperçu des performances. Passez à l'offre Premium pour accéder aux signaux en temps réel, aux prix d'entrée précis, aux Stop Loss et Take Profit.",
   compact = false,
 }) => {
   if (compact) {
@@ -45,10 +44,10 @@ export const VisitorSignalOverlay: React.FC<VisitorSignalOverlayProps> = ({
         <div className="flex flex-wrap items-center justify-center gap-2">
           <button
             onClick={onOpenSubscribeModal}
-            className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 text-xs font-bold font-mono px-3.5 py-1.5 rounded-xl shadow-lg shadow-amber-500/20 transition-all transform active:scale-95 flex items-center gap-1.5"
+            className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 text-xs font-bold font-mono px-3.5 py-1.5 rounded-xl shadow-lg shadow-amber-500/20 active:scale-[0.98] hover:shadow-amber-500/30 transition-all flex items-center gap-1.5"
           >
             <Sparkles className="w-3.5 h-3.5 fill-current" />
-            <span>Débloquer l'accès VIP</span>
+            <span>Voir les offres Premium</span>
           </button>
           <button
             onClick={onOpenLoginModal}
@@ -75,7 +74,7 @@ export const VisitorSignalOverlay: React.FC<VisitorSignalOverlayProps> = ({
       {/* Lock emblem with pulsing radar */}
       <div className="relative">
         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 via-amber-500/20 to-amber-800/40 border border-amber-400/60 flex items-center justify-center text-amber-400 shadow-xl shadow-amber-500/20 backdrop-blur-md">
-          <Lock className="w-8 h-8 drop-shadow-md" />
+          <Sparkles className="w-8 h-8 fill-amber-400/20 text-amber-400 drop-shadow-md" />
         </div>
         <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
@@ -87,12 +86,9 @@ export const VisitorSignalOverlay: React.FC<VisitorSignalOverlayProps> = ({
       <div className="space-y-1.5 max-w-md relative z-10">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-950/90 text-amber-300 border border-amber-500/50 uppercase tracking-widest shadow-xs">
           <Zap className="w-3 h-3 fill-amber-400 text-amber-400" />
-          <span>ACCÈS VIP RÉSERVÉ AUX ABONNÉS</span>
+          <span>{title}</span>
         </div>
-        <h3 className="text-base sm:text-xl font-bold font-mono text-white tracking-tight leading-snug">
-          {title}
-        </h3>
-        <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed pt-1">
           {description}
         </p>
       </div>
@@ -121,10 +117,10 @@ export const VisitorSignalOverlay: React.FC<VisitorSignalOverlayProps> = ({
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-md pt-1 relative z-10">
         <button
           onClick={onOpenSubscribeModal}
-          className="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-mono font-bold py-3 px-5 rounded-2xl text-xs sm:text-sm shadow-xl shadow-amber-500/25 transform hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
+          className="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-mono font-bold py-3 px-5 rounded-2xl text-xs sm:text-sm shadow-xl shadow-amber-500/20 active:scale-[0.98] hover:shadow-amber-500/30 transition-all flex items-center justify-center gap-2 group"
         >
-          <Sparkles className="w-4 h-4 fill-current text-slate-950 group-hover:rotate-12 transition-transform" />
-          <span>Débloquer les signaux VIP</span>
+          <Sparkles className="w-4 h-4 fill-slate-950 text-slate-950 group-hover:rotate-12 transition-transform" />
+          <span>Voir les offres Premium</span>
           <ArrowRight className="w-4 h-4 text-slate-950 group-hover:translate-x-1 transition-transform" />
         </button>
 
@@ -145,4 +141,5 @@ export const VisitorSignalOverlay: React.FC<VisitorSignalOverlayProps> = ({
     </motion.div>
   );
 };
+
 

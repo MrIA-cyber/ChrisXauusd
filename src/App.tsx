@@ -41,6 +41,7 @@ import { LoginModal } from './components/LoginModal';
 import { ExpirationAlertModal } from './components/ExpirationAlertModal';
 import { NewsAndEducationSection } from './components/NewsAndEducationSection';
 import { UserReviewsSection } from './components/UserReviewsSection';
+import { VisitorLandingView } from './components/VisitorLandingView';
 import { AdminPortal } from './components/admin/AdminPortal';
 import { SecretAdminModal } from './components/admin/SecretAdminModal';
 import { OnboardingProfileSelector } from './components/OnboardingProfileSelector';
@@ -553,224 +554,179 @@ export default function App() {
       {/* Main Content Dashboard */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-6 relative z-10">
         
-        {/* Global Sticky Visitor Information Banner (Premium Glassmorphic Redesign) */}
-        {isVisitor && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="sticky top-2 z-30 bg-slate-900/95 border border-amber-500/40 text-white rounded-2xl p-4 shadow-2xl backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-3 font-mono transition-all overflow-hidden"
-          >
-            {/* Ambient Background Lights */}
-            <div className="absolute -top-12 -left-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+        {isVisitor ? (
+          /* Institutional Visitor Landing Presentation Page */
+          <VisitorLandingView
+            onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+            onOpenLoginModal={() => setIsLoginModalOpen(true)}
+          />
+        ) : (
+          /* Active Subscriber VIP Real-Time Trading Terminal */
+          <>
+            {/* 5. Daily Statistics Cards */}
+            <StatsGrid stats={dailyStats} />
 
-            <div className="flex items-start sm:items-center gap-3 relative z-10">
-              <div className="relative shrink-0">
-                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-400/20 via-amber-500/20 to-amber-700/30 border border-amber-400/50 flex items-center justify-center text-amber-400 shadow-md">
-                  <Lock className="w-5 h-5" />
-                </div>
-                <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500" />
-                </span>
-              </div>
-
-              <div className="space-y-0.5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-white font-bold text-xs sm:text-sm tracking-tight flex items-center gap-1.5">
-                    MODE VISITEUR — ACCÈS LIMITÉ
-                  </span>
-                  <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-500/40">
-                    700 000 FCFA / mois
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-300 font-sans leading-snug">
-                  Débloquez les prix d'entrée exacts, Stop Loss, Take Profits et notifications M1/M5 en temps réel.
-                </p>
-              </div>
-            </div>
-
-            {/* Quick Action CTAs */}
-            <div className="flex items-center gap-2 shrink-0 w-full md:w-auto pt-1 md:pt-0 relative z-10">
-              <button
-                onClick={() => setIsSubscribeModalOpen(true)}
-                className="w-full md:w-auto btn-gold-glow text-slate-950 text-xs font-bold font-mono px-4 py-2.5 rounded-xl shadow-lg flex items-center justify-center gap-1.5"
-              >
-                <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
-                <span>{userSession ? 'Passer au Premium' : 'Débloquer l\'accès VIP'}</span>
-              </button>
-            </div>
-          </motion.div>
-        )}
-
-        {/* 5. Daily Statistics Cards (Visible to everyone) */}
-        <StatsGrid stats={dailyStats} />
-
-        {/* 6. Main Active Setups & Live Chart Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          
-          {/* Left Column (7 cols): Active Sequential Trade Setup Ticket */}
-          <div className="lg:col-span-7 space-y-4">
-            
-            {/* Section Header */}
-            <div className="flex items-center justify-between bg-slate-900/80 p-4 rounded-2xl border border-slate-800 shadow-xl backdrop-blur-md">
-              <div className="flex items-center gap-2.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-                <h2 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2 font-mono">
-                  <Ticket className="w-4 h-4 text-amber-400" />
-                  <span>SIGNAL SÉQUENTIEL EN TEMPS RÉEL</span>
-                </h2>
-              </div>
+            {/* 6. Main Active Setups & Live Chart Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
-              <div className="flex items-center gap-2 text-xs font-mono">
-                {!isVisitor ? (
-                  <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2.5 py-0.5 rounded-full">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Abonné VIP
-                  </span>
-                ) : (
-                  <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2.5 py-0.5 rounded-full">
-                    <Lock className="w-3 h-3 text-amber-400" /> Visiteur
-                  </span>
-                )}
-                <button
-                  onClick={() => handleGenerateNewSignal('BUY')}
-                  className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/50 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all active:scale-95"
-                >
-                  + ACHAT
-                </button>
-                <button
-                  onClick={() => handleGenerateNewSignal('SELL')}
-                  className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/50 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all active:scale-95"
-                >
-                  + VENTE
-                </button>
-              </div>
-            </div>
-
-            {/* Analysis Transition State Banner when generating next signal */}
-            {isAnalyzingNextSignal && (
-              <div className="bg-slate-900/90 border border-amber-500/50 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl font-mono animate-pulse">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
-                    <Sparkles className="w-5 h-5 animate-spin" />
+              {/* Left Column (7 cols): Active Sequential Trade Setup Ticket */}
+              <div className="lg:col-span-7 space-y-4">
+                
+                {/* Section Header */}
+                <div className="flex items-center justify-between bg-slate-900/80 p-4 rounded-2xl border border-slate-800 shadow-xl backdrop-blur-md">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+                    <h2 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2 font-mono">
+                      <Ticket className="w-4 h-4 text-amber-400" />
+                      <span>SIGNAL SÉQUENTIEL EN TEMPS RÉEL</span>
+                    </h2>
                   </div>
-                  <div>
-                    <div className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
-                      <span>ANALYSE DU MARCHÉ & PRÉPARATION DU PROCHAIN SIGNAL</span>
-                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                  
+                  <div className="flex items-center gap-2 text-xs font-mono">
+                    <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2.5 py-0.5 rounded-full">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Abonné VIP
+                    </span>
+                    <button
+                      onClick={() => handleGenerateNewSignal('BUY')}
+                      className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/50 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all active:scale-95"
+                    >
+                      + ACHAT
+                    </button>
+                    <button
+                      onClick={() => handleGenerateNewSignal('SELL')}
+                      className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/50 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all active:scale-95"
+                    >
+                      + VENTE
+                    </button>
+                  </div>
+                </div>
+
+                {/* Analysis Transition State Banner when generating next signal */}
+                {isAnalyzingNextSignal && (
+                  <div className="bg-slate-900/90 border border-amber-500/50 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl font-mono animate-pulse">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                        <Sparkles className="w-5 h-5 animate-spin" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
+                          <span>ANALYSE DU MARCHÉ & PRÉPARATION DU PROCHAIN SIGNAL</span>
+                          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-0.5 font-sans">
+                          Balayage des zones d'Order Block M1/M5 et validation des confluences (R:R ≥ 1:1.5)...
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-[11px] text-slate-300 mt-0.5 font-sans">
-                      Balayage des zones d'Order Block M1/M5 et validation des confluences (R:R ≥ 1:1.5)...
-                    </p>
+                    <div className="bg-slate-950 px-3 py-1 rounded-xl border border-amber-500/30 text-amber-300 font-bold text-xs whitespace-nowrap">
+                      Signal imminent ({nextSignalCountdown > 0 ? `${nextSignalCountdown}s` : '1s'})
+                    </div>
                   </div>
-                </div>
-                <div className="bg-slate-950 px-3 py-1 rounded-xl border border-amber-500/30 text-amber-300 font-bold text-xs whitespace-nowrap">
-                  Signal imminent ({nextSignalCountdown > 0 ? `${nextSignalCountdown}s` : '1s'})
-                </div>
-              </div>
-            )}
-
-            {/* Render Primary Active Signal Ticket */}
-            <div className="space-y-3">
-              <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  {activeSetup ? 'SIGNAL ACTIF EN COURS' : 'DERNIER SIGNAL CLÔTURÉ'}
-                </span>
-                {activeSetup && (
-                  <span className="text-amber-400 text-[11px] animate-pulse">● Suivi du prix en temps réel</span>
                 )}
-              </div>
 
-              {displayedTicket ? (
-                <TradeTicket
-                  key={displayedTicket.id}
-                  setup={displayedTicket}
-                  currentTick={currentTick}
-                  onSelectSetup={(s) => setSelectedTicket(s)}
-                  isVisitor={isVisitor}
-                  onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-                  index={0}
-                />
-              ) : (
-                <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center text-slate-400 font-mono">
-                  Génération du premier ticket de trade en cours...
-                </div>
-              )}
-            </div>
+                {/* Render Primary Active Signal Ticket */}
+                <div className="space-y-3">
+                  <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      {activeSetup ? 'SIGNAL ACTIF EN COURS' : 'DERNIER SIGNAL CLÔTURÉ'}
+                    </span>
+                    {activeSetup && (
+                      <span className="text-amber-400 text-[11px] animate-pulse">● Suivi du prix en temps réel</span>
+                    )}
+                  </div>
 
-            {/* Recent Closed Signals History preview */}
-            {recentClosedTickets.length > 0 && (
-              <div className="space-y-2 pt-2 border-t border-slate-800/80">
-                <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
-                  <span>HISTORIQUE DES DERNIERS SIGNALS CLÔTURÉS</span>
-                  <span className="text-[10px] text-slate-500">Ordre Chronologique</span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {recentClosedTickets.map((setup, idx) => (
+                  {displayedTicket ? (
                     <TradeTicket
-                      key={setup.id}
-                      setup={setup}
+                      key={displayedTicket.id}
+                      setup={displayedTicket}
                       currentTick={currentTick}
                       onSelectSetup={(s) => setSelectedTicket(s)}
                       isVisitor={isVisitor}
                       onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-                      index={idx + 1}
+                      index={0}
                     />
-                  ))}
+                  ) : (
+                    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center text-slate-400 font-mono">
+                      Génération du premier ticket de trade en cours...
+                    </div>
+                  )}
+                </div>
+
+                {/* Recent Closed Signals History preview */}
+                {recentClosedTickets.length > 0 && (
+                  <div className="space-y-2 pt-2 border-t border-slate-800/80">
+                    <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
+                      <span>HISTORIQUE DES DERNIERS SIGNALS CLÔTURÉS</span>
+                      <span className="text-[10px] text-slate-500">Ordre Chronologique</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {recentClosedTickets.map((setup, idx) => (
+                        <TradeTicket
+                          key={setup.id}
+                          setup={setup}
+                          currentTick={currentTick}
+                          onSelectSetup={(s) => setSelectedTicket(s)}
+                          isVisitor={isVisitor}
+                          onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+                          index={idx + 1}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              </div>
+
+              {/* Right Column (5 cols): Interactive Chart & Signal Details */}
+              <div className="lg:col-span-5 space-y-4">
+                <LiveChartWidget
+                  candles={candles}
+                  currentTick={currentTick}
+                  activeSetup={selectedTicket || activeSetup || null}
+                />
+
+                {/* Quick Risk Rules Card */}
+                <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 text-xs font-mono space-y-2.5 shadow-xl backdrop-blur-md">
+                  <div className="flex items-center justify-between text-white font-bold border-b border-slate-800 pb-2">
+                    <span className="flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-amber-400" /> RÈGLES DE SCALPING STRICTES
+                    </span>
+                    <span className="text-[10px] text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40 font-bold">
+                      VERIFIED
+                    </span>
+                  </div>
+                  <ul className="space-y-1.5 text-slate-300 text-[11px] list-disc list-inside font-sans">
+                    <li><strong className="text-rose-400 font-mono">Stop Loss Obligatoire :</strong> Aucun trade ne peut être émis sans SL défini.</li>
+                    <li><strong className="text-amber-300 font-mono">Ratio Risque/Rendement :</strong> Tous les tickets exigent au minimum R:R 1:1.50.</li>
+                    <li><strong className="text-emerald-400 font-mono">Prise de Profits Scalp :</strong> Objectifs de 20 à 60 pips sur l'Or.</li>
+                  </ul>
                 </div>
               </div>
-            )}
 
-          </div>
+            </div>
 
-          {/* Right Column (5 cols): Interactive Chart & Signal Details */}
-          <div className="lg:col-span-5 space-y-4">
-            <LiveChartWidget
-              candles={candles}
-              currentTick={currentTick}
-              activeSetup={selectedTicket || activeSetup || null}
+            {/* 7. Trade Journal Table (Full Session History) */}
+            <TradeJournalTable
+              trades={trades}
+              isVisitor={isVisitor}
+              onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
             />
 
-            {/* Quick Risk Rules Card */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 text-xs font-mono space-y-2.5 shadow-xl backdrop-blur-md">
-              <div className="flex items-center justify-between text-white font-bold border-b border-slate-800 pb-2">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-amber-400" /> RÈGLES DE SCALPING STRICTES
-                </span>
-                <span className="text-[10px] text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40 font-bold">
-                  VERIFIED
-                </span>
-              </div>
-              <ul className="space-y-1.5 text-slate-300 text-[11px] list-disc list-inside font-sans">
-                <li><strong className="text-rose-400 font-mono">Stop Loss Obligatoire :</strong> Aucun trade ne peut être émis sans SL défini.</li>
-                <li><strong className="text-amber-300 font-mono">Ratio Risque/Rendement :</strong> Tous les tickets exigent au minimum R:R 1:1.50.</li>
-                <li><strong className="text-emerald-400 font-mono">Prise de Profits Scalp :</strong> Objectifs de 20 à 60 pips sur l'Or.</li>
-              </ul>
-            </div>
-          </div>
+            {/* 8. News & Education Section */}
+            <NewsAndEducationSection
+              isVisitor={isVisitor}
+              onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+            />
 
-        </div>
-
-        {/* 7. Trade Journal Table (Full Session History - Blurred for Visitors) */}
-        <TradeJournalTable
-          trades={trades}
-          isVisitor={isVisitor}
-          onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-        />
-
-        {/* 8. News & Education Section ("Actualités & Éducation" - Fully accessible to ALL) */}
-        <NewsAndEducationSection
-          isVisitor={isVisitor}
-          onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-        />
-
-        {/* 9. Premium User Reviews Section ("Avis Utilisateurs") */}
-        <UserReviewsSection
-          isVisitor={isVisitor}
-          onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-          onOpenLoginModal={() => setIsLoginModalOpen(true)}
-        />
+            {/* 9. Premium User Reviews Section */}
+            <UserReviewsSection
+              isVisitor={isVisitor}
+              onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+              onOpenLoginModal={() => setIsLoginModalOpen(true)}
+            />
+          </>
+        )}
 
       </main>
 
