@@ -40,7 +40,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
   const candleWidth = Math.max(4, (svgWidth / candles.length) * 0.65);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+    <div className="bg-white border border-slate-200/80 rounded-[20px] p-4.5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] font-sans">
       
       {/* Chart Header Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">

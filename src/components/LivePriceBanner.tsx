@@ -1,5 +1,5 @@
-import React from 'react';
-import { TrendingUp, TrendingDown, Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { TrendingUp, TrendingDown, Activity, ArrowUpRight, ArrowDownRight, Layers } from 'lucide-react';
 import { PriceTick, Candle } from '../types';
 
 interface LivePriceBannerProps {
@@ -9,6 +9,25 @@ interface LivePriceBannerProps {
 
 export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, recentCandles }) => {
   const isUp = currentTick.change24h >= 0;
+  
+  // Tick Direction Animation State (Green flash on rise, Red flash on drop)
+  const [tickDirection, setTickDirection] = useState<'UP' | 'DOWN' | 'NEUTRAL'>('NEUTRAL');
+  const prevPriceRef = useRef<number>(currentTick.price);
+
+  useEffect(() => {
+    if (currentTick.price > prevPriceRef.current) {
+      setTickDirection('UP');
+    } else if (currentTick.price < prevPriceRef.current) {
+      setTickDirection('DOWN');
+    }
+    prevPriceRef.current = currentTick.price;
+
+    const timer = setTimeout(() => {
+      setTickDirection('NEUTRAL');
+    }, 450);
+
+    return () => clearTimeout(timer);
+  }, [currentTick.price]);
 
   // Build SVG path points for sparkline chart
   const sparklinePoints = React.useMemo(() => {
@@ -17,8 +36,8 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
     const min = Math.min(...closes);
     const max = Math.max(...closes);
     const range = max - min || 1;
-    const width = 220;
-    const height = 44;
+    const width = 200;
+    const height = 40;
 
     return closes
       .map((val, idx) => {
@@ -30,107 +49,131 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
   }, [recentCandles]);
 
   return (
-    <div className="bg-slate-950/90 border-b border-slate-800/80 px-4 py-3 shadow-xl backdrop-blur-md text-slate-100">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <div className="bg-white/90 border-b border-slate-200/80 px-4 py-3 sm:py-3.5 shadow-xs backdrop-blur-xl text-[#0F172A] relative overflow-hidden font-sans">
+      {/* Background Subtle Grid Effect */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f005_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f005_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
         
-        {/* Left: Ticker Symbol & Main Price */}
-        <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
+        {/* Left: Ticker Symbol & Centerpiece Main Market Price */}
+        <div className="flex items-center gap-5 w-full md:w-auto justify-between md:justify-start">
           <div className="flex items-center gap-3">
-            <div className="flex flex-col">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-600 shrink-0">
+              <Layers className="w-5 h-5 text-amber-500 animate-pulse" />
+            </div>
+            <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-black tracking-wider text-white font-mono">
+                <span className="text-xl sm:text-2xl font-black tracking-wider text-[#0F172A] font-mono">
                   XAU/USD
                 </span>
-                <span className="text-xs bg-amber-950/80 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded font-mono font-bold">
-                  OR COMPTANT
+                <span className="text-[10px] bg-amber-50 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider">
+                  SPOT GOLD
                 </span>
               </div>
-              <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1 mt-0.5">
-                <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
-                FLUX DE MARCHÉ DIRECT (SIMULÉ)
+              <span className="text-[11px] text-slate-500 font-mono flex items-center gap-1.5 mt-0.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping" />
+                <span className="text-slate-700 font-bold">LIVE INSTITUTIONAL FEED</span>
               </span>
             </div>
           </div>
 
-          {/* Main Price Big Display */}
-          <div className="flex items-baseline gap-3">
-            <div className="text-2xl sm:text-3xl font-black font-mono tracking-tight transition-colors duration-200 text-white">
+          {/* MAIN PRICE CENTERPIECE WITH DYNAMIC TICK ANIMATION */}
+          <div className="flex items-center gap-3">
+            <div
+              className={`text-3xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight transition-all duration-300 px-4 py-1.5 rounded-[20px] ${
+                tickDirection === 'UP'
+                  ? 'text-emerald-700 bg-emerald-50 shadow-[0_0_25px_rgba(22,163,74,0.25)] border border-emerald-300 scale-[1.02]'
+                  : tickDirection === 'DOWN'
+                  ? 'text-rose-700 bg-rose-50 shadow-[0_0_25px_rgba(220,38,38,0.25)] border border-rose-300 scale-[1.02]'
+                  : 'text-[#0F172A] bg-slate-50 border border-slate-200/80 shadow-xs'
+              }`}
+            >
               ${currentTick.price.toFixed(2)}
             </div>
 
             <div
-              className={`flex items-center gap-1 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border ${
+              className={`flex items-center gap-1 font-mono text-xs sm:text-sm font-bold px-3 py-1.5 rounded-xl border transition-all ${
                 isUp
-                  ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300'
-                  : 'bg-rose-950/80 border-rose-500/40 text-rose-300'
+                  ? 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-xs'
+                  : 'bg-rose-50 border-rose-300 text-rose-800 shadow-xs'
               }`}
             >
-              {isUp ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
+              {isUp ? <ArrowUpRight className="w-4 h-4 text-emerald-600" /> : <ArrowDownRight className="w-4 h-4 text-rose-600" />}
               <span>{isUp ? '+' : ''}{currentTick.change24h.toFixed(2)}</span>
-              <span>({isUp ? '+' : ''}{currentTick.changePercent24h.toFixed(2)}%)</span>
+              <span className="opacity-80">({isUp ? '+' : ''}{currentTick.changePercent24h.toFixed(2)}%)</span>
             </div>
           </div>
         </div>
 
-        {/* Center: Bid/Ask & Spread + 24h Range */}
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-mono w-full md:w-auto justify-around md:justify-end">
+        {/* Center/Right: 3 Identical Institutional Cards (SPREAD, BID, ASK) + Sparkline */}
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-mono w-full md:w-auto justify-between md:justify-end">
           
-          {/* Bid / Ask */}
-          <div className="flex items-center gap-3 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-800">
-            <div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">OFFRE (BID)</div>
-              <div className="text-emerald-400 font-bold font-mono">${currentTick.bid.toFixed(2)}</div>
+          {/* 3 Identical Cards: SPREAD, BID, ASK */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full sm:w-auto">
+            
+            {/* 1. SPREAD Card */}
+            <div className="bg-white border border-slate-200/80 p-2.5 sm:p-3 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] min-w-[95px] text-center hover:border-amber-400 transition-colors">
+              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">
+                SPREAD
+              </span>
+              <span className="text-xs sm:text-sm font-black text-amber-600 block font-mono">
+                ${currentTick.spread.toFixed(2)}
+              </span>
             </div>
-            <div className="h-6 w-px bg-slate-800" />
-            <div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">DEMANDE (ASK)</div>
-              <div className="text-rose-400 font-bold font-mono">${currentTick.ask.toFixed(2)}</div>
+
+            {/* 2. BID Card */}
+            <div className="bg-white border border-slate-200/80 p-2.5 sm:p-3 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] min-w-[100px] text-center hover:border-emerald-400 transition-colors">
+              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">
+                BID (OFFRE)
+              </span>
+              <span className="text-xs sm:text-sm font-black text-emerald-600 block font-mono">
+                ${currentTick.bid.toFixed(2)}
+              </span>
             </div>
-            <div className="h-6 w-px bg-slate-800" />
-            <div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">SPREAD</div>
-              <div className="text-amber-400 font-bold font-mono">${currentTick.spread.toFixed(2)}</div>
+
+            {/* 3. ASK Card */}
+            <div className="bg-white border border-slate-200/80 p-2.5 sm:p-3 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] min-w-[100px] text-center hover:border-rose-400 transition-colors">
+              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">
+                ASK (DEMANDE)
+              </span>
+              <span className="text-xs sm:text-sm font-black text-rose-600 block font-mono">
+                ${currentTick.ask.toFixed(2)}
+              </span>
             </div>
+
           </div>
 
-          {/* 24h High / Low */}
-          <div className="hidden sm:flex items-center gap-3 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-800">
-            <div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold flex items-center gap-1">
-                <TrendingUp className="w-3 h-3 text-emerald-400" /> HAUT 24H
+          {/* Mini Sparkline Graph & 24h High/Low */}
+          <div className="hidden lg:flex items-center gap-4 bg-white border border-slate-200/80 p-2.5 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)]">
+            <div className="flex flex-col text-[11px] font-mono space-y-1 pr-3 border-r border-slate-100">
+              <div className="flex items-center gap-1 text-slate-500">
+                <TrendingUp className="w-3 h-3 text-emerald-600" />
+                <span>H: <strong className="text-[#0F172A]">${currentTick.high24h.toFixed(2)}</strong></span>
               </div>
-              <div className="text-slate-200 font-bold font-mono">${currentTick.high24h.toFixed(2)}</div>
-            </div>
-            <div className="h-6 w-px bg-slate-800" />
-            <div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold flex items-center gap-1">
-                <TrendingDown className="w-3 h-3 text-rose-400" /> BAS 24H
+              <div className="flex items-center gap-1 text-slate-500">
+                <TrendingDown className="w-3 h-3 text-rose-600" />
+                <span>L: <strong className="text-[#0F172A]">${currentTick.low24h.toFixed(2)}</strong></span>
               </div>
-              <div className="text-slate-200 font-bold font-mono">${currentTick.low24h.toFixed(2)}</div>
             </div>
-          </div>
 
-          {/* Mini Sparkline Graph */}
-          <div className="hidden lg:flex flex-col items-end">
-            <span className="text-[10px] font-mono text-slate-400 mb-0.5 font-medium">TENDANCE M1 (30 DERN. MIN)</span>
-            <div className="w-[220px] h-[36px] bg-slate-900/80 rounded-xl border border-slate-800 p-1 overflow-hidden">
-              <svg className="w-full h-full overflow-visible" viewBox="0 0 220 44">
+            <div className="w-[180px] h-[36px] overflow-hidden">
+              <svg className="w-full h-full" viewBox="0 0 200 40">
                 <defs>
                   <linearGradient id="sparklineGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={isUp ? '#10b981' : '#f43f5e'} stopOpacity="0.3" />
-                    <stop offset="100%" stopColor={isUp ? '#10b981' : '#f43f5e'} stopOpacity="0.0" />
+                    <stop offset="0%" stopColor={isUp ? '#16a34a' : '#dc2626'} stopOpacity="0.3" />
+                    <stop offset="100%" stopColor={isUp ? '#16a34a' : '#dc2626'} stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
                 {sparklinePoints && (
                   <>
                     <polygon
-                      points={`0,44 ${sparklinePoints} 220,44`}
+                      points={`0,40 ${sparklinePoints} 200,40`}
                       fill="url(#sparklineGrad)"
                     />
                     <polyline
                       fill="none"
-                      stroke={isUp ? '#10b981' : '#f43f5e'}
-                      strokeWidth="2"
+                      stroke={isUp ? '#16a34a' : '#dc2626'}
+                      strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       points={sparklinePoints}

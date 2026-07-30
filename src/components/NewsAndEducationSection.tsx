@@ -32,11 +32,11 @@ export const NewsAndEducationSection: React.FC<NewsAndEducationSectionProps> = (
         <div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-blue-600" />
-            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 font-mono">
+            <h2 className="text-base font-bold text-[#0F172A] flex items-center gap-2 font-mono">
               <BookOpen className="w-5 h-5 text-blue-600" />
               <span>ACTUALITÉS & ÉDUCATION (XAU/USD & SCALPING)</span>
             </h2>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
               ACCÈS LIBRE
             </span>
           </div>
@@ -57,10 +57,10 @@ export const NewsAndEducationSection: React.FC<NewsAndEducationSectionProps> = (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id as any)}
-              className={`px-3 py-1.5 rounded-lg border transition-all ${
+              className={`px-3 py-1.5 rounded-xl border transition-all ${
                 selectedCategory === cat.id
                   ? 'bg-blue-600 text-white border-blue-700 font-bold shadow-xs'
-                  : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                  : 'bg-white border-slate-200 text-slate-600 hover:text-slate-950'
               }`}
             >
               {cat.label}
@@ -78,7 +78,7 @@ export const NewsAndEducationSection: React.FC<NewsAndEducationSectionProps> = (
           return (
             <article
               key={article.id}
-              className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-blue-300 transition-all duration-300 flex flex-col justify-between space-y-4 group shadow-sm"
+              className="bg-white border border-slate-200/80 rounded-[20px] p-6 hover:border-amber-400 transition-all duration-300 flex flex-col justify-between space-y-4 group shadow-[0_10px_30px_rgba(15,23,42,0.05)]"
             >
               <div className="space-y-3">
                 
@@ -98,7 +98,7 @@ export const NewsAndEducationSection: React.FC<NewsAndEducationSectionProps> = (
                 </div>
 
                 {/* Article Title */}
-                <h3 className="text-sm font-bold text-slate-900 font-mono group-hover:text-blue-700 transition-colors leading-snug">
+                <h3 className="text-sm font-bold text-[#0F172A] font-mono group-hover:text-blue-700 transition-colors leading-snug">
                   {article.title}
                 </h3>
 
@@ -119,7 +119,7 @@ export const NewsAndEducationSection: React.FC<NewsAndEducationSectionProps> = (
                   {article.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
+                      className="text-[10px] font-mono text-slate-600 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200"
                     >
                       #{tag}
                     </span>

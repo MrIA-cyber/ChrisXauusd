@@ -466,7 +466,7 @@ export default function App() {
   // Render Onboarding Profile Selection View if active
   if (isOnboardingView) {
     return (
-      <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+      <div className="min-h-screen bg-[#FAFBFC] text-[#0F172A] flex flex-col font-sans selection:bg-amber-500 selection:text-white">
         <ChrisBioBubble
           isVisible={showBioBubble}
           onClose={() => setShowBioBubble(false)}
@@ -511,11 +511,11 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070a12] text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950 relative overflow-x-hidden">
-      {/* Background Ambient Glows */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none z-0" />
-      <div className="fixed top-1/3 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none z-0" />
-      <div className="fixed bottom-10 left-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+    <div className="min-h-screen bg-[#FAFBFC] text-[#0F172A] flex flex-col font-sans selection:bg-amber-500 selection:text-white relative overflow-x-hidden">
+      {/* Background Subtle Ambient Glows in Light Palette */}
+      <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="fixed top-1/3 right-10 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="fixed bottom-10 left-10 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none z-0" />
 
       <ChrisBioBubble
         isVisible={showBioBubble}
@@ -572,29 +572,29 @@ export default function App() {
               {/* Left Column (7 cols): Active Sequential Trade Setup Ticket */}
               <div className="lg:col-span-7 space-y-4">
                 
-                {/* Section Header */}
-                <div className="flex items-center justify-between bg-slate-900/80 p-4 rounded-2xl border border-slate-800 shadow-xl backdrop-blur-md">
+                {/* Section Header Card */}
+                <div className="flex items-center justify-between bg-white p-4.5 rounded-[20px] border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] backdrop-blur-md">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-                    <h2 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2 font-mono">
-                      <Ticket className="w-4 h-4 text-amber-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
+                    <h2 className="text-xs sm:text-sm font-bold text-[#0F172A] flex items-center gap-2 font-mono">
+                      <Ticket className="w-4 h-4 text-amber-500" />
                       <span>SIGNAL SÉQUENTIEL EN TEMPS RÉEL</span>
                     </h2>
                   </div>
                   
                   <div className="flex items-center gap-2 text-xs font-mono">
-                    <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2.5 py-0.5 rounded-full">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Abonné VIP
+                    <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Abonné VIP
                     </span>
                     <button
                       onClick={() => handleGenerateNewSignal('BUY')}
-                      className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/50 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all active:scale-95"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-700 px-3 py-1 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95"
                     >
                       + ACHAT
                     </button>
                     <button
                       onClick={() => handleGenerateNewSignal('SELL')}
-                      className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/50 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all active:scale-95"
+                      className="bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 px-3 py-1 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95"
                     >
                       + VENTE
                     </button>
@@ -603,22 +603,22 @@ export default function App() {
 
                 {/* Analysis Transition State Banner when generating next signal */}
                 {isAnalyzingNextSignal && (
-                  <div className="bg-slate-900/90 border border-amber-500/50 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl font-mono animate-pulse">
+                  <div className="bg-amber-50/90 border border-amber-300 rounded-[20px] p-4.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[0_10px_25px_rgba(245,158,11,0.1)] font-mono animate-pulse">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-600 shrink-0">
                         <Sparkles className="w-5 h-5 animate-spin" />
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
+                        <div className="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-2">
                           <span>ANALYSE DU MARCHÉ & PRÉPARATION DU PROCHAIN SIGNAL</span>
-                          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                          <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
                         </div>
-                        <p className="text-[11px] text-slate-300 mt-0.5 font-sans">
+                        <p className="text-[11px] text-slate-700 mt-0.5 font-sans">
                           Balayage des zones d'Order Block M1/M5 et validation des confluences (R:R ≥ 1:1.5)...
                         </p>
                       </div>
                     </div>
-                    <div className="bg-slate-950 px-3 py-1 rounded-xl border border-amber-500/30 text-amber-300 font-bold text-xs whitespace-nowrap">
+                    <div className="bg-white px-3 py-1 rounded-xl border border-amber-300 text-amber-800 font-bold text-xs whitespace-nowrap shadow-xs">
                       Signal imminent ({nextSignalCountdown > 0 ? `${nextSignalCountdown}s` : '1s'})
                     </div>
                   </div>
@@ -626,13 +626,13 @@ export default function App() {
 
                 {/* Render Primary Active Signal Ticket */}
                 <div className="space-y-3">
-                  <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
+                  <div className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-1">
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
                       {activeSetup ? 'SIGNAL ACTIF EN COURS' : 'DERNIER SIGNAL CLÔTURÉ'}
                     </span>
                     {activeSetup && (
-                      <span className="text-amber-400 text-[11px] animate-pulse">● Suivi du prix en temps réel</span>
+                      <span className="text-amber-600 text-[11px] font-bold animate-pulse">● Suivi du prix en temps réel</span>
                     )}
                   </div>
 
@@ -647,7 +647,7 @@ export default function App() {
                       index={0}
                     />
                   ) : (
-                    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center text-slate-400 font-mono">
+                    <div className="bg-white border border-slate-200/80 rounded-[20px] p-8 text-center text-slate-500 font-mono shadow-sm">
                       Génération du premier ticket de trade en cours...
                     </div>
                   )}
@@ -655,12 +655,12 @@ export default function App() {
 
                 {/* Recent Closed Signals History preview */}
                 {recentClosedTickets.length > 0 && (
-                  <div className="space-y-2 pt-2 border-t border-slate-800/80">
-                    <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
+                  <div className="space-y-3 pt-2 border-t border-slate-200">
+                    <div className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-1">
                       <span>HISTORIQUE DES DERNIERS SIGNALS CLÔTURÉS</span>
-                      <span className="text-[10px] text-slate-500">Ordre Chronologique</span>
+                      <span className="text-[10px] text-slate-400">Ordre Chronologique</span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {recentClosedTickets.map((setup, idx) => (
                         <TradeTicket
                           key={setup.id}
@@ -687,19 +687,19 @@ export default function App() {
                 />
 
                 {/* Quick Risk Rules Card */}
-                <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 text-xs font-mono space-y-2.5 shadow-xl backdrop-blur-md">
-                  <div className="flex items-center justify-between text-white font-bold border-b border-slate-800 pb-2">
-                    <span className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-amber-400" /> RÈGLES DE SCALPING STRICTES
+                <div className="bg-white border border-slate-200/80 rounded-[20px] p-4.5 text-xs font-mono space-y-3 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
+                  <div className="flex items-center justify-between text-[#0F172A] font-bold border-b border-slate-100 pb-2.5">
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-amber-500" /> RÈGLES DE SCALPING STRICTES
                     </span>
-                    <span className="text-[10px] text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40 font-bold">
+                    <span className="text-[10px] text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 font-bold">
                       VERIFIED
                     </span>
                   </div>
-                  <ul className="space-y-1.5 text-slate-300 text-[11px] list-disc list-inside font-sans">
-                    <li><strong className="text-rose-400 font-mono">Stop Loss Obligatoire :</strong> Aucun trade ne peut être émis sans SL défini.</li>
-                    <li><strong className="text-amber-300 font-mono">Ratio Risque/Rendement :</strong> Tous les tickets exigent au minimum R:R 1:1.50.</li>
-                    <li><strong className="text-emerald-400 font-mono">Prise de Profits Scalp :</strong> Objectifs de 20 à 60 pips sur l'Or.</li>
+                  <ul className="space-y-2 text-slate-600 text-[11px] list-disc list-inside font-sans">
+                    <li><strong className="text-rose-600 font-mono font-bold">Stop Loss Obligatoire :</strong> Aucun trade ne peut être émis sans SL défini.</li>
+                    <li><strong className="text-amber-700 font-mono font-bold">Ratio Risque/Rendement :</strong> Tous les tickets exigent au minimum R:R 1:1.50.</li>
+                    <li><strong className="text-emerald-700 font-mono font-bold">Prise de Profits Scalp :</strong> Objectifs de 20 à 60 pips sur l'Or.</li>
                   </ul>
                 </div>
               </div>

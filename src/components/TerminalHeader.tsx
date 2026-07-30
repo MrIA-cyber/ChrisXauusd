@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Play, Pause, Zap, Calculator, Clock, Globe, UserCheck, LogIn, LogOut, Sparkles, User, ShieldAlert, Users, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
-import { formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 import { useLongPress } from '../lib/useLongPress';
 
@@ -39,6 +38,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   onTriggerSecretAdmin,
 }) => {
   const [currentTime, setCurrentTime] = useState<string>('');
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   // 5-second long press hook for secret administrator portal trigger
   const { isPressing, progress, handlers } = useLongPress({
@@ -69,67 +69,72 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   const isSubscriberActive = subscription.status === 'ACTIVE' || subscription.status === 'EXPIRING_SOON';
 
   return (
-    <header className="bg-slate-900 border-b border-slate-800 text-slate-100 px-4 py-3.5 shadow-md">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+    <header className="bg-white/90 border-b border-slate-200/80 text-[#0F172A] px-4 py-2 sm:py-2.5 shadow-xs backdrop-blur-xl sticky top-0 z-40 transition-all font-sans">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
-        {/* Left: Branding & Session Status */}
-        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-start">
+        {/* Left: Branding, Symbol Badge & Live Status */}
+        <div className="flex items-center gap-3">
           <div
             {...handlers}
             className="flex items-center gap-2.5 cursor-pointer select-none relative group"
             title="ChrisXauusd Terminal"
           >
             <div className="relative">
-              <ChrisXauusdLogoIcon className="w-9 h-9" />
+              <ChrisXauusdLogoIcon className="w-8 h-8 sm:w-8.5 sm:h-8.5" />
               {isPressing && (
-                <svg className="absolute -inset-1 w-[44px] h-[44px] pointer-events-none z-20">
+                <svg className="absolute -inset-1 w-[42px] h-[42px] pointer-events-none z-20">
                   <circle
-                    cx="22"
-                    cy="22"
-                    r="19"
+                    cx="21"
+                    cy="21"
+                    r="18"
                     fill="none"
                     stroke="#F59E0B"
                     strokeWidth="2.5"
-                    strokeDasharray="120"
-                    strokeDashoffset={120 - (120 * progress) / 100}
+                    strokeDasharray="115"
+                    strokeDashoffset={115 - (115 * progress) / 100}
                     strokeLinecap="round"
                   />
                 </svg>
               )}
             </div>
+
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold tracking-tight text-white flex items-center gap-1.5">
-                  <span className="text-blue-400 font-black tracking-wider">ChrisXauusd</span>
+                <h1 className="text-sm sm:text-base font-black tracking-tight text-[#0F172A] flex items-center gap-1.5 font-mono">
+                  <span className="text-[#0F172A]">ChrisXauusd</span>
                 </h1>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-950 text-blue-300 border border-blue-700/60">
-                  XAU/USD M1/M5
+                
+                {/* Badge XAU/USD */}
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-300 uppercase">
+                  XAU/USD
+                </span>
+
+                {/* LIVE Status Indicator */}
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  LIVE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-mono flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                SIGNAUX DE TRADING OR EN TEMPS RÉEL
-              </p>
             </div>
           </div>
 
           {/* Active Sessions Bar */}
-          <div className="hidden sm:flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/80 text-xs">
-            <Globe className="w-3.5 h-3.5 text-blue-400" />
-            <div className="flex items-center gap-1.5">
+          <div className="hidden lg:flex items-center gap-1.5 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 text-xs ml-2">
+            <Globe className="w-3.5 h-3.5 text-blue-600" />
+            <div className="flex items-center gap-1">
               {marketSessions.map((session) => (
                 <div
                   key={session.name}
-                  className={`flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium transition-colors ${
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-semibold transition-colors ${
                     session.isActiveNow
-                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-slate-900/60 text-slate-400 border border-slate-800'
+                      ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                      : 'bg-white text-slate-600 border border-slate-200'
                   }`}
                   title={`${session.name} (${session.openTimeGmt}-${session.closeTimeGmt} GMT)`}
                 >
                   <span
                     className={`w-1.5 h-1.5 rounded-full ${
-                      session.isActiveNow ? 'bg-emerald-400 animate-ping' : 'bg-slate-600'
+                      session.isActiveNow ? 'bg-white animate-ping' : 'bg-slate-400'
                     }`}
                   />
                   <span>{session.name}</span>
@@ -139,109 +144,111 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
           </div>
         </div>
 
-        {/* Right: Actions, Subscription & User Session Controls */}
-        <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-end">
+        {/* Right: Primary CTA + Grouped Secondary Actions Menu */}
+        <div className="flex items-center gap-2.5">
           
-          {/* Subscription / User Auth Pill & Switch Profile Button */}
+          {/* Main Primary Visible CTA */}
           {isSubscriberActive ? (
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 bg-emerald-950/90 border border-emerald-500/50 px-3 py-1.5 rounded-xl text-xs font-mono shadow-md backdrop-blur-md">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span className="text-emerald-300 font-bold tracking-tight">
-                    Abonnement Premium actif
-                  </span>
-                  <span className="text-[10px] bg-emerald-900/90 text-emerald-200 border border-emerald-400/50 px-2 py-0.5 rounded-full font-bold ml-1">
-                    J-{subscription.daysRemaining}
-                  </span>
-                </div>
-                <button
-                  onClick={onLogout}
-                  className="text-slate-400 hover:text-rose-400 p-1 rounded transition-colors ml-1 active:scale-95"
-                  title="Se déconnecter"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <button
-                onClick={onChangeProfile}
-                className="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-mono active:scale-[0.97] transition-all"
-                title="Changer de profil d'accès"
-              >
-                <Users className="w-3.5 h-3.5 text-blue-400" />
-                <span className="hidden sm:inline">Changer profil</span>
-              </button>
+            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-300 px-3 py-1.5 rounded-xl text-xs font-mono shadow-xs backdrop-blur-md">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="text-emerald-900 font-bold tracking-tight hidden sm:inline">
+                Abonnement VIP Actif
+              </span>
+              <span className="text-[10px] bg-emerald-600 text-white border border-emerald-700 px-2 py-0.5 rounded-full font-bold">
+                J-{subscription.daysRemaining}
+              </span>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={onOpenSubscribeModal}
-                className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold font-mono px-3.5 py-1.5 rounded-xl text-xs shadow-md shadow-amber-500/20 active:scale-[0.97] hover:shadow-amber-500/30 transition-all"
-              >
-                <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
-                <span>Voir les offres Premium</span>
-              </button>
-
-              {!userSession && (
-                <button
-                  onClick={onOpenLoginModal}
-                  className="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 px-2.5 py-1.5 rounded-lg text-xs font-mono active:scale-[0.97] transition-all"
-                  title="Espace membre abonné"
-                >
-                  <LogIn className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="hidden sm:inline">Connexion</span>
-                </button>
-              )}
-
-              <button
-                onClick={onChangeProfile}
-                className="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-mono active:scale-[0.97] transition-all"
-                title="Changer de profil d'accès"
-              >
-                <Users className="w-3.5 h-3.5 text-blue-400" />
-                <span className="hidden sm:inline">Changer profil</span>
-              </button>
-            </div>
+            <button
+              onClick={onOpenSubscribeModal}
+              className="flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold font-mono px-4 py-2 rounded-xl text-xs shadow-md shadow-amber-500/20 active:scale-[0.98] transition-all shrink-0"
+            >
+              <Sparkles className="w-4 h-4 fill-slate-950 text-slate-950" />
+              <span>Découvrir Premium</span>
+            </button>
           )}
 
-          {/* UTC Clock */}
-          <div className="hidden xl:flex items-center gap-1.5 bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-700 text-xs font-mono text-slate-300">
-            <Clock className="w-3.5 h-3.5 text-blue-400" />
-            <span>{currentTime || '00:00:00 GMT'}</span>
+          {/* Grouped Secondary Tools Dropdown Button */}
+          <div className="relative">
+            <button
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+              className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all active:scale-95"
+              title="Outils & Options"
+            >
+              <span>Options</span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-600 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Dropdown Menu Overlay */}
+            {isMenuOpen && (
+              <div
+                className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl p-2 z-50 space-y-1 font-mono text-xs backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="px-3 py-1.5 border-b border-slate-100 text-[10px] text-slate-500 uppercase tracking-wider font-bold">
+                  Options du Terminal
+                </div>
+
+                {/* Risk Calculator */}
+                <button
+                  onClick={onOpenCalculator}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-800 flex items-center justify-between transition-colors font-semibold"
+                >
+                  <span className="flex items-center gap-2">
+                    <Calculator className="w-3.5 h-3.5 text-blue-600" /> Calcul Risque
+                  </span>
+                </button>
+
+                {/* Sound Toggle */}
+                <button
+                  onClick={onToggleSound}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-800 flex items-center justify-between transition-colors font-semibold"
+                >
+                  <span className="flex items-center gap-2">
+                    {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-600" /> : <VolumeX className="w-3.5 h-3.5 text-slate-400" />}
+                    Avertissements Sonores
+                  </span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${soundEnabled ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'}`}>
+                    {soundEnabled ? 'ON' : 'OFF'}
+                  </span>
+                </button>
+
+                {/* Generate Signal */}
+                <button
+                  onClick={onManualGenerateSignal}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-slate-100 text-blue-700 flex items-center gap-2 transition-colors font-semibold"
+                >
+                  <Zap className="w-3.5 h-3.5 text-blue-600" /> Émettre un Signal
+                </button>
+
+                {/* Login or Profile switch */}
+                {!isSubscriberActive && (
+                  <button
+                    onClick={onOpenLoginModal}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-50 text-amber-800 flex items-center gap-2 transition-colors font-bold"
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-amber-600" /> Connexion Membre
+                  </button>
+                )}
+
+                <button
+                  onClick={onChangeProfile}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-slate-100 text-slate-700 flex items-center gap-2 transition-colors font-semibold"
+                >
+                  <Users className="w-3.5 h-3.5 text-slate-500" /> Changer de Profil
+                </button>
+
+                {isSubscriberActive && (
+                  <button
+                    onClick={onLogout}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-rose-50 text-rose-700 flex items-center gap-2 transition-colors border-t border-slate-100 mt-1 font-bold"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-rose-600" /> Se déconnecter
+                  </button>
+                )}
+              </div>
+            )}
           </div>
-
-          {/* Risk Calculator Toggle */}
-          <button
-            onClick={onOpenCalculator}
-            className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-medium active:scale-[0.97] transition-all"
-            title="Calculateur de Taille de Position & Risque"
-          >
-            <Calculator className="w-3.5 h-3.5 text-blue-400" />
-            <span className="hidden sm:inline">Calcul Risk</span>
-          </button>
-
-          {/* Sound Mute/Unmute */}
-          <button
-            onClick={onToggleSound}
-            className={`p-1.5 rounded-lg border active:scale-[0.97] transition-all ${
-              soundEnabled
-                ? 'bg-blue-950/80 border-blue-500/50 text-blue-300'
-                : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200'
-            }`}
-            title={soundEnabled ? 'Avertissements sonores activés' : 'Désactivé'}
-          >
-            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-          </button>
-
-          {/* Immediate Signal Generation Button */}
-          <button
-            onClick={onManualGenerateSignal}
-            className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs active:scale-[0.97] transition-all shadow-sm"
-          >
-            <Zap className="w-3.5 h-3.5 fill-current text-blue-200" />
-            <span className="hidden sm:inline">+ Signal</span>
-          </button>
 
         </div>
 
@@ -249,4 +256,3 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
     </header>
   );
 };
-
