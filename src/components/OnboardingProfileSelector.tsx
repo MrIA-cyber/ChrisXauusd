@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
-import { Eye, Sparkles, CheckCircle2, Lock, ArrowRight, ShieldCheck, Smartphone, CreditCard, LogIn, RefreshCw, Zap } from 'lucide-react';
+import { Eye, Sparkles, CheckCircle2, Lock, ArrowRight, ShieldCheck, Smartphone, CreditCard, LogIn, RefreshCw, Zap, Award, BadgeCheck } from 'lucide-react';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
 import { ChrisXauusdHomeLogo } from './ChrisXauusdLogo';
 
@@ -190,12 +190,15 @@ export const OnboardingProfileSelector: React.FC<OnboardingProfileSelectorProps>
 
         {/* Legal & Security Footnote */}
         <div className="text-center text-xs font-mono text-slate-500 space-y-2">
-          <p className="flex items-center justify-center gap-1.5">
+          <p className="flex items-center justify-center gap-1.5 pt-1">
             <ShieldCheck className="w-4 h-4 text-emerald-600 inline" />
             <span>Paiements sécurisés via Mobile Money (Orange, Wave, MTN, Moov) & Carte Bancaire</span>
           </p>
           <p className="text-[11px] text-slate-500 max-w-2xl mx-auto leading-relaxed">
             Le trading comporte un risque de perte en capital. Ces signaux sont fournis à titre informatif, pas comme un conseil en investissement.
+          </p>
+          <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 pt-1 text-center">
+            Fondateur : Chris Pokam • Trader certifié : Osher Nikos
           </p>
           <p className="text-[11px] text-slate-400">
             Vous pourrez changer de profil ou réviser votre abonnement à tout moment depuis le terminal.

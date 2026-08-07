@@ -1,5 +1,6 @@
 import React from 'react';
 import { ShieldAlert, Info, Lock, Terminal } from 'lucide-react';
+import { ChrisXauusdHorizontalLogo } from './ChrisXauusdLogo';
 
 export const LegalFooter: React.FC = () => {
   return (
@@ -55,12 +56,17 @@ export const LegalFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Footer Copyright & Terminal Version */}
-        <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[10px] text-slate-500">
-          <div>
-            © {new Date().getFullYear()} ChrisXauusd — Signaux de trading Or. Tous droits réservés.
+        {/* Footer Brand Logo & Copyright */}
+        <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[10px] text-slate-500 gap-3">
+          <div className="flex items-center gap-3">
+            <ChrisXauusdHorizontalLogo variant="light" showTagline={false} />
+            <span className="hidden sm:inline text-slate-300">•</span>
+            <span className="hidden sm:inline">© {new Date().getFullYear()} ChrisXauusd — Signaux de trading Or. Tous droits réservés.</span>
           </div>
-          <div className="flex items-center gap-3 mt-2 sm:mt-0">
+          <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400 text-center">
+            Fondateur : Chris Pokam • Trader certifié : Osher Nikos
+          </div>
+          <div className="flex items-center gap-3">
             <span>Terminal Version: <strong className="text-blue-700">2.4.0-LIGHT</strong></span>
             <span>•</span>
             <span>Protocole: <strong className="text-emerald-700 font-mono">SIMULATION_TICK_STREAM</strong></span>

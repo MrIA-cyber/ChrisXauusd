@@ -89,16 +89,16 @@ export const ChrisBioBubble: React.FC<ChrisBioBubbleProps> = ({
             <div className="pr-6 space-y-1">
               <div className="flex items-center gap-2">
                 <span className="font-bold font-mono text-sm text-slate-900">
-                  Chris
+                  Chris Pokam
                 </span>
-                <span className="px-2 py-0.2 rounded-full text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 inline-flex items-center gap-1">
-                  <Award className="w-3 h-3 text-blue-600" />
-                  <span>Analyste Lead</span>
+                <span className="px-2 py-0.2 rounded-full text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 inline-flex items-center gap-1">
+                  <Award className="w-3 h-3 text-amber-600" />
+                  <span>Fondateur</span>
                 </span>
               </div>
 
               <p className="text-xs text-slate-600 leading-snug font-sans">
-                Trader XAU/USD depuis 6 ans, spécialiste du scalping sur or.{' '}
+                Fondateur Chris Pokam, génie des temps modernes.{' '}
                 <span className="text-blue-700 font-medium">
                   {profileType === 'TRADER'
                     ? 'Ravi de vous compter parmi nos Traders !'

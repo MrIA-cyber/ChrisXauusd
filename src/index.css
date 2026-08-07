@@ -2,6 +2,16 @@
 
 @layer base {
   :root {
+    --bg-main: #FAFBFC;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F8FAFC;
+    --border-card: rgba(226, 232, 240, 0.8);
+    --header-bg: rgba(255, 255, 255, 0.9);
+    --dropdown-bg: #FFFFFF;
+
     --bg-obsidian: #090d16;
     --bg-card-dark: #0f172a;
     --bg-card-glass: rgba(15, 23, 42, 0.75);
@@ -13,11 +23,24 @@
     --red-bear: #f43f5e;
   }
 
+  html.dark {
+    --bg-main: #070a12;
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --bg-card: #0F172A;
+    --bg-card-hover: #1E293B;
+    --border-card: rgba(255, 255, 255, 0.1);
+    --header-bg: rgba(15, 23, 42, 0.9);
+    --dropdown-bg: #0F172A;
+  }
+
   body {
-    background-color: #070a12;
-    color: #f8fafc;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Monospace typography enforcement for numbers, prices, timestamps & tables */

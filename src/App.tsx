@@ -51,6 +51,26 @@ import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRig
 import { motion } from 'motion/react';
 
 export default function App() {
+  // Theme State ('light' | 'dark')
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('chrisxauusd_theme');
+    return saved === 'dark' ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('chrisxauusd_theme', theme);
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   // 1. Initial Market State Setup
   const [currentPrice, setCurrentPrice] = useState<number>(2385.50);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -511,7 +531,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFBFC] text-[#0F172A] flex flex-col font-sans selection:bg-amber-500 selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] flex flex-col font-sans selection:bg-amber-500 selection:text-white relative overflow-x-hidden transition-colors duration-300">
       {/* Background Subtle Ambient Glows in Light Palette */}
       <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none z-0" />
       <div className="fixed top-1/3 right-10 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl pointer-events-none z-0" />
@@ -546,13 +566,15 @@ export default function App() {
         onChangeProfile={handleChangeProfile}
         onLogout={handleLogout}
         onTriggerSecretAdmin={() => setIsSecretAdminModalOpen(true)}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
       />
 
       {/* 4. Live Price Banner */}
       <LivePriceBanner currentTick={currentTick} recentCandles={candles} />
 
       {/* Main Content Dashboard */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-6 relative z-10">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-4 sm:space-y-6 relative z-10">
         
         {isVisitor ? (
           /* Institutional Visitor Landing Presentation Page */

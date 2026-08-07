@@ -56,7 +56,7 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
         
         {/* Left: Ticker Symbol & Centerpiece Main Market Price */}
-        <div className="flex items-center gap-5 w-full md:w-auto justify-between md:justify-start">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5 w-full md:w-auto justify-between md:justify-start">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-600 shrink-0">
               <Layers className="w-5 h-5 text-amber-500 animate-pulse" />
@@ -78,9 +78,9 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
           </div>
 
           {/* MAIN PRICE CENTERPIECE WITH DYNAMIC TICK ANIMATION */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <div
-              className={`text-3xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight transition-all duration-300 px-4 py-1.5 rounded-[20px] ${
+              className={`text-2xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight transition-all duration-300 px-3 sm:px-4 py-1 sm:py-1.5 rounded-[16px] sm:rounded-[20px] ${
                 tickDirection === 'UP'
                   ? 'text-emerald-700 bg-emerald-50 shadow-[0_0_25px_rgba(22,163,74,0.25)] border border-emerald-300 scale-[1.02]'
                   : tickDirection === 'DOWN'
@@ -92,7 +92,7 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
             </div>
 
             <div
-              className={`flex items-center gap-1 font-mono text-xs sm:text-sm font-bold px-3 py-1.5 rounded-xl border transition-all ${
+              className={`flex items-center gap-1 font-mono text-xs sm:text-sm font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border transition-all ${
                 isUp
                   ? 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-xs'
                   : 'bg-rose-50 border-rose-300 text-rose-800 shadow-xs'
@@ -109,34 +109,34 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-mono w-full md:w-auto justify-between md:justify-end">
           
           {/* 3 Identical Cards: SPREAD, BID, ASK */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full sm:w-auto">
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-3 w-full sm:w-auto">
             
             {/* 1. SPREAD Card */}
-            <div className="bg-white border border-slate-200/80 p-2.5 sm:p-3 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] min-w-[95px] text-center hover:border-amber-400 transition-colors">
-              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">
+            <div className="bg-white border border-slate-200/80 p-2 sm:p-3 rounded-[16px] sm:rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] text-center hover:border-amber-400 transition-colors">
+              <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-0.5 sm:mb-1">
                 SPREAD
               </span>
-              <span className="text-xs sm:text-sm font-black text-amber-600 block font-mono">
+              <span className="text-xs sm:text-sm font-black text-amber-600 block font-mono truncate">
                 ${currentTick.spread.toFixed(2)}
               </span>
             </div>
 
             {/* 2. BID Card */}
-            <div className="bg-white border border-slate-200/80 p-2.5 sm:p-3 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] min-w-[100px] text-center hover:border-emerald-400 transition-colors">
-              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">
-                BID (OFFRE)
+            <div className="bg-white border border-slate-200/80 p-2 sm:p-3 rounded-[14px] sm:rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] text-center hover:border-emerald-400 transition-colors">
+              <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-0.5 sm:mb-1 truncate">
+                BID<span className="hidden sm:inline"> (OFFRE)</span>
               </span>
-              <span className="text-xs sm:text-sm font-black text-emerald-600 block font-mono">
+              <span className="text-xs sm:text-sm font-black text-emerald-600 block font-mono truncate">
                 ${currentTick.bid.toFixed(2)}
               </span>
             </div>
 
             {/* 3. ASK Card */}
-            <div className="bg-white border border-slate-200/80 p-2.5 sm:p-3 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] min-w-[100px] text-center hover:border-rose-400 transition-colors">
-              <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-1">
-                ASK (DEMANDE)
+            <div className="bg-white border border-slate-200/80 p-2 sm:p-3 rounded-[14px] sm:rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] text-center hover:border-rose-400 transition-colors">
+              <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-0.5 sm:mb-1 truncate">
+                ASK<span className="hidden sm:inline"> (DEMANDE)</span>
               </span>
-              <span className="text-xs sm:text-sm font-black text-rose-600 block font-mono">
+              <span className="text-xs sm:text-sm font-black text-rose-600 block font-mono truncate">
                 ${currentTick.ask.toFixed(2)}
               </span>
             </div>

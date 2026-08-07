@@ -23,6 +23,8 @@ import {
   Zap,
   Star,
   Shield,
+  Award,
+  BadgeCheck,
   CreditCard as CardIcon,
 } from 'lucide-react';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA, generateActiveSubscription } from '../lib/subscriptionService';
@@ -475,13 +477,13 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
     AFRICAN_COUNTRIES[0].operators[0]?.id || ''
   );
 
-  // Form Fields
-  const [fullName, setFullName] = useState<string>('Trader XAU');
-  const [email, setEmail] = useState<string>('trader@xau-scalp.com');
-  const [phone, setPhone] = useState<string>('699001122');
-  const [cardNumber, setCardNumber] = useState<string>('4500 0000 0000 0000');
-  const [cardExpiry, setCardExpiry] = useState<string>('12/28');
-  const [cardCvc, setCardCvc] = useState<string>('321');
+  // Form Fields - Default to empty strings to strictly require user completion
+  const [fullName, setFullName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [cardNumber, setCardNumber] = useState<string>('');
+  const [cardExpiry, setCardExpiry] = useState<string>('');
+  const [cardCvc, setCardCvc] = useState<string>('');
 
   // Country dropdown state
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState<boolean>(false);
@@ -777,6 +779,12 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                         <span>Alertes sonores & PWA Mobile</span>
                       </div>
                     </div>
+
+                    {/* Single Line Signature */}
+                    <div className="pt-2.5 border-t border-blue-800/60 text-center text-[10px] font-mono text-slate-300">
+                      Fondateur : Chris Pokam • Trader certifié : Osher Nikos
+                    </div>
+
                   </div>
                 </div>
 
@@ -1091,7 +1099,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                       /* Card Payment Fields */
                       <div className="space-y-3 pt-1">
                         <div>
-                          <label className="text-[11px] font-mono text-slate-700 block mb-1">
+                          <label className="text-[11px] font-mono text-slate-700 block mb-1 font-bold">
                             Numéro de carte bancaire *
                           </label>
                           <div className="relative">
@@ -1105,14 +1113,33 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                 setCardNumber(e.target.value);
                                 setTouched((prev) => ({ ...prev, cardNumber: true }));
                               }}
-                              className="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 font-mono outline-none focus:border-blue-600"
+                              onBlur={() => setTouched((prev) => ({ ...prev, cardNumber: true }))}
+                              className={`w-full bg-white border rounded-xl pl-10 pr-9 py-2.5 text-xs text-slate-900 font-mono outline-none transition-all shadow-2xs ${
+                                touched.cardNumber
+                                  ? isCardNumberValid
+                                    ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
+                                    : 'border-rose-500 bg-rose-50/30'
+                                  : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                              }`}
                             />
+                            {touched.cardNumber && (
+                              isCardNumberValid ? (
+                                <CheckCircle className="w-4 h-4 text-emerald-600 absolute right-3 top-3" />
+                              ) : (
+                                <AlertCircle className="w-4 h-4 text-rose-600 absolute right-3 top-3" />
+                              )
+                            )}
                           </div>
+                          {touched.cardNumber && !isCardNumberValid && (
+                            <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                              Ce champ est obligatoire. Entrez un numéro de carte valide (15-19 chiffres).
+                            </p>
+                          )}
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[11px] font-mono text-slate-700 block mb-1">
+                            <label className="text-[11px] font-mono text-slate-700 block mb-1 font-bold">
                               Expiration (MM/AA) *
                             </label>
                             <input
@@ -1120,13 +1147,28 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                               required
                               placeholder="12/28"
                               value={cardExpiry}
-                              onChange={(e) => setCardExpiry(e.target.value)}
-                              className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-mono outline-none focus:border-blue-600"
+                              onChange={(e) => {
+                                setCardExpiry(e.target.value);
+                                setTouched((prev) => ({ ...prev, cardExpiry: true }));
+                              }}
+                              onBlur={() => setTouched((prev) => ({ ...prev, cardExpiry: true }))}
+                              className={`w-full bg-white border rounded-xl px-3 py-2.5 text-xs text-slate-900 font-mono outline-none transition-all shadow-2xs ${
+                                touched.cardExpiry
+                                  ? isCardExpiryValid
+                                    ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
+                                    : 'border-rose-500 bg-rose-50/30'
+                                  : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                              }`}
                             />
+                            {touched.cardExpiry && !isCardExpiryValid && (
+                              <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                                Champ obligatoire (MM/AA).
+                              </p>
+                            )}
                           </div>
 
                           <div>
-                            <label className="text-[11px] font-mono text-slate-700 block mb-1">
+                            <label className="text-[11px] font-mono text-slate-700 block mb-1 font-bold">
                               CVC / CVV *
                             </label>
                             <input
@@ -1134,9 +1176,24 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                               required
                               placeholder="321"
                               value={cardCvc}
-                              onChange={(e) => setCardCvc(e.target.value)}
-                              className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-mono outline-none focus:border-blue-600"
+                              onChange={(e) => {
+                                setCardCvc(e.target.value);
+                                setTouched((prev) => ({ ...prev, cardCvc: true }));
+                              }}
+                              onBlur={() => setTouched((prev) => ({ ...prev, cardCvc: true }))}
+                              className={`w-full bg-white border rounded-xl px-3 py-2.5 text-xs text-slate-900 font-mono outline-none transition-all shadow-2xs ${
+                                touched.cardCvc
+                                  ? isCardCvcValid
+                                    ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
+                                    : 'border-rose-500 bg-rose-50/30'
+                                  : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                              }`}
                             />
+                            {touched.cardCvc && !isCardCvcValid && (
+                              <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                                Champ obligatoire (3-4 chiffres).
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
