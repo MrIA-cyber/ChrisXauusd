@@ -40,6 +40,7 @@ interface UserProfileModalProps {
   userSession: AuthUser | null;
   onSaveProfile: (updatedUser: AuthUser) => void;
   onOpenRenewalModal?: () => void;
+  initialTab?: 'PHOTO' | 'INFO' | 'TRADING' | 'PREF' | 'CALENDAR';
 }
 
 export const UserProfileModal: React.FC<UserProfileModalProps> = ({
@@ -48,6 +49,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   userSession,
   onSaveProfile,
   onOpenRenewalModal,
+  initialTab = 'PHOTO',
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -91,6 +93,11 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
 
   // Synchronize state if userSession changes or modal opens
   React.useEffect(() => {
+    if (isOpen) {
+      if (initialTab) {
+        setActiveTab(initialTab);
+      }
+    }
     if (userSession) {
       setName(userSession.name || '');
       setEmail(userSession.email || '');
@@ -105,7 +112,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
       setTradingPlatform(userSession.tradingPlatform || 'MT5');
       setPrivacyMode(userSession.privacyMode || false);
     }
-  }, [userSession, isOpen]);
+  }, [userSession, isOpen, initialTab]);
 
   if (!isOpen || !userSession) return null;
 

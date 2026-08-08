@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing } from 'lucide-react';
+import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing, Calendar } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 import { useLongPress } from '../lib/useLongPress';
@@ -20,11 +20,13 @@ interface TerminalHeaderProps {
   onOpenLoginModal: () => void;
   onChangeProfile: () => void;
   onOpenProfileModal?: () => void;
+  onOpenCalendar?: () => void;
   onLogout: () => void;
   onTriggerSecretAdmin?: () => void;
   theme?: 'light' | 'dark';
   onToggleTheme?: () => void;
   onOpenInstallModal?: () => void;
+  onOpenEbookModal?: () => void;
 }
 
 export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
@@ -41,11 +43,13 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   onOpenLoginModal,
   onChangeProfile,
   onOpenProfileModal,
+  onOpenCalendar,
   onLogout,
   onTriggerSecretAdmin,
   theme = 'light',
   onToggleTheme,
   onOpenInstallModal,
+  onOpenEbookModal,
 }) => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -224,6 +228,32 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
             </button>
           )}
 
+          {/* Quick Visible Direct Header Button: Calendrier Économique */}
+          {onOpenCalendar && (
+            <button
+              type="button"
+              onClick={onOpenCalendar}
+              className="hidden lg:flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-500/30 px-2.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 shadow-xs"
+              title="Ouvrir le Calendrier Économique Réel"
+            >
+              <Calendar className="w-3.5 h-3.5 text-amber-500" />
+              <span>Calendrier</span>
+            </button>
+          )}
+
+          {/* Quick Visible Direct Header Button: Livre PDF */}
+          {onOpenEbookModal && (
+            <button
+              type="button"
+              onClick={onOpenEbookModal}
+              className="hidden md:flex items-center gap-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-900 dark:text-amber-300 border border-amber-500/40 px-2.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 shadow-xs"
+              title="Ouvrir / Télécharger le Livre PDF Comple"
+            >
+              <Download className="w-3.5 h-3.5 text-amber-500" />
+              <span>Livre PDF</span>
+            </button>
+          )}
+
           {/* Compact Push Notifications Bell Button */}
           <button
             onClick={handleTogglePushNotifications}
@@ -308,6 +338,36 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     </span>
                     <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
                       {theme === 'dark' ? 'Sombre' : 'Clair'}
+                    </span>
+                  </button>
+                )}
+
+                {/* Calendrier Économique Macro */}
+                {onOpenCalendar && (
+                  <button
+                    onClick={onOpenCalendar}
+                    className="w-full text-left px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 flex items-center justify-between transition-colors font-bold cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Calendar className="w-3.5 h-3.5 text-amber-500" /> Calendrier Économique Réel
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold bg-amber-500 text-slate-950">
+                      LIVE
+                    </span>
+                  </button>
+                )}
+
+                {/* Ebook Masterclass PDF */}
+                {onOpenEbookModal && (
+                  <button
+                    onClick={onOpenEbookModal}
+                    className="w-full text-left px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 flex items-center justify-between transition-colors font-bold cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Download className="w-3.5 h-3.5 text-amber-500" /> Livre PDF & Masterclass
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold bg-amber-500 text-slate-950">
+                      PDF
                     </span>
                   </button>
                 )}
