@@ -938,6 +938,7 @@ export default function App() {
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onLoginSuccess={handleLoginSuccess}
+        onAdminLogin={() => setIsAdminMode(true)}
         onOpenSubscriptionModal={() => {
           setIsLoginModalOpen(false);
           setIsSubscribeModalOpen(true);

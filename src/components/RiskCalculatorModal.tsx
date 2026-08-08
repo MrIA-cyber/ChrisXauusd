@@ -145,7 +145,7 @@ export const RiskCalculatorModal: React.FC<RiskCalculatorModalProps> = ({
           <div className="bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-4 space-y-3 mt-2 shadow-2xs">
             <div className="flex items-center justify-between border-b border-blue-200/60 dark:border-blue-800/60 pb-2">
               <span className="text-slate-700 dark:text-slate-300 font-semibold">Taille de Lot Recommandée :</span>
-              <span className="text-xl font-black font-mono text-blue-900 dark:text-blue-200 bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 px-3 py-1 rounded-lg shadow-2xs">
+              <span className="text-base sm:text-lg font-black font-mono text-blue-900 dark:text-blue-200 bg-white dark:bg-slate-800 border border-blue-300 dark:border-blue-700 px-2.5 py-1 rounded-lg shadow-2xs">
                 {calculatedLotSize} Lot(s)
               </span>
             </div>

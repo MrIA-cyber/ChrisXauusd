@@ -719,7 +719,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                   <CheckCircle2 className="w-12 h-12" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold font-mono text-emerald-900">
+                  <h3 className="text-base sm:text-lg font-bold font-mono text-emerald-900">
                     PAIEMENT CONFIRMÉ ET VALIDÉ !
                   </h3>
                   <p className="text-sm text-slate-700 font-mono font-bold">
@@ -960,7 +960,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     </div>
 
                     <div className="flex items-baseline gap-2 border-t border-blue-800/60 pt-3">
-                      <span className="text-xl sm:text-2xl font-extrabold font-mono text-amber-300">
+                      <span className="text-lg sm:text-xl font-extrabold font-mono text-amber-300">
                         {formatFcfa(SUBSCRIPTION_PRICE_FCFA)}
                       </span>
                       <span className="text-[11px] text-blue-200 font-mono">/ 30 jours (Accès Illimité)</span>

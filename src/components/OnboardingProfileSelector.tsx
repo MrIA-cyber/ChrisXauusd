@@ -54,7 +54,7 @@ export const OnboardingProfileSelector: React.FC<OnboardingProfileSelectorProps>
 
               {/* Title & Description */}
               <div>
-                <h2 className="text-xl font-bold font-mono text-slate-900 group-hover:text-blue-700 transition-colors">
+                <h2 className="text-base sm:text-lg font-bold font-mono text-slate-900 group-hover:text-blue-700 transition-colors">
                   PROFIL VISITEUR
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
@@ -133,7 +133,7 @@ export const OnboardingProfileSelector: React.FC<OnboardingProfileSelectorProps>
 
               {/* Title & Description */}
               <div>
-                <h2 className="text-xl font-bold font-mono text-slate-900 group-hover:text-blue-700 transition-colors">
+                <h2 className="text-base sm:text-lg font-bold font-mono text-slate-900 group-hover:text-blue-700 transition-colors">
                   PROFIL TRADER
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">

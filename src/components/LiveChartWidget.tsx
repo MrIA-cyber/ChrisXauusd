@@ -40,26 +40,26 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
   const candleWidth = Math.max(4, (svgWidth / candles.length) * 0.65);
 
   return (
-    <div className="bg-white border border-slate-200/80 rounded-[20px] p-4.5 shadow-[0_10px_30px_rgba(15,23,42,0.05)] font-sans">
+    <div className="bg-[#071426] border border-[#00E5FF]/20 rounded-[20px] p-4.5 shadow-[0_10px_30px_rgba(0,0,0,0.5)] font-sans text-slate-100">
       
       {/* Chart Header Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#00E5FF]/15">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold font-mono text-blue-900 flex items-center gap-1.5">
-            <Layers className="w-4 h-4 text-blue-600" /> GRAPHIQUE DIRECT XAU/USD
+          <span className="text-xs font-bold font-mono text-[#00E5FF] flex items-center gap-1.5">
+            <Layers className="w-4 h-4 text-[#00E5FF]" /> GRAPHIQUE DIRECT XAU/USD
           </span>
-          <span className="text-[10px] font-mono bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded font-bold">
+          <span className="text-[10px] font-mono bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/30 px-2 py-0.5 rounded font-bold">
             {selectedTimeframe} SCALPING
           </span>
         </div>
 
         <div className="flex items-center gap-2">
           {/* Timeframe selector */}
-          <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs font-mono font-medium">
+          <div className="flex bg-[#030B16] p-0.5 rounded-lg border border-[#00E5FF]/20 text-xs font-mono font-medium">
             <button
               onClick={() => setSelectedTimeframe('M1')}
               className={`px-2 py-0.5 rounded transition-colors ${
-                selectedTimeframe === 'M1' ? 'bg-blue-600 text-white font-bold' : 'text-slate-600 hover:text-slate-900'
+                selectedTimeframe === 'M1' ? 'bg-[#00E5FF] text-[#030B16] font-extrabold' : 'text-slate-400 hover:text-white'
               }`}
             >
               M1
@@ -67,7 +67,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
             <button
               onClick={() => setSelectedTimeframe('M5')}
               className={`px-2 py-0.5 rounded transition-colors ${
-                selectedTimeframe === 'M5' ? 'bg-blue-600 text-white font-bold' : 'text-slate-600 hover:text-slate-900'
+                selectedTimeframe === 'M5' ? 'bg-[#00E5FF] text-[#030B16] font-extrabold' : 'text-slate-400 hover:text-white'
               }`}
             >
               M5
@@ -75,11 +75,11 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
           </div>
 
           {/* Chart type toggle */}
-          <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs">
+          <div className="flex bg-[#030B16] p-0.5 rounded-lg border border-[#00E5FF]/20 text-xs">
             <button
               onClick={() => setChartType('candle')}
               className={`p-1 rounded transition-colors ${
-                chartType === 'candle' ? 'bg-white text-blue-700 shadow-2xs' : 'text-slate-500'
+                chartType === 'candle' ? 'bg-[#00E5FF] text-[#030B16]' : 'text-slate-400'
               }`}
               title="Bougies Japonaises"
             >
@@ -88,7 +88,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
             <button
               onClick={() => setChartType('line')}
               className={`p-1 rounded transition-colors ${
-                chartType === 'line' ? 'bg-white text-blue-700 shadow-2xs' : 'text-slate-500'
+                chartType === 'line' ? 'bg-[#00E5FF] text-[#030B16]' : 'text-slate-400'
               }`}
               title="Graphique en Ligne"
             >
@@ -102,7 +102,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
       <div className="relative mt-3 w-full overflow-x-auto">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          className="w-full h-[260px] bg-slate-50 rounded-lg border border-slate-200"
+          className="w-full h-[260px] bg-[#030B16] rounded-lg border border-[#00E5FF]/20"
         >
           {/* Background Grid Lines */}
           {[0.2, 0.4, 0.6, 0.8].map((ratio, i) => {
@@ -115,14 +115,14 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
                   y1={y}
                   x2={svgWidth - 60}
                   y2={y}
-                  stroke="#e2e8f0"
+                  stroke="rgba(0, 229, 255, 0.1)"
                   strokeWidth="1"
                   strokeDasharray="4 4"
                 />
                 <text
                   x={svgWidth - 55}
                   y={y + 3}
-                  fill="#64748b"
+                  fill="#94A3B8"
                   fontSize="9"
                   fontFamily="monospace"
                 >
@@ -141,7 +141,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
               const yHigh = getY(c.high);
               const yLow = getY(c.low);
               const isGreen = c.close >= c.open;
-              const color = isGreen ? '#059669' : '#dc2626';
+              const color = isGreen ? '#22C55E' : '#EF4444';
 
               const topBody = Math.min(yOpen, yClose);
               const bodyHeight = Math.max(2, Math.abs(yClose - yOpen));
@@ -172,7 +172,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
           ) : (
             <polyline
               fill="none"
-              stroke="#2563eb"
+              stroke="#00E5FF"
               strokeWidth="2"
               points={candles
                 .map((c, idx) => {
@@ -187,13 +187,13 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
           {/* Active Setup Overlay Lines (Entry, SL, TP) */}
           {activeSetup && (
             <g>
-              {/* Entry Price Line (Blue) */}
+              {/* Entry Price Line (Cyan) */}
               <line
                 x1="0"
                 y1={getY(activeSetup.entryPrice)}
                 x2={svgWidth - 60}
                 y2={getY(activeSetup.entryPrice)}
-                stroke="#2563eb"
+                stroke="#00E5FF"
                 strokeWidth="1.5"
                 strokeDasharray="5 3"
               />
@@ -202,13 +202,13 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
                 y={getY(activeSetup.entryPrice) - 9}
                 width="58"
                 height="18"
-                fill="#2563eb"
+                fill="#00E5FF"
                 rx="3"
               />
               <text
                 x={svgWidth - 56}
                 y={getY(activeSetup.entryPrice) + 3}
-                fill="#fff"
+                fill="#030B16"
                 fontSize="9"
                 fontWeight="bold"
                 fontFamily="monospace"
@@ -222,7 +222,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
                 y1={getY(activeSetup.stopLoss)}
                 x2={svgWidth - 60}
                 y2={getY(activeSetup.stopLoss)}
-                stroke="#dc2626"
+                stroke="#EF4444"
                 strokeWidth="1.5"
                 strokeDasharray="3 3"
               />
@@ -231,7 +231,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
                 y={getY(activeSetup.stopLoss) - 9}
                 width="58"
                 height="18"
-                fill="#dc2626"
+                fill="#EF4444"
                 rx="3"
               />
               <text
@@ -251,7 +251,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
                 y1={getY(activeSetup.takeProfit)}
                 x2={svgWidth - 60}
                 y2={getY(activeSetup.takeProfit)}
-                stroke="#059669"
+                stroke="#22C55E"
                 strokeWidth="1.5"
                 strokeDasharray="3 3"
               />
@@ -260,7 +260,7 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
                 y={getY(activeSetup.takeProfit) - 9}
                 width="58"
                 height="18"
-                fill="#059669"
+                fill="#22C55E"
                 rx="3"
               />
               <text
@@ -282,33 +282,33 @@ export const LiveChartWidget: React.FC<LiveChartWidgetProps> = ({
             y1={getY(currentTick.price)}
             x2={svgWidth - 60}
             y2={getY(currentTick.price)}
-            stroke="#0284c7"
+            stroke="#00E5FF"
             strokeWidth="1.2"
           />
           <circle
             cx={svgWidth - 60}
             cy={getY(currentTick.price)}
-            r="3"
-            fill="#0284c7"
+            r="3.5"
+            fill="#00E5FF"
             className="animate-ping"
           />
         </svg>
       </div>
 
       {/* Footer Legend */}
-      <div className="flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-500 mt-2">
+      <div className="flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-400 mt-2">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1 font-medium">
-            <span className="w-2.5 h-0.5 bg-blue-600 inline-block" /> Entrée Trade
+            <span className="w-2.5 h-0.5 bg-[#00E5FF] inline-block" /> Entrée Trade
           </span>
           <span className="flex items-center gap-1 font-medium">
-            <span className="w-2.5 h-0.5 bg-emerald-600 inline-block" /> Take Profit (TP)
+            <span className="w-2.5 h-0.5 bg-[#22C55E] inline-block" /> Take Profit (TP)
           </span>
           <span className="flex items-center gap-1 font-medium">
-            <span className="w-2.5 h-0.5 bg-rose-600 inline-block" /> Stop Loss (SL)
+            <span className="w-2.5 h-0.5 bg-[#EF4444] inline-block" /> Stop Loss (SL)
           </span>
         </div>
-        <span className="font-medium">Support / Résistance automatique ICT</span>
+        <span className="font-medium text-slate-400">Support / Résistance automatique ICT</span>
       </div>
 
     </div>

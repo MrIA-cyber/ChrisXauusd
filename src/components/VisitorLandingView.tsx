@@ -253,22 +253,22 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
 
           {/* CTAs: Primary & Secondary */}
           <div className="pt-2 sm:pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto">
-            {/* Primary Royal Blue Button */}
+            {/* Primary Electric Cyan Button */}
             <button
               onClick={onOpenSubscribeModal}
-              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base px-4 sm:px-6 rounded-2xl shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 group relative overflow-hidden cursor-pointer"
+              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-[#00E5FF] hover:bg-[#00E5FF]/80 text-[#030B16] font-black text-sm sm:text-base px-4 sm:px-6 rounded-2xl shadow-[0_0_20px_rgba(0,229,255,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group relative overflow-hidden cursor-pointer"
             >
-              <Sparkles className="w-5 h-5 fill-white text-white group-hover:rotate-12 transition-transform shrink-0" />
+              <Sparkles className="w-5 h-5 fill-[#030B16] text-[#030B16] group-hover:rotate-12 transition-transform shrink-0" />
               <span>Devenir Trader VIP</span>
-              <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform shrink-0" />
+              <ArrowRight className="w-5 h-5 text-[#030B16] group-hover:translate-x-1 transition-transform shrink-0" />
             </button>
 
-            {/* Secondary Button */}
+            {/* Secondary Dark Sapphire Button */}
             <button
               onClick={onOpenLoginModal}
-              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white text-xs sm:text-sm font-bold px-4 sm:px-6 rounded-2xl transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-xs cursor-pointer"
+              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-[#071426] hover:bg-[#071426]/80 border border-[#00E5FF]/30 text-slate-200 hover:text-white text-xs sm:text-sm font-bold px-4 sm:px-6 rounded-2xl transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-xs cursor-pointer"
             >
-              <LogIn className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+              <LogIn className="w-4 h-4 text-[#00E5FF] shrink-0" />
               <span>Déjà membre ? Se connecter</span>
             </button>
           </div>
@@ -282,10 +282,10 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       ========================================== */}
       <section className="space-y-6">
         <div className="text-center space-y-1">
-          <h2 className="text-[11px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+          <h2 className="text-[11px] font-bold uppercase tracking-widest text-[#00E5FF]">
             DASHBOARD KPI INSTITUTIONNEL
           </h2>
-          <p className="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">Performance Globale de la Plateforme</p>
+          <p className="text-lg sm:text-xl font-bold text-white">Performance Globale de la Plateforme</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -294,8 +294,8 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               label: 'Taux de réussite',
               value: '88.4%',
               icon: TrendingUp,
-              color: 'text-emerald-600 dark:text-emerald-400',
-              bg: 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800',
+              color: 'text-[#22C55E]',
+              bg: 'bg-[#22C55E]/10 border-[#22C55E]/30',
               sub: 'Calculé sur +500 trades',
               sparkline: [45, 50, 62, 58, 70, 75, 88]
             },
@@ -303,8 +303,8 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               label: 'Signaux aujourd\'hui',
               value: '3 - 5 / jour',
               icon: Activity,
-              color: 'text-amber-600 dark:text-amber-400',
-              bg: 'bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800',
+              color: 'text-[#00E5FF]',
+              bg: 'bg-[#00E5FF]/10 border-[#00E5FF]/30',
               sub: 'Filtrés par haute probabilité',
               sparkline: [30, 40, 35, 50, 60, 55, 70]
             },
@@ -312,8 +312,8 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               label: 'Ratio Risque/Rendement',
               value: '1 : 2.50',
               icon: Target,
-              color: 'text-blue-600 dark:text-blue-400',
-              bg: 'bg-blue-50 dark:bg-blue-950/60 border-blue-200 dark:border-blue-800',
+              color: 'text-blue-400',
+              bg: 'bg-blue-950/60 border-blue-800',
               sub: 'Minimum garanti R:R 1:1.5',
               sparkline: [20, 35, 45, 40, 65, 70, 80]
             },
@@ -321,8 +321,8 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               label: 'Temps de réaction',
               value: '< 1 sec',
               icon: Zap,
-              color: 'text-purple-600 dark:text-purple-400',
-              bg: 'bg-purple-50 dark:bg-purple-950/60 border-purple-200 dark:border-purple-800',
+              color: 'text-purple-400',
+              bg: 'bg-purple-950/60 border-purple-800',
               sub: 'Émetteur M1/M5 ultra rapide',
               sparkline: [80, 75, 60, 40, 25, 15, 10]
             },
@@ -330,8 +330,8 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               label: 'Membres Premium',
               value: '1 420+',
               icon: Users,
-              color: 'text-sky-600 dark:text-sky-400',
-              bg: 'bg-sky-50 dark:bg-sky-950/60 border-sky-200 dark:border-sky-800',
+              color: 'text-sky-400',
+              bg: 'bg-sky-950/60 border-sky-800',
               sub: 'Traders actifs en Afrique & Europe',
               sparkline: [10, 25, 40, 60, 80, 100, 120]
             }
@@ -345,20 +345,20 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
             return (
               <div
                 key={idx}
-                className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 rounded-[20px] shadow-[0_10px_30px_rgba(15,23,42,0.05)] hover:border-amber-400 transition-all flex flex-col justify-between group space-y-4"
+                className="bg-[#071426] border border-[#00E5FF]/20 p-5 rounded-[20px] shadow-md hover:border-[#00E5FF]/50 transition-all flex flex-col justify-between group space-y-4 text-slate-100"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{stat.label}</span>
+                  <span className="text-xs font-semibold text-slate-400">{stat.label}</span>
                   <div className={`p-2 rounded-xl border ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
                     <IconComponent className="w-4 h-4" />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="text-lg sm:text-xl font-bold font-mono text-slate-900 dark:text-slate-100 tracking-tight">
+                  <div className="text-lg sm:text-xl font-bold font-mono text-white tracking-tight">
                     {stat.value}
                   </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400 font-sans">{stat.sub}</div>
+                  <div className="text-[11px] text-slate-400 font-sans">{stat.sub}</div>
                 </div>
 
                 {/* KPI Mini Sparkline */}

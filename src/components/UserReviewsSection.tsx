@@ -235,7 +235,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
               <Sparkles className="w-3.5 h-3.5 fill-current text-amber-500" />
               <span>COMMUNAUTÉ CHRISXAUUSD</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black font-mono text-[#0F172A] tracking-tight flex items-center gap-2">
+            <h2 className="text-lg sm:text-2xl font-black font-mono text-[#0F172A] tracking-tight flex items-center gap-2">
               <span>⭐ Ce que pensent nos abonnés</span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-sans leading-relaxed">
@@ -267,7 +267,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
           {/* Rating Big Card */}
           <div className="col-span-2 sm:col-span-1 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/80 rounded-[16px] p-4 flex flex-col items-center justify-center text-center shadow-xs">
             <div className="flex items-center gap-1 mb-1">
-              <span className="text-3xl font-black font-mono text-amber-600">4.9</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-amber-600">4.9</span>
               <span className="text-sm font-bold font-mono text-slate-400">/ 5</span>
             </div>
             <div className="flex items-center gap-1 text-amber-500 mb-1">
@@ -287,7 +287,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
               <Users className="w-4 h-4 text-blue-600" />
             </div>
             <div className="mt-2">
-              <span className="text-xl font-bold font-mono text-[#0F172A]">1 450+</span>
+              <span className="text-base sm:text-lg font-bold font-mono text-[#0F172A]">1 450+</span>
               <p className="text-[10px] text-emerald-600 font-mono font-medium flex items-center gap-1 mt-0.5">
                 <TrendingUp className="w-3 h-3" /> +12% ce mois
               </p>
@@ -301,7 +301,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
               <Award className="w-4 h-4 text-emerald-600" />
             </div>
             <div className="mt-2">
-              <span className="text-xl font-bold font-mono text-emerald-600">98.4%</span>
+              <span className="text-base sm:text-lg font-bold font-mono text-emerald-600">98.4%</span>
               <p className="text-[10px] text-slate-500 font-mono mt-0.5">
                 Taux de réabonnement
               </p>
@@ -315,7 +315,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
               <Zap className="w-4 h-4 text-amber-500" />
             </div>
             <div className="mt-2">
-              <span className="text-xl font-bold font-mono text-amber-600">84.5%</span>
+              <span className="text-base sm:text-lg font-bold font-mono text-amber-600">84.5%</span>
               <p className="text-[10px] text-slate-500 font-mono mt-0.5">
                 Audité en temps réel
               </p>
@@ -329,7 +329,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
               <ShieldCheck className="w-4 h-4 text-purple-600" />
             </div>
             <div className="mt-2">
-              <span className="text-xl font-bold font-mono text-[#0F172A]">3 200+</span>
+              <span className="text-base sm:text-lg font-bold font-mono text-[#0F172A]">3 200+</span>
               <p className="text-[10px] text-slate-500 font-mono mt-0.5">
                 Historique transparent
               </p>

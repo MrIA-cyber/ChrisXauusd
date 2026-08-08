@@ -399,7 +399,7 @@ export const RailwayLiveSignals: React.FC = () => {
                       <div className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
                         Prix du Signal
                       </div>
-                      <div className="text-xl font-black font-mono text-slate-900 dark:text-white">
+                      <div className="text-base sm:text-lg font-black font-mono text-slate-900 dark:text-white">
                         {typeof sig.price === 'number'
                           ? sig.price.toFixed(sig.pair.includes('XAU') ? 2 : 5)
                           : sig.price}

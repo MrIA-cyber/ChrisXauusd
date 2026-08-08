@@ -247,7 +247,7 @@ export const ChrisXauusdHomeLogo: React.FC = () => {
 
       {/* Wordmark & Tagline Group */}
       <div className="space-y-1 z-10">
-        <h1 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight leading-tight flex items-center justify-center gap-2">
+        <h1 className="text-xl sm:text-2xl font-black text-white font-mono tracking-tight leading-tight flex items-center justify-center gap-2">
           <span>CHRIS</span>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600">
             XAUUSD
@@ -303,7 +303,7 @@ export const LogoBrandShowcase: React.FC = () => {
             <Award className="w-3.5 h-3.5" />
             <span>Charte Graphique Officielle 2026</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-white">
+          <h2 className="text-lg sm:text-2xl font-black font-mono tracking-tight text-white">
             Nouveau Logo ChrisXauusd — Monogramme CX
           </h2>
           <p className="text-sm text-slate-400 mt-1 max-w-2xl">

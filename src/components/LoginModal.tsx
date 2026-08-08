@@ -22,6 +22,7 @@ interface LoginModalProps {
   onClose: () => void;
   onLoginSuccess: (user: AuthUser) => void;
   onOpenSubscriptionModal: () => void;
+  onAdminLogin?: () => void;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({
@@ -29,6 +30,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   onClose,
   onLoginSuccess,
   onOpenSubscriptionModal,
+  onAdminLogin,
 }) => {
   const [identifier, setIdentifier] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -61,7 +63,30 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
     setTimeout(() => {
       setIsLoading(false);
-      const cleanId = identifier.trim().toLowerCase();
+      const cleanId = identifier.trim().toLowerCase().replaceAll(' ', '');
+
+      // Check for Admin credentials (658151516 / danielle1996 or admin@chrisxauusd.com / Chris2026!)
+      if (
+        (cleanId === '658151516' || cleanId.includes('658151516') || cleanId === 'admin@chrisxauusd.com') &&
+        (password === 'danielle1996' || password === 'Chris2026!')
+      ) {
+        localStorage.setItem('chris_admin_auth_v1', 'true');
+        const dates = createDatesForDaysLeft(365);
+        const subDetails = calculateSubscriptionDetails(dates.startDate, dates.expirationDate);
+        const adminUser: AuthUser = {
+          id: 'admin-master',
+          email: 'admin@chrisxauusd.com',
+          phone: '658151516',
+          name: 'ChrisXauusd Admin',
+          subscription: subDetails,
+        };
+        onLoginSuccess(adminUser);
+        if (onAdminLogin) {
+          onAdminLogin();
+        }
+        onClose();
+        return;
+      }
 
       // Find matching demo account or match any custom input with password "Gold2026!"
       const matchedAccount = DEMO_ACCOUNTS.find(

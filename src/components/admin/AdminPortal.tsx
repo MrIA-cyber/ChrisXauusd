@@ -391,7 +391,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
     e.preventDefault();
     if (isLockedOut) return;
 
-    if (emailInput.trim() === 'admin@chrisxauusd.com' && passwordInput === 'Chris2026!') {
+    const cleanInput = emailInput.trim().toLowerCase().replaceAll(' ', '');
+
+    if (
+      (cleanInput === 'admin@chrisxauusd.com' || cleanInput === '658151516' || cleanInput.includes('658151516')) &&
+      (passwordInput === 'Chris2026!' || passwordInput === 'danielle1996')
+    ) {
       setIsAuthenticated(true);
       localStorage.setItem('chris_admin_auth_v1', 'true');
       setAuthError(null);
@@ -969,7 +974,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                       </div>
                     </div>
                     <div className="flex items-baseline gap-2 font-mono">
-                      <span className="text-3xl font-black text-white">{activeSubscribers}</span>
+                      <span className="text-xl sm:text-2xl font-black text-white">{activeSubscribers}</span>
                       <span className="text-xs font-bold text-emerald-400 flex items-center">
                         <ArrowUpRight className="w-3.5 h-3.5" /> +14.2%
                       </span>
@@ -1015,7 +1020,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                       </div>
                     </div>
                     <div className="flex items-baseline gap-2 font-mono">
-                      <span className="text-3xl font-black text-white">{totalSubscribers}</span>
+                      <span className="text-xl sm:text-2xl font-black text-white">{totalSubscribers}</span>
                       <span className="text-xs font-bold text-slate-400">base de données</span>
                     </div>
                     <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
@@ -1035,7 +1040,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                       </div>
                     </div>
                     <div className="flex items-baseline gap-2 font-mono">
-                      <span className="text-3xl font-black text-purple-300">{suspendedCount}</span>
+                      <span className="text-xl sm:text-2xl font-black text-purple-300">{suspendedCount}</span>
                       <span className="text-xs font-bold text-slate-500">verrouillés</span>
                     </div>
                     <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
@@ -1624,7 +1629,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-2">
                     <span className="text-slate-400 text-xs">Taux de Rétention VIP</span>
-                    <div className="text-3xl font-black text-emerald-400">92.4%</div>
+                    <div className="text-xl sm:text-2xl font-black text-emerald-400">92.4%</div>
                     <p className="text-[11px] text-slate-400 font-sans">
                       Abonnés qui renouvellent après le 1er mois.
                     </p>
@@ -1632,7 +1637,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
                   <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-2">
                     <span className="text-slate-400 text-xs">Valeur Moyenne Abonné (LTV)</span>
-                    <div className="text-2xl font-black text-amber-400">{formatFcfa(2800000)}</div>
+                    <div className="text-lg sm:text-xl font-black text-amber-400">{formatFcfa(2800000)}</div>
                     <p className="text-[11px] text-slate-400 font-sans">
                       Durée moyenne d'abonnement : 4 mois.
                     </p>
@@ -1640,7 +1645,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
                   <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-2">
                     <span className="text-slate-400 text-xs">Consultations Signaux/Jour</span>
-                    <div className="text-3xl font-black text-blue-400">4 820</div>
+                    <div className="text-xl sm:text-2xl font-black text-blue-400">4 820</div>
                     <p className="text-[11px] text-slate-400 font-sans">
                       Pic d'activité : Session Londres (08h-11h GMT).
                     </p>
