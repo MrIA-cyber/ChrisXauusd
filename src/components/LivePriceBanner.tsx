@@ -49,7 +49,7 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
   }, [recentCandles]);
 
   return (
-    <div className="bg-white/90 border-b border-slate-200/80 px-4 py-3 sm:py-3.5 shadow-xs backdrop-blur-xl text-[#0F172A] relative overflow-hidden font-sans">
+    <div className="bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/80 dark:border-slate-800 px-4 py-3 sm:py-3.5 shadow-xs backdrop-blur-xl text-slate-900 dark:text-slate-100 relative overflow-hidden font-sans">
       {/* Background Subtle Grid Effect */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f005_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f005_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 
@@ -57,22 +57,22 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
         
         {/* Left: Ticker Symbol & Centerpiece Main Market Price */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5 w-full md:w-auto justify-between md:justify-start">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-600 shrink-0">
               <Layers className="w-5 h-5 text-amber-500 animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-base sm:text-lg font-bold tracking-wider text-[#0F172A] font-mono">
+                <span className="text-base sm:text-lg font-bold tracking-wider text-slate-900 dark:text-slate-100 font-mono whitespace-nowrap">
                   XAU/USD
                 </span>
-                <span className="text-[10px] bg-amber-50 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider">
+                <span className="text-[10px] bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700 px-2 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider whitespace-nowrap">
                   SPOT GOLD
                 </span>
               </div>
-              <span className="text-[11px] text-slate-500 font-mono flex items-center gap-1.5 mt-0.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping" />
-                <span className="text-slate-700 font-bold">LIVE INSTITUTIONAL FEED</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5 mt-0.5 whitespace-nowrap">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping shrink-0" />
+                <span className="text-slate-700 dark:text-slate-300 font-bold">LIVE INSTITUTIONAL FEED</span>
               </span>
             </div>
           </div>
@@ -112,31 +112,31 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
           <div className="grid grid-cols-3 gap-1.5 sm:gap-3 w-full sm:w-auto">
             
             {/* 1. SPREAD Card */}
-            <div className="bg-white border border-slate-200/80 p-2 sm:p-3 rounded-[16px] sm:rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] text-center hover:border-amber-400 transition-colors">
-              <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-0.5 sm:mb-1">
+            <div className="bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 p-2 sm:p-3 rounded-[16px] sm:rounded-[20px] shadow-xs text-center hover:border-amber-400 transition-colors">
+              <span className="text-[9px] sm:text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-widest font-extrabold block mb-0.5 sm:mb-1">
                 SPREAD
               </span>
-              <span className="text-xs sm:text-sm font-black text-amber-600 block font-mono truncate">
+              <span className="text-xs sm:text-sm font-black text-amber-700 dark:text-amber-400 block font-mono truncate">
                 ${currentTick.spread.toFixed(2)}
               </span>
             </div>
 
             {/* 2. BID Card */}
-            <div className="bg-white border border-slate-200/80 p-2 sm:p-3 rounded-[14px] sm:rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] text-center hover:border-emerald-400 transition-colors">
-              <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-0.5 sm:mb-1 truncate">
+            <div className="bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 p-2 sm:p-3 rounded-[14px] sm:rounded-[20px] shadow-xs text-center hover:border-emerald-400 transition-colors">
+              <span className="text-[9px] sm:text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-widest font-extrabold block mb-0.5 sm:mb-1 truncate">
                 BID<span className="hidden sm:inline"> (OFFRE)</span>
               </span>
-              <span className="text-xs sm:text-sm font-black text-emerald-600 block font-mono truncate">
+              <span className="text-xs sm:text-sm font-black text-emerald-700 dark:text-emerald-400 block font-mono truncate">
                 ${currentTick.bid.toFixed(2)}
               </span>
             </div>
 
             {/* 3. ASK Card */}
-            <div className="bg-white border border-slate-200/80 p-2 sm:p-3 rounded-[14px] sm:rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)] text-center hover:border-rose-400 transition-colors">
-              <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-widest font-bold block mb-0.5 sm:mb-1 truncate">
+            <div className="bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 p-2 sm:p-3 rounded-[14px] sm:rounded-[20px] shadow-xs text-center hover:border-rose-400 transition-colors">
+              <span className="text-[9px] sm:text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-widest font-extrabold block mb-0.5 sm:mb-1 truncate">
                 ASK<span className="hidden sm:inline"> (DEMANDE)</span>
               </span>
-              <span className="text-xs sm:text-sm font-black text-rose-600 block font-mono truncate">
+              <span className="text-xs sm:text-sm font-black text-rose-700 dark:text-rose-400 block font-mono truncate">
                 ${currentTick.ask.toFixed(2)}
               </span>
             </div>
@@ -144,15 +144,15 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
           </div>
 
           {/* Mini Sparkline Graph & 24h High/Low */}
-          <div className="hidden lg:flex items-center gap-4 bg-white border border-slate-200/80 p-2.5 rounded-[20px] shadow-[0_4px_20px_rgba(15,23,42,0.04)]">
-            <div className="flex flex-col text-[11px] font-mono space-y-1 pr-3 border-r border-slate-100">
-              <div className="flex items-center gap-1 text-slate-500">
-                <TrendingUp className="w-3 h-3 text-emerald-600" />
-                <span>H: <strong className="text-[#0F172A]">${currentTick.high24h.toFixed(2)}</strong></span>
+          <div className="hidden lg:flex items-center gap-4 bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 p-2.5 rounded-[20px] shadow-xs">
+            <div className="flex flex-col text-[11px] font-mono space-y-1 pr-3 border-r border-slate-200 dark:border-slate-700">
+              <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+                <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                <span>H: <strong className="text-slate-900 dark:text-slate-100">${currentTick.high24h.toFixed(2)}</strong></span>
               </div>
-              <div className="flex items-center gap-1 text-slate-500">
-                <TrendingDown className="w-3 h-3 text-rose-600" />
-                <span>L: <strong className="text-[#0F172A]">${currentTick.low24h.toFixed(2)}</strong></span>
+              <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+                <TrendingDown className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                <span>L: <strong className="text-slate-900 dark:text-slate-100">${currentTick.low24h.toFixed(2)}</strong></span>
               </div>
             </div>
 

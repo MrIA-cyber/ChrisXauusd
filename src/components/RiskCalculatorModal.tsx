@@ -17,6 +17,19 @@ export const RiskCalculatorModal: React.FC<RiskCalculatorModalProps> = ({
   const [slPips, setSlPips] = useState<number>(defaultSlPips);
   const [rrTarget, setRrTarget] = useState<number>(2.0);
 
+  // Escape key listener to close
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   // Calculation logic for XAU/USD:
@@ -28,8 +41,14 @@ export const RiskCalculatorModal: React.FC<RiskCalculatorModalProps> = ({
   const potentialProfitUsd = Number((maxRiskUsd * rrTarget).toFixed(2));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden relative text-[var(--text-primary)] font-sans">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto cursor-pointer animate-fade-in font-sans"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden relative text-slate-900 dark:text-slate-100 font-sans my-auto cursor-default"
+      >
         
         {/* Header */}
         <div className="px-5 py-4 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">

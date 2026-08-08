@@ -42,6 +42,12 @@ export function sendWebPushNotification(
     return;
   }
 
+  // Check user preference saved in localStorage
+  const isPushEnabled = localStorage.getItem('chrisxauusd_push_enabled');
+  if (isPushEnabled === 'false') {
+    return;
+  }
+
   if (Notification.permission !== 'granted') {
     return;
   }

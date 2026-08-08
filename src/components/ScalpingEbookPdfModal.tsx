@@ -27,6 +27,19 @@ export const ScalpingEbookPdfModal: React.FC<ScalpingEbookPdfModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  // Keyboard Escape listener
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handlePrintPdf = () => {
@@ -34,9 +47,15 @@ export const ScalpingEbookPdfModal: React.FC<ScalpingEbookPdfModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto cursor-pointer animate-fade-in font-sans"
+    >
       {/* Container - Printable Target */}
-      <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 w-full max-w-4xl rounded-2xl border border-amber-500/30 shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col print:max-h-none print:shadow-none print:border-none print:rounded-none">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 w-full max-w-4xl rounded-2xl border border-amber-500/30 shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col print:max-h-none print:shadow-none print:border-none print:rounded-none cursor-default"
+      >
         
         {/* Top Header Controls (Hidden when printing) */}
         <div className="p-4 bg-slate-900 text-white flex items-center justify-between border-b border-amber-500/30 shrink-0 print:hidden">

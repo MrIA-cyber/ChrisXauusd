@@ -282,8 +282,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
         transition={{ duration: 0.25, ease: 'easeOut' }}
         className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-xl max-h-[92vh] overflow-y-auto shadow-2xl relative text-slate-900 dark:text-white font-sans my-auto cursor-default"
       >
-        {/* Header with Luxury Amber Glow */}
-        <div className="relative bg-gradient-to-r from-slate-900 via-amber-950/90 to-slate-900 text-white p-6 sm:p-8 text-center overflow-hidden border-b border-amber-500/30">
+        {/* Header with Royal Blue & Pure White Theme */}
+        <div className="relative bg-gradient-to-r from-slate-950 via-blue-900 to-indigo-950 text-white p-6 sm:p-8 text-center overflow-hidden border-b border-blue-500/40">
           
           {/* Close Button */}
           <button
@@ -296,13 +296,13 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           </button>
 
           {/* Background Ambient Glows */}
-          <div className="absolute -top-10 -left-10 w-44 h-44 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-10 -left-10 w-44 h-44 bg-blue-600/30 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none" />
 
           {/* Avatar Centered Display with Change Trigger */}
           <div className="relative z-10 flex flex-col items-center space-y-3">
             <div className="relative group">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-4 ring-amber-400/80 shadow-2xl overflow-hidden bg-slate-800 flex items-center justify-center relative">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-4 ring-blue-400 shadow-2xl overflow-hidden bg-blue-800 flex items-center justify-center relative">
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
@@ -310,7 +310,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-3xl sm:text-4xl font-extrabold font-mono text-amber-300">
+                  <span className="text-3xl sm:text-4xl font-extrabold font-mono text-white">
                     {getInitials(userSession.name)}
                   </span>
                 )}
@@ -318,7 +318,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 {/* Processing Overlay */}
                 {isProcessingImage && (
                   <div className="absolute inset-0 bg-slate-950/70 flex items-center justify-center">
-                    <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
                   </div>
                 )}
               </div>
@@ -327,10 +327,10 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-0 right-0 p-2.5 rounded-full bg-amber-500 text-slate-950 hover:bg-amber-400 border-2 border-slate-900 shadow-xl transition-transform active:scale-90 cursor-pointer"
+                className="absolute bottom-0 right-0 p-2.5 rounded-full bg-blue-600 text-white hover:bg-blue-500 border-2 border-slate-900 shadow-xl transition-transform active:scale-90 cursor-pointer"
                 title="Changer ma photo de profil"
               >
-                <Camera className="w-4 h-4 fill-slate-950" />
+                <Camera className="w-4 h-4 fill-white" />
               </button>
 
               <input
@@ -346,11 +346,11 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
             <div className="text-center space-y-1">
               <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center justify-center gap-2">
                 <span>{userSession.name}</span>
-                <Crown className="w-4 h-4 text-amber-400 fill-amber-400 shrink-0" />
+                <Crown className="w-4 h-4 text-amber-300 fill-amber-300 shrink-0" />
               </h2>
               <div className="flex flex-wrap items-center justify-center gap-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-600/40 text-blue-100 border border-blue-400/50">
+                  <Sparkles className="w-3.5 h-3.5 text-blue-200" />
                   <span>
                     {traderLevel === 'MASTER_TRADER' && '👑 Master Elite'}
                     {traderLevel === 'SCALPER_PRO' && '⚡ Scalper Pro'}
@@ -374,7 +374,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
             onClick={() => setActiveTab('PHOTO')}
             className={`flex-1 min-w-[100px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'PHOTO'
-                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
@@ -387,7 +387,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
             onClick={() => setActiveTab('INFO')}
             className={`flex-1 min-w-[100px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'INFO'
-                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
@@ -400,11 +400,11 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
             onClick={() => setActiveTab('TRADING')}
             className={`flex-1 min-w-[120px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'TRADING'
-                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
-            <Briefcase className="w-3.5 h-3.5 text-amber-500" />
+            <Briefcase className="w-3.5 h-3.5 text-blue-600" />
             <span>Trading VIP</span>
           </button>
 
@@ -413,7 +413,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
             onClick={() => setActiveTab('PREF')}
             className={`flex-1 min-w-[110px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'PREF'
-                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
@@ -426,11 +426,11 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
             onClick={() => setActiveTab('CALENDAR')}
             className={`flex-1 min-w-[130px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'CALENDAR'
-                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
-            <Calendar className="w-3.5 h-3.5 text-amber-500" />
+            <Calendar className="w-3.5 h-3.5 text-blue-600" />
             <span>Calendrier Macro</span>
           </button>
         </div>

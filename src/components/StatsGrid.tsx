@@ -19,25 +19,25 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.05 }}
-          className="bg-white border border-slate-200/80 rounded-[18px] sm:rounded-[20px] p-3.5 sm:p-5 relative overflow-hidden group hover:border-blue-400 hover:shadow-[0_15px_35px_rgba(15,23,42,0.08)] hover:-translate-y-1 transition-all duration-300 shadow-[0_10px_30px_rgba(15,23,42,0.05)]"
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[18px] sm:rounded-[20px] p-3.5 sm:p-5 relative overflow-hidden group hover:border-blue-400 hover:shadow-[0_15px_35px_rgba(15,23,42,0.08)] hover:-translate-y-1 transition-all duration-300 shadow-xs"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600" />
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-wider truncate">Total Setups</span>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shadow-xs group-hover:scale-110 transition-transform shrink-0">
+            <span className="text-[10px] sm:text-xs font-mono font-extrabold text-slate-600 dark:text-slate-400 uppercase tracking-wider truncate">Total Setups</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-xs group-hover:scale-110 transition-transform shrink-0">
               <Target className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-3xl font-black font-mono text-[#0F172A] tracking-tight">
-              {stats.totalSetups} <span className="text-sm font-normal text-slate-400">/ 4 max</span>
+            <span className="text-xl sm:text-3xl font-black font-mono text-slate-900 dark:text-slate-100 tracking-tight">
+              {stats.totalSetups} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ 4 max</span>
             </span>
-            <span className="text-[10px] sm:text-xs font-mono text-blue-800 font-bold bg-blue-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-blue-200">
+            <span className="text-[10px] sm:text-xs font-mono text-blue-900 dark:text-blue-300 font-bold bg-blue-50 dark:bg-blue-950/60 px-2 sm:px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
               {stats.active} en cours
             </span>
           </div>
-          <div className="mt-2.5 sm:mt-3 flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-600 font-mono font-semibold truncate">
-            <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
+          <div className="mt-2.5 sm:mt-3 flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-700 dark:text-slate-300 font-mono font-semibold truncate">
+            <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
             <span>Limite stricte : 4 trades / jour</span>
           </div>
         </motion.div>
@@ -47,25 +47,25 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="bg-white border border-slate-200/80 rounded-[18px] sm:rounded-[20px] p-3.5 sm:p-5 relative overflow-hidden group hover:border-emerald-400 hover:shadow-[0_15px_35px_rgba(15,23,42,0.08)] hover:-translate-y-1 transition-all duration-300 shadow-[0_10px_30px_rgba(15,23,42,0.05)]"
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[18px] sm:rounded-[20px] p-3.5 sm:p-5 relative overflow-hidden group hover:border-emerald-400 hover:shadow-[0_15px_35px_rgba(15,23,42,0.08)] hover:-translate-y-1 transition-all duration-300 shadow-xs"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-600" />
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-wider truncate">Gagnants (TP)</span>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs group-hover:scale-110 transition-transform shrink-0">
+            <span className="text-[10px] sm:text-xs font-mono font-extrabold text-slate-600 dark:text-slate-400 uppercase tracking-wider truncate">Gagnants (TP)</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-xs group-hover:scale-110 transition-transform shrink-0">
               <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-3xl font-black font-mono text-emerald-600 tracking-tight">
+            <span className="text-xl sm:text-3xl font-black font-mono text-emerald-700 dark:text-emerald-400 tracking-tight">
               {stats.winners}
             </span>
-            <span className="text-[10px] sm:text-xs font-mono text-emerald-800 font-bold bg-emerald-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-200">
+            <span className="text-[10px] sm:text-xs font-mono text-emerald-900 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
               +{stats.totalPips > 0 ? stats.totalPips : 0} pips
             </span>
           </div>
-          <div className="mt-2.5 sm:mt-3 flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-700 font-mono font-semibold truncate">
-            <Award className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 shrink-0" />
+          <div className="mt-2.5 sm:mt-3 flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-800 dark:text-emerald-300 font-mono font-semibold truncate">
+            <Award className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>Objectifs TP Validés</span>
           </div>
         </motion.div>
@@ -75,25 +75,25 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.15 }}
-          className="bg-white border border-slate-200/80 rounded-[18px] sm:rounded-[20px] p-3.5 sm:p-5 relative overflow-hidden group hover:border-rose-400 hover:shadow-[0_15px_35px_rgba(15,23,42,0.08)] hover:-translate-y-1 transition-all duration-300 shadow-[0_10px_30px_rgba(15,23,42,0.05)]"
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[18px] sm:rounded-[20px] p-3.5 sm:p-5 relative overflow-hidden group hover:border-rose-400 hover:shadow-[0_15px_35px_rgba(15,23,42,0.08)] hover:-translate-y-1 transition-all duration-300 shadow-xs"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-500 to-red-600" />
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-wider truncate">Perdants (SL)</span>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shadow-xs group-hover:scale-110 transition-transform shrink-0">
+            <span className="text-[10px] sm:text-xs font-mono font-extrabold text-slate-600 dark:text-slate-400 uppercase tracking-wider truncate">Perdants (SL)</span>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400 shadow-xs group-hover:scale-110 transition-transform shrink-0">
               <XCircle className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-3xl font-black font-mono text-rose-600 tracking-tight">
+            <span className="text-xl sm:text-3xl font-black font-mono text-rose-700 dark:text-rose-400 tracking-tight">
               {stats.losers}
             </span>
-            <span className="text-[10px] sm:text-xs font-mono text-slate-600 font-bold bg-slate-100 px-2 sm:px-2.5 py-0.5 rounded-full border border-slate-200">
+            <span className="text-[10px] sm:text-xs font-mono text-slate-700 dark:text-slate-300 font-bold bg-slate-100 dark:bg-slate-800 px-2 sm:px-2.5 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
               100% Transparence
             </span>
           </div>
-          <div className="mt-2.5 sm:mt-3 flex items-center gap-1 text-[10px] sm:text-[11px] text-rose-700 font-mono font-semibold truncate">
-            <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-600 shrink-0" />
+          <div className="mt-2.5 sm:mt-3 flex items-center gap-1 text-[10px] sm:text-[11px] text-rose-800 dark:text-rose-300 font-mono font-semibold truncate">
+            <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
             <span>SL Réellement Exécuté</span>
           </div>
         </motion.div>

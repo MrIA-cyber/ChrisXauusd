@@ -18,6 +18,12 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
   onToggleSound,
 }) => {
   const [permission, setPermission] = useState<NotificationPermissionState>(() => getNotificationPermission());
+  const [pushEnabled, setPushEnabled] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    const saved = localStorage.getItem('chrisxauusd_push_enabled');
+    if (saved !== null) return saved === 'true';
+    return getNotificationPermission() === 'granted';
+  });
   const [isInIframe, setIsInIframe] = useState<boolean>(false);
   const [testSent, setTestSent] = useState<boolean>(false);
   const [inAppAlerts, setInAppAlerts] = useState<boolean>(true);
@@ -29,7 +35,33 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
       setIsInIframe(true);
     }
     setPermission(getNotificationPermission());
+    const saved = localStorage.getItem('chrisxauusd_push_enabled');
+    if (saved !== null) {
+      setPushEnabled(saved === 'true');
+    }
   }, [isOpen]);
+
+  const handleTogglePushSetting = async () => {
+    if (pushEnabled) {
+      setPushEnabled(false);
+      localStorage.setItem('chrisxauusd_push_enabled', 'false');
+    } else {
+      if (permission !== 'granted') {
+        const res = await requestWebNotificationPermission();
+        setPermission(res);
+        if (res === 'granted') {
+          setPushEnabled(true);
+          localStorage.setItem('chrisxauusd_push_enabled', 'true');
+        }
+      } else {
+        setPushEnabled(true);
+        localStorage.setItem('chrisxauusd_push_enabled', 'true');
+        sendWebPushNotification('🛎️ Notifications Push Activées', {
+          body: 'Vous recevrez les alertes VIP instantanément.',
+        });
+      }
+    }
+  };
 
   const handleRequestPermission = async () => {
     soundService.playNewSignalSound(true);
@@ -60,16 +92,33 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
     setTimeout(() => setTestSent(false), 4000);
   };
 
+  // Keyboard Escape listener to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+      <div
+        onClick={onClose}
+        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto cursor-pointer animate-fade-in font-sans"
+      >
         <motion.div
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden text-slate-900 font-sans"
+          className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden text-slate-900 dark:text-slate-100 my-auto cursor-default"
         >
           {/* Header */}
           <div className="relative px-6 pt-6 pb-5 bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 text-white">
@@ -169,6 +218,23 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
 
             {/* Toggles */}
             <div className="pt-3 border-t border-slate-150 space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
+                <div className="flex items-center gap-2.5">
+                  <Bell className={`w-4 h-4 ${pushEnabled && permission === 'granted' ? 'text-emerald-600' : 'text-slate-400'}`} />
+                  <span className="font-bold text-slate-700">Notifications Push Web</span>
+                </div>
+                <button
+                  onClick={handleTogglePushSetting}
+                  className={`px-3 py-1 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
+                    pushEnabled && permission === 'granted'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-slate-200 text-slate-600'
+                  }`}
+                >
+                  {pushEnabled && permission === 'granted' ? 'ACTIVÉ' : 'DÉSACTIVÉ'}
+                </button>
+              </div>
+
               <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
                 <div className="flex items-center gap-2.5">
                   {soundEnabled ? (

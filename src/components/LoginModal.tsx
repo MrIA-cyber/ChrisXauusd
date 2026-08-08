@@ -280,8 +280,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           {/* Footer Call to Subscription */}
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800/80 text-center text-xs font-mono text-slate-600 dark:text-slate-300 space-y-2">
             <div className="flex items-center justify-center gap-1.5 text-slate-500 dark:text-slate-400">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Vous n'avez pas encore de compte VIP active ?</span>
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+              <span>Vous n'avez pas encore de compte VIP actif ?</span>
             </div>
             <button
               type="button"
@@ -289,7 +289,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 onClose();
                 onOpenSubscriptionModal();
               }}
-              className="w-full py-2.5 px-4 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold border border-amber-500/30 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-bold border border-blue-300 dark:border-blue-500/40 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <span>Activer mon Abonnement — {formatFcfa(SUBSCRIPTION_PRICE_FCFA)}</span>
               <ArrowRight className="w-3.5 h-3.5" />

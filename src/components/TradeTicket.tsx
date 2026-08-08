@@ -213,12 +213,12 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
           {isVisitor ? (
             <div
               onClick={triggerLockedShake}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black font-mono tracking-wider bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/40 shadow-2xs cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black font-mono tracking-wider bg-blue-50 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-400/50 shadow-2xs cursor-pointer ${
                 isShaking ? 'animate-shake' : ''
               }`}
             >
-              <Lock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span>🔒 SETUP VERROUILLÉ (MEMBRE VIP)</span>
+              <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>🔒 SETUP VERROUILLÉ (TRADER VIP)</span>
             </div>
           ) : (
             <div className="flex items-center gap-2">
@@ -247,8 +247,8 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
             </div>
           )}
 
-          <div className="flex items-center gap-1.5 bg-amber-500/10 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-700/80 px-3 py-1.5 rounded-xl text-xs font-mono text-amber-900 dark:text-amber-300 font-black">
-            <Award className="w-3.5 h-3.5 text-amber-500" />
+          <div className="flex items-center gap-1.5 bg-blue-50 text-blue-900 dark:bg-blue-950/50 border border-blue-300 dark:border-blue-700/80 px-3 py-1.5 rounded-xl text-xs font-mono dark:text-blue-300 font-black">
+            <Award className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>R:R 1:{setup.rrRatio}</span>
           </div>
         </div>
