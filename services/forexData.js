@@ -64,14 +64,16 @@ let cachedQuote = {
 };
 
 /**
- * Récupère le prix en temps réel de Twelve Data pour XAU/USD ou un autre symbole.
+ * Récupère le prix en temps réel de Twelve Data pour XAU/USD ou un autre symbole,
+ * avec basculement automatique sur un flux de secours en cas d'erreur 429 ou de limite de quota.
  */
 export async function getLiveQuote(symbol = 'XAU/USD') {
   const apiKey = process.env.TWELVE_DATA_API_KEY || 'b7a3a115daf84f289e283ef25041cee4';
   const url = `https://api.twelvedata.com/quote?symbol=${encodeURIComponent(symbol)}&apikey=${apiKey}`;
 
+  // 1. Essai principal via Twelve Data API
   try {
-    const response = await axios.get(url, { timeout: 8000 });
+    const response = await axios.get(url, { timeout: 6000 });
     const data = response.data;
     if (data && data.close && !data.message && data.status !== 'error') {
       const price = parseFloat(data.close || data.open);
@@ -84,14 +86,44 @@ export async function getLiveQuote(symbol = 'XAU/USD') {
           changePercent24h: parseFloat(data.percent_change) || 0,
           timestamp: Date.now(),
         };
-        return { success: true, isLive: true, data: cachedQuote };
+        return { success: true, isLive: true, provider: 'TwelveData', data: cachedQuote };
       }
     }
   } catch (err) {
-    // Fallback en cas d'erreur ou de quota dépassé
+    // Continuer vers les flux secondaires de secours
   }
 
-  // Micro-fluctuations réalistes en mode fallback si limite ou réseau indisponible
+  // 2. Flux secondaire de secours (Yahoo Finance pour Or / Forex en cas de 429 Twelve Data)
+  try {
+    const yahooSymbol = symbol.includes('XAU') ? 'GC=F' : symbol.replace('/', '') + '=X';
+    const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yahooSymbol)}?interval=1m&range=1d`;
+    const yRes = await axios.get(yahooUrl, {
+      timeout: 5000,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+    });
+
+    const meta = yRes?.data?.chart?.result?.[0]?.meta;
+    if (meta && meta.regularMarketPrice) {
+      const price = parseFloat(meta.regularMarketPrice);
+      const prevClose = parseFloat(meta.chartPreviousClose || meta.previousClose) || price;
+      const change = price - prevClose;
+      const changePct = prevClose > 0 ? (change / prevClose) * 100 : 0;
+
+      cachedQuote = {
+        price: Number(price.toFixed(2)),
+        high24h: Number((meta.regularMarketDayHigh || price + 4.0).toFixed(2)),
+        low24h: Number((meta.regularMarketDayLow || price - 4.0).toFixed(2)),
+        change24h: Number(change.toFixed(2)),
+        changePercent24h: Number(changePct.toFixed(2)),
+        timestamp: Date.now(),
+      };
+      return { success: true, isLive: true, provider: 'YahooFinance', data: cachedQuote };
+    }
+  } catch (yErr) {
+    // Échec du flux de secours secondaire
+  }
+
+  // 3. Fallback micro-fluctuations réalistes si fermeture de marché ou panne totale des APIs
   const variation = (Math.random() - 0.49) * 0.15;
   cachedQuote.price = Number((cachedQuote.price + variation).toFixed(2));
   cachedQuote.high24h = Math.max(cachedQuote.high24h, cachedQuote.price);
