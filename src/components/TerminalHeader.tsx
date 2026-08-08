@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing, Calendar } from 'lucide-react';
+import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing, Calendar, BookOpen, Newspaper, Info } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 import { useLongPress } from '../lib/useLongPress';
@@ -53,6 +53,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
 }) => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isInfosMenuOpen, setIsInfosMenuOpen] = useState<boolean>(false);
   const [isNotifModalOpen, setIsNotifModalOpen] = useState<boolean>(false);
   const [notifPermission, setNotifPermission] = useState<string>(() => getNotificationPermission());
 
@@ -216,43 +217,103 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                 J-{subscription.daysRemaining}
               </span>
             </button>
-          ) : (
-            <button
-              onClick={onOpenSubscribeModal}
-              className="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold font-mono px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs shadow-md shadow-amber-500/20 active:scale-[0.98] transition-all shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-slate-950 text-slate-950" />
-              <span>
-                <span className="hidden sm:inline">Découvrir </span>Premium
-              </span>
-            </button>
-          )}
+          ) : null}
 
-          {/* Quick Visible Direct Header Button: Calendrier Économique */}
-          {onOpenCalendar && (
+          {/* Menu INFOS Dropdown Button (Livres PDF, Calendrier Économique & Annonces) */}
+          <div className="relative">
             <button
               type="button"
-              onClick={onOpenCalendar}
-              className="hidden lg:flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-500/30 px-2.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 shadow-xs"
-              title="Ouvrir le Calendrier Économique Réel"
+              onClick={() => {
+                setIsInfosMenuOpen((prev) => !prev);
+                if (isMenuOpen) setIsMenuOpen(false);
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700/80 text-xs font-mono font-medium transition-all active:scale-95 cursor-pointer shrink-0"
+              title="Menu Informations — Livres, Calendrier Économique & Actualités"
             >
-              <Calendar className="w-3.5 h-3.5 text-amber-500" />
-              <span>Calendrier</span>
+              <Info className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+              <span className="hidden sm:inline">Infos</span>
+              <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isInfosMenuOpen ? 'rotate-180' : ''}`} />
             </button>
-          )}
 
-          {/* Quick Visible Direct Header Button: Livre PDF */}
-          {onOpenEbookModal && (
-            <button
-              type="button"
-              onClick={onOpenEbookModal}
-              className="hidden md:flex items-center gap-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-900 dark:text-amber-300 border border-amber-500/40 px-2.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shrink-0 shadow-xs"
-              title="Ouvrir / Télécharger le Livre PDF Comple"
-            >
-              <Download className="w-3.5 h-3.5 text-amber-500" />
-              <span>Livre PDF</span>
-            </button>
-          )}
+            {/* Dropdown Menu INFOS */}
+            {isInfosMenuOpen && (
+              <div
+                className="absolute right-0 mt-2 w-60 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl p-1.5 z-50 space-y-1 font-mono text-xs backdrop-blur-md animate-in fade-in slide-in-from-top-1 duration-150"
+                onClick={() => setIsInfosMenuOpen(false)}
+              >
+                <div className="px-2.5 py-1.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold flex items-center gap-1">
+                    <Info className="w-3 h-3 text-blue-500" /> Centre d'information
+                  </span>
+                </div>
+
+                {/* 1. Livre PDF & Masterclass */}
+                {onOpenEbookModal && (
+                  <button
+                    onClick={onOpenEbookModal}
+                    className="w-full text-left p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-amber-500 shrink-0" />
+                      <div>
+                        <div className="font-semibold text-xs">Livre Scalping (PDF)</div>
+                        <div className="text-[10px] text-slate-400">Guide & Masterclass</div>
+                      </div>
+                    </div>
+                  </button>
+                )}
+
+                {/* 2. Calendrier Économique Réel */}
+                {onOpenCalendar && (
+                  <button
+                    onClick={onOpenCalendar}
+                    className="w-full text-left p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-blue-500 shrink-0" />
+                      <div>
+                        <div className="font-semibold text-xs">Calendrier Économique</div>
+                        <div className="text-[10px] text-slate-400">FED, CPI, NFP Live</div>
+                      </div>
+                    </div>
+                  </button>
+                )}
+
+                {/* 3. Fil Satellite Actualités */}
+                <button
+                  onClick={() => {
+                    const newsElem = document.getElementById('news-section');
+                    if (newsElem) newsElem.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="w-full text-left p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors group cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <Newspaper className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <div>
+                      <div className="font-semibold text-xs">Actualités du Marché</div>
+                      <div className="text-[10px] text-slate-400">Annonces XAU/USD</div>
+                    </div>
+                  </div>
+                </button>
+
+                {/* 4. Option Abonnement VIP / Premium si non actif */}
+                {!isSubscriberActive && (
+                  <div className="pt-1 border-t border-slate-100 dark:border-slate-800">
+                    <button
+                      onClick={onOpenSubscribeModal}
+                      className="w-full text-left p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-semibold flex items-center justify-between transition-colors cursor-pointer text-xs"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Abonnement Premium</span>
+                      </div>
+                    </button>
+                  </div>
+                )}
+
+              </div>
+            )}
+          </div>
 
           {/* Compact Push Notifications Bell Button */}
           <button
@@ -338,36 +399,6 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     </span>
                     <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
                       {theme === 'dark' ? 'Sombre' : 'Clair'}
-                    </span>
-                  </button>
-                )}
-
-                {/* Calendrier Économique Macro */}
-                {onOpenCalendar && (
-                  <button
-                    onClick={onOpenCalendar}
-                    className="w-full text-left px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 flex items-center justify-between transition-colors font-bold cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-amber-500" /> Calendrier Économique Réel
-                    </span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold bg-amber-500 text-slate-950">
-                      LIVE
-                    </span>
-                  </button>
-                )}
-
-                {/* Ebook Masterclass PDF */}
-                {onOpenEbookModal && (
-                  <button
-                    onClick={onOpenEbookModal}
-                    className="w-full text-left px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-300 flex items-center justify-between transition-colors font-bold cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Download className="w-3.5 h-3.5 text-amber-500" /> Livre PDF & Masterclass
-                    </span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold bg-amber-500 text-slate-950">
-                      PDF
                     </span>
                   </button>
                 )}

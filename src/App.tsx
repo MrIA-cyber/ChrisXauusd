@@ -722,37 +722,6 @@ export default function App() {
       {/* Main Content Dashboard */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-4 sm:space-y-6 relative z-10">
         
-        {/* Quick Access Action Ribbon for Calendar & Livre PDF */}
-        <div className="bg-gradient-to-r from-slate-900 via-amber-950/80 to-slate-900 text-white p-3 sm:p-3.5 rounded-2xl border border-amber-500/40 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 shrink-0">
-              <Sparkles className="w-4 h-4 animate-pulse" />
-            </div>
-            <div>
-              <span className="text-xs font-mono font-bold text-amber-300 block uppercase">Accès Direct aux Outils VIP</span>
-              <p className="text-xs text-slate-300">Retrouvez le Calendrier Macro-Économique Réel et le Livre PDF de Scalping ici :</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
-            <button
-              onClick={handleOpenCalendar}
-              className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
-            >
-              <Calendar className="w-4 h-4" />
-              <span>📅 Calendrier Économique Réel</span>
-            </button>
-
-            <button
-              onClick={() => setIsEbookModalOpen(true)}
-              className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/50 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
-            >
-              <BookOpen className="w-4 h-4 text-amber-400" />
-              <span>📕 Livre PDF Complete</span>
-            </button>
-          </div>
-        </div>
-        
         {isVisitor ? (
           /* Institutional Visitor Landing Presentation Page */
           <VisitorLandingView

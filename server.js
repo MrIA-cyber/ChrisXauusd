@@ -17,6 +17,7 @@ import { connectToDatabase, getDbStatus } from './services/db.js';
 import { startSignalCron, runSignalAnalysis } from './cron/signalCron.js';
 import { getForexData, getLiveQuote } from './services/forexData.js';
 import { generateSignal } from './services/signalGenerator.js';
+import { fetchLiveMarketNews } from './services/realNewsService.js';
 
 dotenv.config();
 
@@ -80,6 +81,21 @@ app.get('/api/forex/candles', async (req, res) => {
     });
   } catch (err) {
     return res.status(500).json({ success: false, error: 'Erreur lors de la récupération des bougies' });
+  }
+});
+
+// Endpoint Actualités Financières & Or en Direct (Live Satellite News)
+app.get('/api/news/live', async (req, res) => {
+  try {
+    const liveArticles = await fetchLiveMarketNews();
+    return res.json({
+      success: true,
+      count: liveArticles.length,
+      data: liveArticles,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: 'Erreur lors de la récupération des actualités réelles' });
   }
 });
 

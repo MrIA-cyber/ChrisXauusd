@@ -148,5 +148,7 @@ export interface NewsArticle {
   imageUrl?: string;
   author: string;
   tags: string[];
+  sourceUrl?: string;
+  isLiveReal?: boolean;
 }
 
