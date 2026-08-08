@@ -37,13 +37,13 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   grade: SetupGrade; // 'A+' | 'A' | 'B'
   confluenceStrings: string[];
 } {
-  // Determine target score weighted toward high confluence (minimum 3/5 criteria required)
+  // Determine target score weighted toward ultra-high confluence Grade A+ (75% A+ 5/5, 20% A 4/5)
   const rand = Math.random();
-  let targetScore = 5; // Setup A+ (5/5)
-  if (rand > 0.52 && rand <= 0.85) {
-    targetScore = 4; // Setup A (4/5)
-  } else if (rand > 0.85) {
-    targetScore = 3; // Setup B (3/5)
+  let targetScore = 5; // Setup A+ Ultra High Confluence (5/5)
+  if (rand > 0.75 && rand <= 0.95) {
+    targetScore = 4; // Setup A High Confluence (4/5)
+  } else if (rand > 0.95) {
+    targetScore = 3; // Setup B Moderated Confluence (3/5)
   }
 
   // 1. Structure de marché (BOS / CHoCH M5/M15)
@@ -119,12 +119,12 @@ export function createNewTradeSetup(
   const isBuy = forceType ? forceType === 'BUY' : Math.random() > 0.48;
   
   // Gold pricing: 1 pip = $0.10 ($1 = 10 pips)
-  // Scalping SL: 15 to 28 pips ($1.50 to $2.80)
-  const slPips = Math.floor(Math.random() * 14) + 15;
+  // Scalping SL: Strict 12 to 22 pips ($1.20 to $2.20) for minimal drawdown
+  const slPips = Math.floor(Math.random() * 11) + 12;
   const slOffset = slPips * 0.10;
   
-  // Risk / Reward Ratio: Minimum 1:1.5, up to 1:3.2
-  const rrRatio = Number((1.5 + Math.random() * 1.7).toFixed(2));
+  // Risk / Reward Ratio: Minimum 1:1.8, up to 1:3.5 for maximum win expectancy
+  const rrRatio = Number((1.8 + Math.random() * 1.7).toFixed(2));
   const tpPips = Math.round(slPips * rrRatio);
   const tpOffset = tpPips * 0.10;
 

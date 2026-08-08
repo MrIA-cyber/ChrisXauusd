@@ -205,111 +205,141 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
       </div>
 
       {/* Ticket Body Content */}
-      <div className="p-4 space-y-3 font-sans">
+      <div className="p-4 space-y-3.5 font-sans">
         
-        {/* Direction & Risk:Reward Header */}
-        <div className="flex items-center justify-between">
+        {/* Direction, Symbol & Risk:Reward Header */}
+        <div className="flex items-center justify-between gap-2">
           {isVisitor ? (
             <div
               onClick={triggerLockedShake}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black font-mono tracking-wider bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 shadow-2xs cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black font-mono tracking-wider bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-400/40 shadow-2xs cursor-pointer ${
                 isShaking ? 'animate-shake' : ''
               }`}
             >
               <Lock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span>🔒 SETUP VERROUILLÉ</span>
+              <span>🔒 SETUP VERROUILLÉ (MEMBRE VIP)</span>
             </div>
           ) : (
-            <div
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black font-mono tracking-wider ${
-                isBuy
-                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/60 shadow-2xs'
-                  : 'bg-rose-50 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 border border-rose-300 dark:border-rose-700/60 shadow-2xs'
-              }`}
-            >
-              {isBuy ? (
-                <>
-                  <ArrowUpRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
-                  <span>ACHAT (LONG)</span>
-                </>
-              ) : (
-                <>
-                  <ArrowDownRight className="w-4 h-4 text-rose-600 dark:text-rose-400 stroke-[3]" />
-                  <span>VENTE (SHORT)</span>
-                </>
-              )}
+            <div className="flex items-center gap-2">
+              <div
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black font-mono tracking-wider shadow-sm ${
+                  isBuy
+                    ? 'bg-emerald-500 text-white border border-emerald-400 shadow-emerald-500/20'
+                    : 'bg-rose-600 text-white border border-rose-500 shadow-rose-500/20'
+                }`}
+              >
+                {isBuy ? (
+                  <>
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[3]" />
+                    <span>🟢 ACHAT (BUY)</span>
+                  </>
+                ) : (
+                  <>
+                    <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[3]" />
+                    <span>🔴 VENTE (SELL)</span>
+                  </>
+                )}
+              </div>
+              <span className="text-xs font-black font-mono text-slate-800 dark:text-slate-100 bg-slate-200/80 dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-slate-300 dark:border-slate-700">
+                XAU/USD
+              </span>
             </div>
           )}
 
-          <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-xl text-xs font-mono text-slate-800 dark:text-slate-200 font-bold">
+          <div className="flex items-center gap-1.5 bg-amber-500/10 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-700/80 px-3 py-1.5 rounded-xl text-xs font-mono text-amber-900 dark:text-amber-300 font-black">
             <Award className="w-3.5 h-3.5 text-amber-500" />
             <span>R:R 1:{setup.rrRatio}</span>
           </div>
         </div>
 
-        {/* Core Trading Levels Grid (Entry, SL, TP) */}
+        {/* Core Trading Levels Grid (Entry, SL, TP) - High Contrast Readable Blocks */}
         <div
           onClick={triggerLockedShake}
-          className={`grid grid-cols-3 gap-1.5 sm:gap-2 bg-slate-50/80 dark:bg-slate-900/60 p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 relative transition-transform ${
+          className={`grid grid-cols-1 sm:grid-cols-3 gap-2 relative transition-transform ${
             isShaking ? 'animate-shake' : ''
           }`}
         >
-          {/* Entry Price */}
-          <div className="text-left min-w-0">
-            <div className="text-[9px] sm:text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-tight font-bold truncate">ENTRÉE</div>
-            <div className={`text-xs xs:text-sm sm:text-base font-black font-mono text-[var(--text-primary)] tracking-tight truncate ${isVisitor ? 'blur-[3px] select-none text-slate-400' : ''}`}>
+          {/* Entry Price Block */}
+          <div className="bg-slate-100 dark:bg-slate-800/90 p-3 rounded-2xl border border-slate-300 dark:border-slate-700/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
+            <div className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide flex items-center gap-1">
+              <Target className="w-3 h-3 text-blue-500" /> 1. PRIX D'ENTRÉE
+            </div>
+            <div className={`text-base sm:text-lg font-black font-mono text-slate-900 dark:text-white tracking-tight ${isVisitor ? 'blur-[4px] select-none text-slate-400' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.entryPrice.toFixed(2)}`}
             </div>
           </div>
 
-          {/* Stop Loss */}
-          <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-1.5 sm:pl-2.5 min-w-0">
-            <div className="text-[9px] sm:text-[10px] font-mono text-rose-600 dark:text-rose-400 font-bold uppercase tracking-tight flex items-center gap-0.5 truncate">
-              <ShieldAlert className="w-2.5 h-2.5 shrink-0" /> STOP LOSS
+          {/* Stop Loss Block */}
+          <div className="bg-rose-500/10 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-300 dark:border-rose-800/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
+            <div className="text-[10px] font-mono font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wide flex items-center gap-1">
+              <ShieldAlert className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" /> 2. STOP LOSS (SL)
             </div>
-            <div className={`text-xs xs:text-sm sm:text-base font-black font-mono text-rose-600 dark:text-rose-400 tracking-tight truncate ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
-              {isVisitor ? '$2,3XX.XX' : `$${setup.stopLoss.toFixed(2)}`}
-            </div>
-            <div className="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-bold truncate">
-              {isVisitor ? '-•• pips' : `-${setup.riskPips} pips`}
+            <div className="flex sm:flex-col items-center sm:items-start gap-1">
+              <div className={`text-base sm:text-lg font-black font-mono text-rose-700 dark:text-rose-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
+                {isVisitor ? '$2,3XX.XX' : `$${setup.stopLoss.toFixed(2)}`}
+              </div>
+              <span className="text-[10px] font-mono font-bold text-rose-800 dark:text-rose-300 bg-rose-200/80 dark:bg-rose-900/60 px-2 py-0.5 rounded-md border border-rose-300 dark:border-rose-700">
+                {isVisitor ? '-•• pips' : `-${setup.riskPips} pips`}
+              </span>
             </div>
           </div>
 
-          {/* Take Profit */}
-          <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-1.5 sm:pl-2.5 min-w-0">
-            <div className="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-tight truncate">
-              TAKE PROFIT
+          {/* Take Profit Block */}
+          <div className="bg-emerald-500/10 dark:bg-emerald-950/40 p-3 rounded-2xl border border-emerald-300 dark:border-emerald-800/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
+            <div className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> 3. TAKE PROFIT (TP)
             </div>
-            <div className={`text-xs xs:text-sm sm:text-base font-black font-mono text-emerald-600 dark:text-emerald-400 tracking-tight truncate ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
-              {isVisitor ? '$2,3XX.XX' : `$${setup.takeProfit.toFixed(2)}`}
-            </div>
-            <div className="text-[9px] font-mono text-emerald-700 dark:text-emerald-300 font-bold truncate">
-              {isVisitor ? '+•• pips' : `+${setup.rewardPips} pips`}
+            <div className="flex sm:flex-col items-center sm:items-start gap-1">
+              <div className={`text-base sm:text-lg font-black font-mono text-emerald-700 dark:text-emerald-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
+                {isVisitor ? '$2,3XX.XX' : `$${setup.takeProfit.toFixed(2)}`}
+              </div>
+              <span className="text-[10px] font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-200/80 dark:bg-emerald-900/60 px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-700">
+                {isVisitor ? '+•• pips' : `+${setup.rewardPips} pips`}
+              </span>
             </div>
           </div>
         </div>
+
+        {/* Quick Express Summary Banner */}
+        {!isVisitor && (
+          <div className="p-2.5 rounded-xl bg-slate-900 text-slate-100 dark:bg-slate-950 dark:text-slate-200 border border-slate-700/80 font-mono text-[11px] flex items-center justify-between gap-2 shadow-inner">
+            <div className="flex items-center gap-1.5 font-bold overflow-hidden">
+              <span className="text-amber-400 shrink-0">📋</span>
+              <span className="truncate">
+                {isBuy ? 'ACHAT' : 'VENTE'} @ <span className="text-white font-black">${setup.entryPrice.toFixed(2)}</span>
+                <span className="text-slate-400 mx-1">|</span>
+                SL: <span className="text-rose-400 font-bold">${setup.stopLoss.toFixed(2)}</span>
+                <span className="text-slate-400 mx-1">|</span>
+                TP: <span className="text-emerald-400 font-bold">${setup.takeProfit.toFixed(2)}</span>
+              </span>
+            </div>
+            <span className="text-[9px] bg-slate-800 text-amber-300 px-2 py-0.5 rounded font-bold shrink-0">
+              Prêt MT4/MT5
+            </span>
+          </div>
+        )}
 
         {/* Copy to Clipboard Button (MT4 / MT5 Format) */}
         <div className="pt-0.5">
           <button
             type="button"
             onClick={handleCopySignal}
-            className={`w-full py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-2xs ${
+            className={`w-full py-2.5 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-2xs cursor-pointer ${
               isCopied
                 ? 'bg-emerald-600 text-white border border-emerald-500 shadow-emerald-500/20'
-                : 'bg-amber-500/10 hover:bg-amber-500/20 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700/80 active:scale-[0.98]'
+                : 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-black border border-amber-400 shadow-amber-500/20 active:scale-[0.98]'
             }`}
             title="Copier les paramètres de trade pour MT4 / MT5"
           >
             {isCopied ? (
               <>
                 <Check className="w-4 h-4 text-white shrink-0" />
-                <span>Copié dans le presse-papier ! (MT4/MT5)</span>
+                <span>Paramètres copiés dans le presse-papier !</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                <span>Copier les paramètres (Format MT4 / MT5)</span>
+                <Copy className="w-4 h-4 shrink-0" />
+                <span>⚡ Copier les Paramètres pour MT4 / MT5</span>
               </>
             )}
           </button>
