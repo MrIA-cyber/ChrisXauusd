@@ -265,7 +265,7 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
             <div className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide flex items-center gap-1">
               <Target className="w-3 h-3 text-blue-500" /> 1. PRIX D'ENTRÉE
             </div>
-            <div className={`text-base sm:text-lg font-black font-mono text-slate-900 dark:text-white tracking-tight ${isVisitor ? 'blur-[4px] select-none text-slate-400' : ''}`}>
+            <div className={`text-sm sm:text-base font-extrabold font-mono text-slate-900 dark:text-white tracking-tight ${isVisitor ? 'blur-[4px] select-none text-slate-400' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.entryPrice.toFixed(2)}`}
             </div>
           </div>
@@ -276,7 +276,7 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
               <ShieldAlert className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" /> 2. STOP LOSS (SL)
             </div>
             <div className="flex sm:flex-col items-center sm:items-start gap-1">
-              <div className={`text-base sm:text-lg font-black font-mono text-rose-700 dark:text-rose-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
+              <div className={`text-sm sm:text-base font-extrabold font-mono text-rose-700 dark:text-rose-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
                 {isVisitor ? '$2,3XX.XX' : `$${setup.stopLoss.toFixed(2)}`}
               </div>
               <span className="text-[10px] font-mono font-bold text-rose-800 dark:text-rose-300 bg-rose-200/80 dark:bg-rose-900/60 px-2 py-0.5 rounded-md border border-rose-300 dark:border-rose-700">
@@ -291,7 +291,7 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> 3. TAKE PROFIT (TP)
             </div>
             <div className="flex sm:flex-col items-center sm:items-start gap-1">
-              <div className={`text-base sm:text-lg font-black font-mono text-emerald-700 dark:text-emerald-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
+              <div className={`text-sm sm:text-base font-extrabold font-mono text-emerald-700 dark:text-emerald-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
                 {isVisitor ? '$2,3XX.XX' : `$${setup.takeProfit.toFixed(2)}`}
               </div>
               <span className="text-[10px] font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-200/80 dark:bg-emerald-900/60 px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-700">
@@ -533,7 +533,7 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
             {setup.confluence.map((item, idx) => (
               <span
                 key={idx}
-                className="text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700 leading-relaxed font-semibold"
+                className="text-[9px] sm:text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700 leading-normal font-semibold max-w-full truncate"
               >
                 {item}
               </span>

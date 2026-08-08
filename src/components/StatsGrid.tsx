@@ -29,8 +29,8 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
             </div>
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-3xl font-black font-mono text-slate-900 dark:text-slate-100 tracking-tight">
-              {stats.totalSetups} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ 4 max</span>
+            <span className="text-lg sm:text-2xl font-black font-mono text-slate-900 dark:text-slate-100 tracking-tight">
+              {stats.totalSetups} <span className="text-xs sm:text-sm font-normal text-slate-500 dark:text-slate-400">/ 4 max</span>
             </span>
             <span className="text-[10px] sm:text-xs font-mono text-blue-900 dark:text-blue-300 font-bold bg-blue-50 dark:bg-blue-950/60 px-2 sm:px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
               {stats.active} en cours
@@ -57,7 +57,7 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
             </div>
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-3xl font-black font-mono text-emerald-700 dark:text-emerald-400 tracking-tight">
+            <span className="text-lg sm:text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400 tracking-tight">
               {stats.winners}
             </span>
             <span className="text-[10px] sm:text-xs font-mono text-emerald-900 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
@@ -85,7 +85,7 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
             </div>
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-3xl font-black font-mono text-rose-700 dark:text-rose-400 tracking-tight">
+            <span className="text-lg sm:text-2xl font-black font-mono text-rose-700 dark:text-rose-400 tracking-tight">
               {stats.losers}
             </span>
             <span className="text-[10px] sm:text-xs font-mono text-slate-700 dark:text-slate-300 font-bold bg-slate-100 dark:bg-slate-800 px-2 sm:px-2.5 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
@@ -113,7 +113,7 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
             </div>
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-3xl font-black font-mono text-amber-600 tracking-tight">
+            <span className="text-lg sm:text-2xl font-black font-mono text-amber-600 tracking-tight">
               {stats.winRate}%
             </span>
             <span className="text-[10px] sm:text-xs font-mono text-amber-800 font-bold bg-amber-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-amber-200">

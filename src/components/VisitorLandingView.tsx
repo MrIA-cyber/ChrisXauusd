@@ -218,7 +218,7 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
 
           {/* Imposing Title & Subtitle with max width constraint */}
           <div className="space-y-3 sm:space-y-4">
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-sans text-slate-900 dark:text-slate-100 tracking-tight leading-[1.2] break-words">
+            <h1 className="text-lg sm:text-2xl lg:text-3xl font-extrabold font-sans text-slate-900 dark:text-slate-100 tracking-tight leading-snug break-words">
               Signaux XAU/USD à Haute Probabilité
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto font-sans leading-relaxed">
@@ -481,11 +481,11 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       ========================================== */}
       <section className="space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 uppercase">
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-600 dark:text-amber-400" />
             EXEMPLE DE STRUCTURE
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
+          <h2 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
             Aperçu d'un Signal Premium
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto font-sans">
@@ -516,40 +516,40 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
               <div className="bg-slate-50 dark:bg-slate-800/60 p-2.5 sm:p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
                 <span className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-sans font-bold uppercase tracking-tight block truncate">Prix d'Entrée</span>
-                <span className="text-xs sm:text-base font-extrabold font-mono text-slate-900 dark:text-slate-100 whitespace-nowrap block mt-1">2 742.50 $</span>
+                <span className="text-xs sm:text-sm font-extrabold font-mono text-slate-900 dark:text-slate-100 whitespace-nowrap block mt-1">2 742.50 $</span>
               </div>
 
               <div className="bg-rose-50/90 dark:bg-rose-950/40 p-2.5 sm:p-3.5 rounded-2xl border border-rose-200 dark:border-rose-900/60">
                 <span className="text-[10px] sm:text-xs text-rose-700 dark:text-rose-300 font-sans font-bold uppercase tracking-tight block truncate">Stop Loss</span>
-                <span className="text-xs sm:text-base font-extrabold font-mono text-rose-600 dark:text-rose-400 whitespace-nowrap block mt-1">2 737.50 $</span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-rose-600/90 dark:text-rose-400 block whitespace-nowrap mt-0.5">-50 Pips</span>
+                <span className="text-xs sm:text-sm font-extrabold font-mono text-rose-600 dark:text-rose-400 whitespace-nowrap block mt-1">2 737.50 $</span>
+                <span className="text-[10px] font-mono text-rose-600/90 dark:text-rose-400 block whitespace-nowrap mt-0.5">-50 Pips</span>
               </div>
 
               <div className="bg-emerald-50/90 dark:bg-emerald-950/40 p-2.5 sm:p-3.5 rounded-2xl border border-emerald-200 dark:border-emerald-900/60">
                 <span className="text-[10px] sm:text-xs text-emerald-800 dark:text-emerald-300 font-sans font-bold uppercase tracking-tight block truncate">Take Profit 1</span>
-                <span className="text-xs sm:text-base font-extrabold font-mono text-emerald-600 dark:text-emerald-400 whitespace-nowrap block mt-1">2 750.00 $</span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-emerald-700 dark:text-emerald-400 block whitespace-nowrap mt-0.5">+75 Pips (1:1.5)</span>
+                <span className="text-xs sm:text-sm font-extrabold font-mono text-emerald-600 dark:text-emerald-400 whitespace-nowrap block mt-1">2 750.00 $</span>
+                <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 block whitespace-nowrap mt-0.5">+75 Pips (1:1.5)</span>
               </div>
 
               <div className="bg-emerald-50/80 dark:bg-emerald-950/30 p-2.5 sm:p-3.5 rounded-2xl border border-emerald-200 dark:border-emerald-900/60">
                 <span className="text-[10px] sm:text-xs text-emerald-800 dark:text-emerald-300 font-sans font-bold uppercase tracking-tight block truncate">Take Profit 2</span>
-                <span className="text-xs sm:text-base font-extrabold font-mono text-emerald-700 dark:text-emerald-400 whitespace-nowrap block mt-1">2 760.00 $</span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-emerald-700 dark:text-emerald-400 block whitespace-nowrap mt-0.5">+175 Pips (1:3.5)</span>
+                <span className="text-xs sm:text-sm font-extrabold font-mono text-emerald-700 dark:text-emerald-400 whitespace-nowrap block mt-1">2 760.00 $</span>
+                <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 block whitespace-nowrap mt-0.5">+175 Pips (1:3.5)</span>
               </div>
             </div>
 
             <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="text-[11px] sm:text-xs font-sans font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
+              <span className="text-[10px] sm:text-xs font-sans font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
                 Confluences Validées par l'IA :
               </span>
               <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-xl text-[11px] font-sans font-semibold shrink-0 whitespace-nowrap">
+                <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-sans font-medium shrink-0 whitespace-nowrap">
                   ✓ Order Block M5
                 </span>
-                <span className="bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-2.5 py-1 rounded-xl text-[11px] font-sans font-semibold shrink-0 whitespace-nowrap">
+                <span className="bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-sans font-medium shrink-0 whitespace-nowrap">
                   ✓ Liquidity Sweep London
                 </span>
-                <span className="bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-2.5 py-1 rounded-xl text-[11px] font-sans font-semibold shrink-0 whitespace-nowrap">
+                <span className="bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-sans font-medium shrink-0 whitespace-nowrap">
                   ✓ RSI Divergence Bullish
                 </span>
               </div>
@@ -569,10 +569,10 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       ========================================== */}
       <section className="space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+          <h2 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
             FONCTIONNALITÉS EXCLUSIVES
           </h2>
-          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100">Pourquoi Choisir ChrisXauusd Premium ?</p>
+          <p className="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100">Pourquoi Choisir ChrisXauusd Premium ?</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -788,7 +788,7 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
             <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 fill-amber-500/20 text-amber-600 dark:text-amber-400" />
           </div>
 
-          <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-sans text-slate-900 dark:text-slate-100 tracking-tight leading-snug">
+          <h2 className="text-lg sm:text-2xl lg:text-3xl font-extrabold font-sans text-slate-900 dark:text-slate-100 tracking-tight leading-snug">
             Prêt à Passer au Niveau Institutionnel ?
           </h2>
 
