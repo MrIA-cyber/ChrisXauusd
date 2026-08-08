@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database } from 'lucide-react';
+import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 import { useLongPress } from '../lib/useLongPress';
@@ -21,6 +21,7 @@ interface TerminalHeaderProps {
   onTriggerSecretAdmin?: () => void;
   theme?: 'light' | 'dark';
   onToggleTheme?: () => void;
+  onOpenInstallModal?: () => void;
 }
 
 export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
@@ -40,6 +41,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   onTriggerSecretAdmin,
   theme = 'light',
   onToggleTheme,
+  onOpenInstallModal,
 }) => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -186,6 +188,18 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
             </button>
           )}
 
+          {/* Dedicated PWA Install App Button */}
+          {onOpenInstallModal && (
+            <button
+              onClick={onOpenInstallModal}
+              className="flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all active:scale-95 cursor-pointer shadow-2xs"
+              title="Installer l'application sur votre écran d'accueil"
+            >
+              <Download className="w-3.5 h-3.5 text-amber-500" />
+              <span className="hidden md:inline">Installer l'App</span>
+            </button>
+          )}
+
           {/* Dedicated Theme Selector Toggle Button */}
           {onToggleTheme && (
             <button
@@ -227,6 +241,21 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                 <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">
                   Options du Terminal
                 </div>
+
+                {/* Install App Option */}
+                {onOpenInstallModal && (
+                  <button
+                    onClick={onOpenInstallModal}
+                    className="w-full text-left px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 flex items-center justify-between transition-colors font-bold"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Download className="w-3.5 h-3.5 text-amber-500" /> Installer l'App
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-amber-500 text-slate-950">
+                      PWA
+                    </span>
+                  </button>
+                )}
 
                 {/* Theme Switcher in Dropdown */}
                 {onToggleTheme && (

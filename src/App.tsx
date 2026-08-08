@@ -54,6 +54,7 @@ import { AdminPortal } from './components/admin/AdminPortal';
 import { SecretAdminModal } from './components/admin/SecretAdminModal';
 import { OnboardingProfileSelector } from './components/OnboardingProfileSelector';
 import { ChrisBioBubble } from './components/ChrisBioBubble';
+import { InstallPwaModal } from './components/InstallPwaModal';
 
 import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -115,6 +116,7 @@ export default function App() {
   const [isExpirationAlertOpen, setIsExpirationAlertOpen] = useState<boolean>(false);
   const [expiredDateForAlert, setExpiredDateForAlert] = useState<string | null>(null);
   const [isSecretAdminModalOpen, setIsSecretAdminModalOpen] = useState<boolean>(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
 
   // Admin Portal Mode State (Triggered via /admin.chris or Ctrl+Shift+A)
   const [isAdminMode, setIsAdminMode] = useState<boolean>(() => {
@@ -643,6 +645,7 @@ export default function App() {
         onTriggerSecretAdmin={() => setIsSecretAdminModalOpen(true)}
         theme={theme}
         onToggleTheme={handleToggleTheme}
+        onOpenInstallModal={() => setIsInstallModalOpen(true)}
       />
 
       {/* 4. Live Price Banner */}
@@ -873,6 +876,12 @@ export default function App() {
         onAdminAuthenticated={() => {
           setIsAdminMode(true);
         }}
+      />
+
+      {/* PWA App Installation Guidance Modal */}
+      <InstallPwaModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
       />
 
       {/* 9. Legal Footer */}
