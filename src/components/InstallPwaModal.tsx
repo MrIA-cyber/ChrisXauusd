@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, Smartphone, Share, PlusSquare, CheckCircle2, X, Monitor, ShieldCheck, Zap } from 'lucide-react';
+import { Download, Smartphone, Share, PlusSquare, CheckCircle2, X, Monitor, ShieldCheck, Zap, ExternalLink, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -16,8 +16,16 @@ export const InstallPwaModal: React.FC<InstallPwaModalProps> = ({ isOpen, onClos
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState<boolean>(false);
   const [isIOS, setIsIOS] = useState<boolean>(false);
+  const [isInIframe, setIsInIframe] = useState<boolean>(false);
 
   useEffect(() => {
+    // Detect iframe environment
+    try {
+      setIsInIframe(window.self !== window.top);
+    } catch {
+      setIsInIframe(true);
+    }
+
     // Check if running on iOS
     const userAgent = window.navigator.userAgent.toLowerCase();
     const iosDevice = /iphone|ipad|ipod/.test(userAgent);
@@ -63,6 +71,10 @@ export const InstallPwaModal: React.FC<InstallPwaModalProps> = ({ isOpen, onClos
     }
   };
 
+  const handleOpenNewTab = () => {
+    window.open(window.location.href, '_blank');
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -87,7 +99,7 @@ export const InstallPwaModal: React.FC<InstallPwaModalProps> = ({ isOpen, onClos
 
           {/* Icon + Title */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/20">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/20 shrink-0">
               ⚡
             </div>
             <div>
@@ -99,6 +111,26 @@ export const InstallPwaModal: React.FC<InstallPwaModalProps> = ({ isOpen, onClos
               </p>
             </div>
           </div>
+
+          {/* Warning if running inside preview iframe */}
+          {isInIframe && !isInstalled && (
+            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-900 dark:text-amber-200 mb-4 space-y-2">
+              <div className="font-bold flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>Étape requise pour installer l'application</span>
+              </div>
+              <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                Vous êtes dans la prévisualisation intégrée. Pour pouvoir installer l'application sur votre téléphone ou PC, <strong>ouvrez l'application dans un nouvel onglet</strong>.
+              </p>
+              <button
+                onClick={handleOpenNewTab}
+                className="w-full py-2 px-3 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 mt-1"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Ouvrir dans un nouvel onglet</span>
+              </button>
+            </div>
+          )}
 
           {/* Body Content depending on state */}
           {isInstalled ? (
@@ -146,38 +178,48 @@ export const InstallPwaModal: React.FC<InstallPwaModalProps> = ({ isOpen, onClos
                   <li className="flex items-start gap-2">
                     <span className="font-bold text-amber-500 shrink-0">1.</span>
                     <span>
-                      Appuyez sur l'icône <strong className="text-amber-500 inline-flex items-center gap-1">Partager <Share className="w-3.5 h-3.5 inline" /></strong> dans la barre du navigateur Safari en bas.
+                      Ouvrez ce site dans <strong>Safari</strong> (bouton "Ouvrir dans un nouvel onglet" ci-dessus).
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-bold text-amber-500 shrink-0">2.</span>
                     <span>
-                      Faites défiler vers le bas et sélectionnez <strong className="text-amber-500 inline-flex items-center gap-1 font-bold">Sur l'écran d'accueil <PlusSquare className="w-3.5 h-3.5 inline" /></strong>.
+                      Appuyez sur l'icône <strong className="text-amber-500 inline-flex items-center gap-1">Partager <Share className="w-3.5 h-3.5 inline" /></strong> en bas de Safari.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="font-bold text-amber-500 shrink-0">3.</span>
-                    <span>Validez en cliquant sur <strong>Ajouter</strong> en haut à droite.</span>
+                    <span>
+                      Sélectionnez <strong className="text-amber-500 inline-flex items-center gap-1 font-bold">Sur l'écran d'accueil <PlusSquare className="w-3.5 h-3.5 inline" /></strong> puis validez par <strong>Ajouter</strong>.
+                    </span>
                   </li>
                 </ol>
               </div>
             </div>
           ) : (
-            /* General Instructions for Desktop & Chrome */
+            /* General Instructions for Android & Desktop */
             <div className="space-y-4 py-2">
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 space-y-3">
                 <p className="text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                  <Monitor className="w-4 h-4 text-amber-500" />
-                  <span>Installation depuis votre Navigateur Web :</span>
+                  <Smartphone className="w-4 h-4 text-amber-500" />
+                  <span>Comment installer sur Android ou PC :</span>
                 </p>
-                <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-2">
+                <ul className="text-xs text-slate-600 dark:text-slate-300 space-y-2.5">
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-500">•</span>
-                    <span>Dans Chrome ou Edge : Cliquez sur l'icône <strong>Installer <Download className="w-3 h-3 inline text-amber-500" /></strong> tout à droite de la barre d'adresse URL.</span>
+                    <span className="text-amber-500 font-bold">1.</span>
+                    <span>Ouvrez le site dans un nouvel onglet de votre navigateur (Chrome / Brave / Edge / Samsung Internet).</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-500">•</span>
-                    <span>Ou ouvrez le menu du navigateur (3 petits points <strong>⋮</strong>) ➔ <strong>"Enregistrer et partager"</strong> ➔ <strong>"Installer ChrisXauusd"</strong>.</span>
+                    <span className="text-amber-500 font-bold">2.</span>
+                    <span>
+                      Cliquez sur le menu <strong>(3 petits points ⋮)</strong> en haut à droite.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-500 font-bold">3.</span>
+                    <span>
+                      Sélectionnez <strong>"Installer l'application"</strong> ou <strong>"Ajouter à l'écran d'accueil"</strong>.
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -196,3 +238,4 @@ export const InstallPwaModal: React.FC<InstallPwaModalProps> = ({ isOpen, onClos
     </AnimatePresence>
   );
 };
+
