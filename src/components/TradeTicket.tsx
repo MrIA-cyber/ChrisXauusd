@@ -250,40 +250,40 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
         {/* Core Trading Levels Grid (Entry, SL, TP) */}
         <div
           onClick={triggerLockedShake}
-          className={`grid grid-cols-3 gap-2 bg-slate-50/80 dark:bg-slate-900/60 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 relative transition-transform ${
+          className={`grid grid-cols-3 gap-1.5 sm:gap-2 bg-slate-50/80 dark:bg-slate-900/60 p-2.5 sm:p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 relative transition-transform ${
             isShaking ? 'animate-shake' : ''
           }`}
         >
           {/* Entry Price */}
-          <div className="text-left">
-            <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-tight font-bold">ENTRÉE</div>
-            <div className={`text-sm sm:text-base font-black font-mono text-[var(--text-primary)] tracking-tight ${isVisitor ? 'blur-[3px] select-none text-slate-400' : ''}`}>
+          <div className="text-left min-w-0">
+            <div className="text-[9px] sm:text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-tight font-bold truncate">ENTRÉE</div>
+            <div className={`text-xs xs:text-sm sm:text-base font-black font-mono text-[var(--text-primary)] tracking-tight truncate ${isVisitor ? 'blur-[3px] select-none text-slate-400' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.entryPrice.toFixed(2)}`}
             </div>
           </div>
 
           {/* Stop Loss */}
-          <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-2.5">
-            <div className="text-[10px] font-mono text-rose-600 dark:text-rose-400 font-bold uppercase tracking-tight flex items-center gap-0.5">
-              <ShieldAlert className="w-2.5 h-2.5" /> STOP LOSS
+          <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-1.5 sm:pl-2.5 min-w-0">
+            <div className="text-[9px] sm:text-[10px] font-mono text-rose-600 dark:text-rose-400 font-bold uppercase tracking-tight flex items-center gap-0.5 truncate">
+              <ShieldAlert className="w-2.5 h-2.5 shrink-0" /> STOP LOSS
             </div>
-            <div className={`text-sm sm:text-base font-black font-mono text-rose-600 dark:text-rose-400 tracking-tight ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
+            <div className={`text-xs xs:text-sm sm:text-base font-black font-mono text-rose-600 dark:text-rose-400 tracking-tight truncate ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.stopLoss.toFixed(2)}`}
             </div>
-            <div className="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-bold">
+            <div className="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-bold truncate">
               {isVisitor ? '-•• pips' : `-${setup.riskPips} pips`}
             </div>
           </div>
 
           {/* Take Profit */}
-          <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-2.5">
-            <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-tight">
+          <div className="text-left border-l border-slate-200 dark:border-slate-800 pl-1.5 sm:pl-2.5 min-w-0">
+            <div className="text-[9px] sm:text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-tight truncate">
               TAKE PROFIT
             </div>
-            <div className={`text-sm sm:text-base font-black font-mono text-emerald-600 dark:text-emerald-400 tracking-tight ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
+            <div className={`text-xs xs:text-sm sm:text-base font-black font-mono text-emerald-600 dark:text-emerald-400 tracking-tight truncate ${isVisitor ? 'blur-[3px] select-none' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.takeProfit.toFixed(2)}`}
             </div>
-            <div className="text-[9px] font-mono text-emerald-700 dark:text-emerald-300 font-bold">
+            <div className="text-[9px] font-mono text-emerald-700 dark:text-emerald-300 font-bold truncate">
               {isVisitor ? '+•• pips' : `+${setup.rewardPips} pips`}
             </div>
           </div>

@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
-import { X, LogIn, Lock, AlertCircle, ShieldAlert, CheckCircle2, UserCheck, KeyRound } from 'lucide-react';
-import { DEMO_ACCOUNTS, createDatesForDaysLeft, calculateSubscriptionDetails, formatDateFr } from '../lib/subscriptionService';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  X,
+  LogIn,
+  Lock,
+  AlertCircle,
+  ShieldAlert,
+  CheckCircle2,
+  User,
+  LockKeyhole,
+  Star,
+  ArrowRight,
+  Sparkles,
+} from 'lucide-react';
+import { DEMO_ACCOUNTS, createDatesForDaysLeft, calculateSubscriptionDetails, formatDateFr, formatFcfa, SUBSCRIPTION_PRICE_FCFA } from '../lib/subscriptionService';
 import { AuthUser, UserSubscription } from '../types';
+import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -16,11 +30,26 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   onLoginSuccess,
   onOpenSubscriptionModal,
 }) => {
-  const [identifier, setIdentifier] = useState<string>('trader.pro@xau-scalp.com');
-  const [password, setPassword] = useState<string>('Gold2026!');
+  const [identifier, setIdentifier] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [expiredSubWarning, setExpiredSubWarning] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Escape key listener
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -64,6 +93,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           email: matchedAccount.email,
           phone: matchedAccount.phone,
           name: matchedAccount.name,
+          avatarUrl: matchedAccount.avatarUrl,
           subscription: subDetails,
         };
 
@@ -96,173 +126,180 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     }, 600);
   };
 
-  const fillQuickDemo = (demo: typeof DEMO_ACCOUNTS[0]) => {
-    setIdentifier(demo.email);
-    setPassword(demo.password);
-    setErrorMessage(null);
-    setExpiredSubWarning(null);
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative text-slate-900 font-sans">
-        
-        {/* Header */}
-        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600">
-              <LogIn className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold font-mono text-slate-900">
-                CONNEXION CHRISXAUUSD
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-slate-950/80 backdrop-blur-xl overflow-y-auto animate-fade-in cursor-pointer"
+    >
+      <motion.div
+        onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.95, y: 15 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 15 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl relative text-slate-900 dark:text-white font-sans my-auto cursor-default"
+      >
+        {/* Top Premium Dark Header */}
+        <div className="relative bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white p-6 sm:p-8 text-center overflow-hidden border-b border-blue-900/50">
+          
+          {/* Close Cross Button */}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Fermer"
+            className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow-lg backdrop-blur-md transition-all active:scale-95 cursor-pointer flex items-center justify-center"
+          >
+            <X className="w-5 h-5 text-white" />
+          </button>
+
+          {/* Background Glow Effects */}
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Centered Logo & Branding */}
+          <div className="flex flex-col items-center justify-center space-y-2 relative z-10">
+            <ChrisXauusdLogoIcon className="w-14 h-14 sm:w-16 sm:h-16 drop-shadow-xl" />
+
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-gradient-to-r from-amber-500/20 via-blue-500/20 to-purple-500/20 border border-amber-400/40 text-amber-300 shadow-2xs">
+                <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                <span>ACCÈS ESPACE MEMBRE VIP</span>
+              </div>
+              <h2 className="text-base sm:text-lg font-bold font-sans tracking-tight text-white uppercase">
+                Connexion Terminal
               </h2>
-              <p className="text-[11px] text-slate-500 font-mono">
-                ChrisXauusd — Saisissez vos identifiants d'accès
+              <p className="text-xs sm:text-sm text-blue-200/90 font-sans max-w-md mx-auto flex items-center justify-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-blue-400 inline shrink-0" />
+                <span>Authentification Sécurisée & Accès Protégé</span>
               </p>
             </div>
           </div>
-
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-5">
+        {/* Form Body */}
+        <div className="p-6 sm:p-7 space-y-5">
           
           {/* Generic Error Message Box */}
           {errorMessage && (
-            <div className="bg-rose-50 border border-rose-200 text-rose-800 p-3 rounded-xl text-xs font-mono flex items-center gap-2.5 animate-shake">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 p-3.5 rounded-2xl text-xs font-mono flex items-center gap-2.5 shadow-2xs"
+            >
+              <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
               <span>{errorMessage}</span>
-            </div>
+            </motion.div>
           )}
 
           {/* Expired Subscription Warning Box */}
           {expiredSubWarning && (
-            <div className="bg-amber-50 border border-amber-300 text-amber-900 p-3.5 rounded-xl text-xs font-mono space-y-2 animate-fade-in">
-              <div className="flex items-center gap-2 text-amber-800 font-bold">
-                <ShieldAlert className="w-4 h-4 shrink-0 text-amber-600" />
-                <span>ACCÈS INTERDIT - ABONNEMENT EXPIRÉ</span>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 p-4 rounded-2xl text-xs font-mono space-y-3"
+            >
+              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold uppercase tracking-tight">
+                <ShieldAlert className="w-4 h-4 shrink-0" />
+                <span>Accès Suspendu — Abonnement Expiré</span>
               </div>
-              <p className="text-[11px] leading-relaxed text-amber-900">{expiredSubWarning}</p>
+              <p className="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300">{expiredSubWarning}</p>
               <button
                 type="button"
                 onClick={() => {
                   onClose();
                   onOpenSubscriptionModal();
                 }}
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center justify-center gap-1 mt-1 shadow-2xs"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 cursor-pointer"
               >
-                Renouveler mon abonnement maintenant
+                <span>Renouveler mon abonnement maintenant</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
-            </div>
+            </motion.div>
           )}
 
-          {/* Form */}
+          {/* Login Form */}
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             
-            <div>
-              <label className="text-[11px] font-mono text-slate-600 block mb-1">
-                Identifiant (Email ou Numéro de Téléphone) :
+            {/* Field 1: Identifier */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-blue-500" />
+                <span>Identifiant (Email ou Numéro de Téléphone) *</span>
               </label>
               <div className="relative">
+                <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
                 <input
                   type="text"
                   required
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="trader@xau-scalp.com ou +221..."
-                  className="w-full bg-white border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl px-3.5 py-2.5 text-slate-900 font-sans text-xs outline-none transition-colors"
+                  placeholder="Ex: jean.kouassi@gmail.com ou 699001122"
+                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 dark:text-white font-sans outline-none transition-all shadow-2xs placeholder:text-slate-400"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="text-[11px] font-mono text-slate-600 block mb-1">
-                Mot de Passe / Code d'Accès :
+            {/* Field 2: Password */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <LockKeyhole className="w-3.5 h-3.5 text-blue-500" />
+                <span>Mot de Passe / Code d'Accès *</span>
               </label>
               <div className="relative">
+                <LockKeyhole className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-white border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono text-xs outline-none transition-colors"
+                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 dark:text-white font-mono outline-none transition-all shadow-2xs placeholder:text-slate-400"
                 />
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs sm:text-sm shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 disabled:opacity-50 font-mono"
+              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 hover:from-blue-500 hover:to-indigo-700 text-white font-mono font-bold text-xs sm:text-sm shadow-xl shadow-blue-600/25 flex items-center justify-center gap-2.5 transition-all transform active:scale-98 cursor-pointer disabled:opacity-50 mt-2"
             >
               {isLoading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
                   <LogIn className="w-4 h-4" />
-                  <span>Se Connecter</span>
+                  <span>Se Connecter au Terminal VIP</span>
+                  <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
 
           </form>
 
-          {/* Quick Demo Fill Accounts Box */}
-          <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-2">
-            <span className="text-[10px] font-mono text-blue-900 font-bold flex items-center gap-1 uppercase tracking-wider">
-              <KeyRound className="w-3 h-3 text-blue-600" /> Comptes Démo pour Tester (1 Clic) :
-            </span>
-
-            <div className="space-y-1.5">
-              {DEMO_ACCOUNTS.map((acc, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => fillQuickDemo(acc)}
-                  className="w-full text-left bg-white hover:bg-slate-100 border border-slate-200 p-2 rounded-lg text-[11px] font-mono flex items-center justify-between text-slate-700 transition-colors shadow-2xs"
-                >
-                  <span className="truncate pr-2 font-medium">{acc.name}</span>
-                  <span
-                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
-                      acc.subscriptionDaysLeft > 3
-                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                        : acc.subscriptionDaysLeft > 0
-                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
-                        : 'bg-rose-100 text-rose-800 border border-rose-300'
-                    }`}
-                  >
-                    {acc.subscriptionDaysLeft > 0 ? `${acc.subscriptionDaysLeft}j restants` : 'Expiré'}
-                  </span>
-                </button>
-              ))}
+          {/* Footer Call to Subscription */}
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800/80 text-center text-xs font-mono text-slate-600 dark:text-slate-300 space-y-2">
+            <div className="flex items-center justify-center gap-1.5 text-slate-500 dark:text-slate-400">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Vous n'avez pas encore de compte VIP active ?</span>
             </div>
-          </div>
-
-          {/* Footer link to payment */}
-          <div className="pt-1 text-center text-xs font-mono text-slate-500">
-            <span>Pas encore d'abonnement ? </span>
             <button
+              type="button"
               onClick={() => {
                 onClose();
                 onOpenSubscriptionModal();
               }}
-              className="text-blue-600 font-bold hover:underline ml-1"
+              className="w-full py-2.5 px-4 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold border border-amber-500/30 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              S'abonner pour 700 000 FCFA
+              <span>Activer mon Abonnement — {formatFcfa(SUBSCRIPTION_PRICE_FCFA)}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
         </div>
 
-      </div>
+      </motion.div>
     </div>
   );
 };
+

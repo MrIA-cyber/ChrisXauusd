@@ -55,6 +55,7 @@ import { SecretAdminModal } from './components/admin/SecretAdminModal';
 import { OnboardingProfileSelector } from './components/OnboardingProfileSelector';
 import { ChrisBioBubble } from './components/ChrisBioBubble';
 import { InstallPwaModal } from './components/InstallPwaModal';
+import { UserProfileModal } from './components/UserProfileModal';
 
 import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -117,6 +118,7 @@ export default function App() {
   const [expiredDateForAlert, setExpiredDateForAlert] = useState<string | null>(null);
   const [isSecretAdminModalOpen, setIsSecretAdminModalOpen] = useState<boolean>(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
 
   // Admin Portal Mode State (Triggered via /admin.chris or Ctrl+Shift+A)
   const [isAdminMode, setIsAdminMode] = useState<boolean>(() => {
@@ -496,11 +498,22 @@ export default function App() {
     saveUserSession(user);
     setSubscription(user.subscription);
     saveSubscription(user.subscription);
-    saveUserSubscriptionToFirestore(user.id, user.subscription, { name: user.name, email: user.email });
+    saveUserSubscriptionToFirestore(user.id, user.subscription, { name: user.name, email: user.email, avatarUrl: user.avatarUrl });
     localStorage.setItem('xau_scalp_profile_choice_v1', 'TRADER');
     setIsOnboardingView(false); // Seamless redirect to main page
     setBioProfileType('TRADER');
     setShowBioBubble(true);
+  };
+
+  const handleSaveProfile = (updatedUser: AuthUser) => {
+    setUserSession(updatedUser);
+    saveUserSession(updatedUser);
+    saveUserSubscriptionToFirestore(updatedUser.id, updatedUser.subscription, {
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      avatarUrl: updatedUser.avatarUrl,
+    });
   };
 
   const handleLogout = () => {
@@ -641,6 +654,7 @@ export default function App() {
         onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
         onOpenLoginModal={() => setIsLoginModalOpen(true)}
         onChangeProfile={handleChangeProfile}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
         onLogout={handleLogout}
         onTriggerSecretAdmin={() => setIsSecretAdminModalOpen(true)}
         theme={theme}
@@ -882,6 +896,15 @@ export default function App() {
       <InstallPwaModal
         isOpen={isInstallModalOpen}
         onClose={() => setIsInstallModalOpen(false)}
+      />
+
+      {/* Subscriber Profile & Photo Management Modal */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        userSession={userSession}
+        onSaveProfile={handleSaveProfile}
+        onOpenRenewalModal={() => setIsSubscribeModalOpen(true)}
       />
 
       {/* 9. Legal Footer */}

@@ -200,34 +200,34 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="relative overflow-hidden rounded-[24px] bg-white border border-slate-200/80 p-8 sm:p-12 lg:p-16 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-2xl transition-all"
+        className="relative overflow-hidden rounded-[24px] bg-white border border-slate-200/80 p-5 sm:p-10 lg:p-16 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-2xl transition-all"
       >
         {/* Subtle Ambient Aura Glow */}
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-amber-400/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.04)_0%,transparent_70%)] pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-10">
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8 sm:space-y-10">
           
           {/* Header Tag / Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-300 text-amber-900 font-mono text-xs font-bold uppercase tracking-widest shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-50 border border-amber-300 text-amber-900 font-sans text-[11px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest shadow-xs">
             <ShieldCheck className="w-4 h-4 text-amber-600" />
             <span>ChrisXauusd Premium</span>
             <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
           </div>
 
           {/* Imposing Title & Subtitle with max width constraint */}
-          <div className="space-y-6">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-mono text-[#0F172A] tracking-tight leading-[1.1]">
+          <div className="space-y-3 sm:space-y-4">
+            <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-sans text-[#0F172A] tracking-tight leading-[1.2] break-words">
               Signaux XAU/USD à Haute Probabilité
             </h1>
-            <p className="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto font-sans leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto font-sans leading-relaxed">
               Des signaux XAU/USD générés par une intelligence artificielle spécialisée, avec validation multi-confluence et gestion avancée du risque.
             </p>
           </div>
 
           {/* Feature Checklist Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2 text-left max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 pt-2 text-left max-w-3xl mx-auto">
             {[
               { title: 'Analyse en temps réel', desc: 'M1 & M5 scalping continu' },
               { title: 'Entrées précises', desc: 'Zones d\'Order Block & SMC' },
@@ -238,37 +238,37 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
             ].map((item, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3.5 p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 hover:border-amber-400 transition-all group"
+                className="flex items-start gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 hover:border-amber-400 transition-all group"
               >
                 <div className="w-7 h-7 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 text-emerald-600 mt-0.5 group-hover:scale-110 transition-transform">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[#0F172A] font-mono">{item.title}</h4>
-                  <p className="text-xs text-slate-500 font-sans mt-0.5">{item.desc}</p>
+                  <h4 className="text-xs sm:text-sm font-bold text-[#0F172A] font-sans">{item.title}</h4>
+                  <p className="text-[11px] sm:text-xs text-slate-500 font-sans mt-0.5">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* CTAs: Primary (58px height) & Secondary (58px height) */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
+          {/* CTAs: Primary & Secondary */}
+          <div className="pt-2 sm:pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto">
             {/* Primary Gold Button */}
             <button
               onClick={onOpenSubscribeModal}
-              className="w-full sm:w-1/2 h-[58px] bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-base px-6 rounded-2xl shadow-[0_8px_25px_rgba(245,158,11,0.25)] hover:shadow-[0_12px_35px_rgba(245,158,11,0.35)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group relative overflow-hidden"
+              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm sm:text-base px-4 sm:px-6 rounded-2xl shadow-[0_8px_25px_rgba(245,158,11,0.25)] hover:shadow-[0_12px_35px_rgba(245,158,11,0.35)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group relative overflow-hidden cursor-pointer"
             >
-              <Sparkles className="w-5 h-5 fill-slate-950 text-slate-950 group-hover:rotate-12 transition-transform" />
+              <Sparkles className="w-5 h-5 fill-slate-950 text-slate-950 group-hover:rotate-12 transition-transform shrink-0" />
               <span>Découvrir Premium</span>
-              <ArrowRight className="w-5 h-5 text-slate-950 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 text-slate-950 group-hover:translate-x-1 transition-transform shrink-0" />
             </button>
 
             {/* Secondary Discrete Button */}
             <button
               onClick={onOpenLoginModal}
-              className="w-full sm:w-1/2 h-[58px] bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 hover:text-slate-950 font-mono text-sm font-bold px-6 rounded-2xl transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-xs"
+              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 hover:text-slate-950 text-xs sm:text-sm font-bold px-4 sm:px-6 rounded-2xl transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-xs cursor-pointer"
             >
-              <LogIn className="w-4 h-4 text-amber-600" />
+              <LogIn className="w-4 h-4 text-amber-600 shrink-0" />
               <span>Déjà membre ? Se connecter</span>
             </button>
           </div>
@@ -281,11 +281,11 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
           2. KPI DASHBOARD BLOCK (5 Cards with Sparkline charts & 20px corners)
       ========================================== */}
       <section className="space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-xs font-mono font-bold uppercase tracking-widest text-amber-600">
+        <div className="text-center space-y-1">
+          <h2 className="text-[11px] font-bold uppercase tracking-widest text-amber-600">
             DASHBOARD KPI INSTITUTIONNEL
           </h2>
-          <p className="text-2xl sm:text-3xl font-bold font-mono text-[#0F172A]">Performance Globale de la Plateforme</p>
+          <p className="text-lg sm:text-xl font-bold text-[#0F172A]">Performance Globale de la Plateforme</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -348,14 +348,14 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
                 className="bg-white border border-slate-200/80 p-5 rounded-[20px] shadow-[0_10px_30px_rgba(15,23,42,0.05)] hover:border-amber-400 transition-all flex flex-col justify-between group space-y-4"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-medium text-slate-500">{stat.label}</span>
+                  <span className="text-xs font-semibold text-slate-500">{stat.label}</span>
                   <div className={`p-2 rounded-xl border ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
                     <IconComponent className="w-4 h-4" />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="text-2xl sm:text-3xl font-black font-mono text-[#0F172A] tracking-tight">
+                  <div className="text-lg sm:text-xl font-bold font-mono text-[#0F172A] tracking-tight">
                     {stat.value}
                   </div>
                   <div className="text-[11px] text-slate-500 font-sans">{stat.sub}</div>
@@ -392,7 +392,7 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               <Play className="w-5 h-5 fill-amber-500/20 text-amber-600" />
             </div>
             <div>
-              <h3 className="text-base sm:text-xl font-bold font-mono text-[#0F172A]">Démonstration du Moteur d'Analyse</h3>
+              <h3 className="text-base sm:text-xl font-bold font-sans text-[#0F172A]">Démonstration du Moteur d'Analyse</h3>
               <p className="text-xs text-slate-500 font-sans mt-0.5">Simulation en direct de l'exécution algorithmique sur l'Or (XAU/USD)</p>
             </div>
           </div>
@@ -481,11 +481,11 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       ========================================== */}
       <section className="space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-300 uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-900 border border-amber-300 uppercase">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" />
             EXEMPLE DE STRUCTURE
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold font-mono text-[#0F172A]">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
             Aperçu d'un Signal Premium
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto font-sans">
@@ -494,68 +494,68 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
         </div>
 
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white border border-slate-200/80 rounded-[24px] p-6 sm:p-8 shadow-[0_10px_35px_rgba(15,23,42,0.06)] relative overflow-hidden space-y-6">
+          <div className="bg-white border border-slate-200/80 rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-[0_10px_35px_rgba(15,23,42,0.06)] relative overflow-hidden space-y-5 sm:space-y-6">
             
-            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-              <div className="flex items-center gap-3">
-                <span className="bg-emerald-600 text-white font-mono font-bold text-xs px-3.5 py-1.5 rounded-xl uppercase tracking-wider">
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 sm:gap-3 border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <span className="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl uppercase tracking-wider shrink-0 whitespace-nowrap shadow-xs">
                   ACHAT / BUY
                 </span>
-                <div>
-                  <h3 className="text-lg font-bold font-mono text-[#0F172A]">XAU/USD (Or)</h3>
-                  <p className="text-xs text-slate-500 font-mono">Exemple d'Exécution Scalping M5</p>
+                <div className="min-w-0">
+                  <h3 className="text-base sm:text-lg font-bold font-sans text-[#0F172A] truncate">XAU/USD (Or)</h3>
+                  <p className="text-[11px] sm:text-xs text-slate-500 font-sans truncate">Exemple d'Exécution Scalping M5</p>
                 </div>
               </div>
-              <div>
-                <span className="text-xs text-amber-900 bg-amber-50 px-3 py-1 rounded-full border border-amber-300 font-bold font-mono">
+              <div className="shrink-0">
+                <span className="text-[11px] sm:text-xs text-amber-900 bg-amber-50 px-3 py-1 rounded-full border border-amber-300 font-semibold shrink-0 whitespace-nowrap">
                   Aperçu de démonstration
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
-                <span className="text-xs text-slate-500 block uppercase">Prix d'Entrée</span>
-                <span className="text-base sm:text-lg font-bold text-[#0F172A]">2 742.50 $</span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+              <div className="bg-slate-50 p-2.5 sm:p-3.5 rounded-2xl border border-slate-200/80">
+                <span className="text-[10px] sm:text-xs text-slate-500 font-sans font-bold uppercase tracking-tight block truncate">Prix d'Entrée</span>
+                <span className="text-xs sm:text-base font-extrabold font-mono text-[#0F172A] whitespace-nowrap block mt-1">2 742.50 $</span>
               </div>
 
-              <div className="bg-rose-50 p-4 rounded-2xl border border-rose-200">
-                <span className="text-xs text-rose-700 block uppercase">Stop Loss</span>
-                <span className="text-base sm:text-lg font-bold text-rose-600">2 737.50 $</span>
-                <span className="text-[11px] text-rose-600/80 block">-50 Pips</span>
+              <div className="bg-rose-50/90 p-2.5 sm:p-3.5 rounded-2xl border border-rose-200">
+                <span className="text-[10px] sm:text-xs text-rose-700 font-sans font-bold uppercase tracking-tight block truncate">Stop Loss</span>
+                <span className="text-xs sm:text-base font-extrabold font-mono text-rose-600 whitespace-nowrap block mt-1">2 737.50 $</span>
+                <span className="text-[10px] sm:text-[11px] font-mono text-rose-600/90 block whitespace-nowrap mt-0.5">-50 Pips</span>
               </div>
 
-              <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
-                <span className="text-xs text-emerald-800 block uppercase">Take Profit 1</span>
-                <span className="text-base sm:text-lg font-bold text-emerald-600">2 750.00 $</span>
-                <span className="text-[11px] text-emerald-700 block">+75 Pips (R:R 1:1.5)</span>
+              <div className="bg-emerald-50/90 p-2.5 sm:p-3.5 rounded-2xl border border-emerald-200">
+                <span className="text-[10px] sm:text-xs text-emerald-800 font-sans font-bold uppercase tracking-tight block truncate">Take Profit 1</span>
+                <span className="text-xs sm:text-base font-extrabold font-mono text-emerald-600 whitespace-nowrap block mt-1">2 750.00 $</span>
+                <span className="text-[10px] sm:text-[11px] font-mono text-emerald-700 block whitespace-nowrap mt-0.5">+75 Pips (1:1.5)</span>
               </div>
 
-              <div className="bg-emerald-50/80 p-4 rounded-2xl border border-emerald-200">
-                <span className="text-xs text-emerald-800 block uppercase">Take Profit 2</span>
-                <span className="text-base sm:text-lg font-bold text-emerald-700">2 760.00 $</span>
-                <span className="text-[11px] text-emerald-700 block">+175 Pips (R:R 1:3.5)</span>
+              <div className="bg-emerald-50/80 p-2.5 sm:p-3.5 rounded-2xl border border-emerald-200">
+                <span className="text-[10px] sm:text-xs text-emerald-800 font-sans font-bold uppercase tracking-tight block truncate">Take Profit 2</span>
+                <span className="text-xs sm:text-base font-extrabold font-mono text-emerald-700 whitespace-nowrap block mt-1">2 760.00 $</span>
+                <span className="text-[10px] sm:text-[11px] font-mono text-emerald-700 block whitespace-nowrap mt-0.5">+175 Pips (1:3.5)</span>
               </div>
             </div>
 
             <div className="space-y-2 pt-2 border-t border-slate-100">
-              <span className="text-xs font-mono font-bold text-slate-500 uppercase">
+              <span className="text-[11px] sm:text-xs font-sans font-bold text-slate-500 uppercase tracking-wide block">
                 Confluences Validées par l'IA :
               </span>
-              <div className="flex flex-wrap gap-2 text-xs font-mono">
-                <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl font-medium">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-xl text-[11px] font-sans font-semibold shrink-0 whitespace-nowrap">
                   ✓ Order Block M5
                 </span>
-                <span className="bg-amber-50 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl font-medium">
+                <span className="bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-xl text-[11px] font-sans font-semibold shrink-0 whitespace-nowrap">
                   ✓ Liquidity Sweep London
                 </span>
-                <span className="bg-blue-50 text-blue-900 border border-blue-200 px-3 py-1.5 rounded-xl font-medium">
+                <span className="bg-blue-50 text-blue-900 border border-blue-200 px-2.5 py-1 rounded-xl text-[11px] font-sans font-semibold shrink-0 whitespace-nowrap">
                   ✓ RSI Divergence Bullish
                 </span>
               </div>
             </div>
 
-            <div className="bg-amber-50 border border-amber-300 p-3.5 rounded-2xl text-center text-xs text-amber-900 font-sans">
+            <div className="bg-amber-50 border border-amber-300 p-3 sm:p-3.5 rounded-2xl text-center text-xs text-amber-900 font-sans">
               🔒 <strong>Note :</strong> Les signaux actifs en temps réel sont réservés aux abonnés Premium.
             </div>
 
@@ -569,10 +569,10 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       ========================================== */}
       <section className="space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-xs font-mono font-bold uppercase tracking-widest text-amber-600">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-amber-600">
             FONCTIONNALITÉS EXCLUSIVES
           </h2>
-          <p className="text-2xl sm:text-3xl font-bold font-mono text-[#0F172A]">Pourquoi Choisir ChrisXauusd Premium ?</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">Pourquoi Choisir ChrisXauusd Premium ?</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -650,11 +650,11 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       >
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 pb-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-300 uppercase">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-900 border border-amber-300 uppercase">
               <Award className="w-3.5 h-3.5 text-amber-600" />
               COMMUNAUTÉ DE TRADERS
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold font-mono text-[#0F172A] mt-1">
+            <h2 className="text-lg sm:text-xl font-bold font-sans text-[#0F172A] mt-1">
               Ils Utilisent ChrisXauusd
             </h2>
           </div>
@@ -735,11 +735,11 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       ========================================== */}
       <section className="space-y-6 pt-4">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-blue-50 text-blue-900 border border-blue-200 uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-900 border border-blue-200 uppercase">
             <Quote className="w-3.5 h-3.5 text-blue-600" />
             SOURCES D'INSPIRATION ET DISCIPLINE
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold font-mono text-[#0F172A]">
+          <h2 className="text-lg sm:text-xl font-bold font-sans text-[#0F172A]">
             Les Plus Grands Traders Nous Inspirent
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto font-sans">
@@ -780,30 +780,30 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       {/* ==========================================
           8. CALL TO ACTION FINAL
       ========================================== */}
-      <section className="relative overflow-hidden rounded-[24px] bg-white border border-amber-300 p-8 sm:p-14 text-center space-y-6 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+      <section className="relative overflow-hidden rounded-[24px] bg-white border border-amber-300 p-6 sm:p-12 text-center space-y-5 sm:space-y-6 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
         <div className="absolute top-0 right-0 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
         
-        <div className="max-w-2xl mx-auto space-y-6 relative z-10">
-          <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-300 flex items-center justify-center text-amber-600 mx-auto shadow-md">
-            <Sparkles className="w-8 h-8 fill-amber-500/20 text-amber-600" />
+        <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6 relative z-10">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-amber-50 border border-amber-300 flex items-center justify-center text-amber-600 mx-auto shadow-md">
+            <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 fill-amber-500/20 text-amber-600" />
           </div>
 
-          <h2 className="text-2xl sm:text-4xl font-black font-mono text-[#0F172A] tracking-tight">
+          <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold font-sans text-[#0F172A] tracking-tight leading-snug">
             Prêt à Passer au Niveau Institutionnel ?
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 font-sans leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-600 font-sans leading-relaxed">
             Rejoignez plus de 1 420 traders VIP et débloquez immédiatement les signaux en temps réel, les prix d'entrée exacts, Stop Loss et Take Profit sur XAU/USD.
           </p>
 
           <div className="pt-2 flex justify-center">
             <button
               onClick={onOpenSubscribeModal}
-              className="w-full sm:w-auto h-[58px] bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-base px-8 rounded-2xl shadow-[0_8px_25px_rgba(245,158,11,0.25)] hover:shadow-[0_12px_35px_rgba(245,158,11,0.35)] active:scale-[0.98] transition-all inline-flex items-center justify-center gap-2"
+              className="w-full sm:w-auto min-h-[52px] sm:min-h-[58px] py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-sans font-bold text-sm sm:text-base px-5 sm:px-8 rounded-2xl shadow-[0_8px_25px_rgba(245,158,11,0.25)] hover:shadow-[0_12px_35px_rgba(245,158,11,0.35)] active:scale-[0.98] transition-all inline-flex items-center justify-center gap-2 text-center cursor-pointer"
             >
-              <Sparkles className="w-5 h-5 fill-slate-950 text-slate-950" />
-              <span>Découvrir ChrisXauusd Premium</span>
-              <ArrowRight className="w-5 h-5 text-slate-950" />
+              <Sparkles className="w-5 h-5 fill-slate-950 text-slate-950 shrink-0" />
+              <span className="leading-snug">Découvrir ChrisXauusd Premium</span>
+              <ArrowRight className="w-5 h-5 text-slate-950 shrink-0" />
             </button>
           </div>
         </div>

@@ -119,6 +119,7 @@ export interface AuthUser {
   email: string;
   phone?: string;
   name: string;
+  avatarUrl?: string;
   subscription: UserSubscription;
 }
 

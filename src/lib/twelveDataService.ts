@@ -42,6 +42,26 @@ export async function fetchLiveXauUsdQuote(apiKey?: string): Promise<{
   isLive: boolean;
   message?: string;
 } | null> {
+  // First attempt backend API proxy endpoint to prevent CORS & client-side rate limits
+  try {
+    const apiRes = await fetch('/api/price/xauusd');
+    if (apiRes.ok) {
+      const payload = await apiRes.json();
+      if (payload && payload.data && payload.data.price) {
+        return {
+          price: payload.data.price,
+          high24h: payload.data.high24h,
+          low24h: payload.data.low24h,
+          change24h: payload.data.change24h,
+          changePercent24h: payload.data.changePercent24h,
+          isLive: !!payload.isLive,
+        };
+      }
+    }
+  } catch (err) {
+    // Silent fallback to direct fetch
+  }
+
   const key = apiKey || TWELVE_DATA_API_KEY;
   if (!key) return null;
 
@@ -79,7 +99,7 @@ export async function fetchLiveXauUsdQuote(apiKey?: string): Promise<{
       isLive: true,
     };
   } catch (err) {
-    console.error('Failed to fetch Twelve Data quote:', err);
+    console.warn('Twelve Data direct client fetch unavailable, using live tick engine:', err);
     return null;
   }
 }

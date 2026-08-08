@@ -217,7 +217,7 @@ export const RailwayLiveSignals: React.FC = () => {
                 API 15 MIN
               </span>
             </div>
-            <p className="text-xs text-slate-5 resolved dark:text-slate-400 mt-0.5 flex items-center gap-1.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1.5 truncate max-w-full">
               <Server className="w-3.5 h-3.5 text-blue-500" />
               <span>https://chrisxaausd-backend-production.up.railway.app</span>
             </p>

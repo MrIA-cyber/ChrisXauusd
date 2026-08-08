@@ -54,6 +54,53 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Cache backend pour le prix XAU/USD
+let cachedQuote = {
+  price: 4342.53,
+  high24h: 4350.10,
+  low24h: 4310.20,
+  change24h: 1969.43,
+  changePercent24h: 82.99,
+  timestamp: Date.now(),
+};
+
+app.get('/api/price/xauusd', async (req, res) => {
+  const apiKey = process.env.TWELVE_DATA_API_KEY || 'b7a3a115daf84f289e283ef25041cee4';
+  const url = `https://api.twelvedata.com/quote?symbol=XAU/USD&apikey=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.close && !data.message) {
+        const price = parseFloat(data.close || data.open);
+        if (!isNaN(price) && price > 0) {
+          cachedQuote = {
+            price,
+            high24h: parseFloat(data.high) || price + 5,
+            low24h: parseFloat(data.low) || price - 5,
+            change24h: parseFloat(data.change) || 0,
+            changePercent24h: parseFloat(data.percent_change) || 0,
+            timestamp: Date.now(),
+          };
+          return res.json({ success: true, isLive: true, data: cachedQuote });
+        }
+      }
+    }
+  } catch (err) {
+    // Silent server fallback
+  }
+
+  // Si l'API externe echoue ou atteint la limite, simuler de légères micro-fluctuations réalistes autour de la dernière cotation
+  const variation = (Math.random() - 0.49) * 0.15;
+  cachedQuote.price = Number((cachedQuote.price + variation).toFixed(2));
+  cachedQuote.high24h = Math.max(cachedQuote.high24h, cachedQuote.price);
+  cachedQuote.low24h = Math.min(cachedQuote.low24h, cachedQuote.price);
+  cachedQuote.timestamp = Date.now();
+
+  return res.json({ success: true, isLive: false, fallback: true, data: cachedQuote });
+});
+
 // 3. Endpoint API GET /api/signals - Récupère les 20 derniers signaux
 app.get('/api/signals', async (req, res) => {
   try {

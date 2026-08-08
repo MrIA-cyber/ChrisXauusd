@@ -55,9 +55,49 @@ export interface DemoAccount {
   phone: string;
   password: string; // "Gold2026!"
   name: string;
+  avatarUrl?: string;
   subscriptionDaysLeft: number; // 28, 2, or -1 for expired
   description: string;
 }
+
+export interface PresetAvatar {
+  id: string;
+  name: string;
+  url: string;
+}
+
+export const PRESET_TRADER_AVATARS: PresetAvatar[] = [
+  {
+    id: 'trader-1',
+    name: 'Moussa (Trader PRO)',
+    url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
+  },
+  {
+    id: 'trader-2',
+    name: 'Koffi (VIP Scalper)',
+    url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=250',
+  },
+  {
+    id: 'trader-3',
+    name: 'Pauline (Analyste Gold)',
+    url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+  },
+  {
+    id: 'trader-4',
+    name: 'Executive Alpha',
+    url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=250',
+  },
+  {
+    id: 'trader-5',
+    name: 'Institutional Pro',
+    url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
+  },
+  {
+    id: 'trader-6',
+    name: 'Master Scalper',
+    url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=250',
+  },
+];
 
 export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
@@ -65,6 +105,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     phone: '+221 77 123 45 67',
     password: 'Gold2026!',
     name: 'Moussa Diop (Trader PRO)',
+    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
     subscriptionDaysLeft: 28,
     description: 'Abonné Actif (28 jours restants)',
   },
@@ -73,6 +114,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     phone: '+225 07 89 01 23',
     password: 'Gold2026!',
     name: 'Koffi Armand (VIP Scalper)',
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=250',
     subscriptionDaysLeft: 2,
     description: 'Expiration Proche (2 jours restants - Alerte J-3)',
   },
@@ -81,6 +123,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     phone: '+237 690 12 34 56',
     password: 'Gold2026!',
     name: 'Pauline Mbida',
+    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
     subscriptionDaysLeft: -1,
     description: 'Abonnement Expiré (Date dépassée)',
   },

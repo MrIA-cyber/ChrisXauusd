@@ -35,17 +35,47 @@
     --dropdown-bg: #0F172A;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     background-color: var(--bg-main);
     color: var(--text-primary);
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    font-size: 0.9375rem; /* 15px baseline for optimal readability */
+    line-height: 1.5;
   }
 
-  /* Monospace typography enforcement for numbers, prices, timestamps & tables */
-  .font-mono-numbers, .font-mono, table td, .price-display, .ticket-number {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
+  /* Responsive card, container and touch control guidelines */
+  .app-card {
+    border-radius: clamp(12px, 2vw, 20px);
+    padding: clamp(0.875rem, 2.5vw, 1.5rem);
+  }
+
+  .app-button {
+    min-height: 44px;
+    padding-left: clamp(0.875rem, 2vw, 1.25rem);
+    padding-right: clamp(0.875rem, 2vw, 1.25rem);
+    font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
+  }
+
+  .app-input {
+    min-height: 44px;
+    font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
+    padding: 0.625rem 0.875rem;
+  }
+
+  /* Monospace typography enforcement for numbers, prices, timestamps & financial data */
+  .font-mono-numbers, .font-mono, .price-display, .ticket-number {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-variant-numeric: tabular-nums lining-nums;
   }
 }

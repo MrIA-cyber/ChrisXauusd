@@ -17,6 +17,7 @@ interface TerminalHeaderProps {
   onOpenSubscribeModal: () => void;
   onOpenLoginModal: () => void;
   onChangeProfile: () => void;
+  onOpenProfileModal?: () => void;
   onLogout: () => void;
   onTriggerSecretAdmin?: () => void;
   theme?: 'light' | 'dark';
@@ -37,6 +38,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   onOpenSubscribeModal,
   onOpenLoginModal,
   onChangeProfile,
+  onOpenProfileModal,
   onLogout,
   onTriggerSecretAdmin,
   theme = 'light',
@@ -106,7 +108,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
 
             <div>
               <div className="flex items-center gap-1 sm:gap-2">
-                <h1 className="text-xs sm:text-base font-black tracking-tight text-[var(--text-primary)] flex items-center gap-1 font-mono">
+                <h1 className="text-xs sm:text-base font-extrabold tracking-tight text-[var(--text-primary)] flex items-center gap-1 font-sans">
                   <span>ChrisXauusd</span>
                 </h1>
                 
@@ -165,17 +167,39 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
         {/* Right: Primary CTA + Theme Selector + Grouped Secondary Actions Menu */}
         <div className="flex items-center gap-2">
           
-          {/* Main Primary Visible CTA */}
+          {/* Main Primary Visible CTA & User Profile Button */}
           {isSubscriberActive ? (
-            <div className="flex items-center gap-1.5 sm:gap-2 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-700 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono shadow-xs backdrop-blur-md">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span className="text-emerald-900 dark:text-emerald-200 font-bold tracking-tight hidden sm:inline">
-                Abonnement VIP Actif
-              </span>
-              <span className="text-[10px] bg-emerald-600 text-white border border-emerald-700 px-1.5 sm:px-2 py-0.5 rounded-full font-bold">
+            <button
+              type="button"
+              onClick={onOpenProfileModal}
+              className="flex items-center gap-2 bg-slate-900 dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 border border-amber-500/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl text-xs font-mono shadow-md backdrop-blur-md transition-all active:scale-95 cursor-pointer group"
+              title="Mon Profil Abonné — Modifier photo et informations"
+            >
+              <div className="relative shrink-0">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden ring-2 ring-amber-400 bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-[10px]">
+                  {userSession?.avatarUrl ? (
+                    <img src={userSession.avatarUrl} alt={userSession.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span>{userSession?.name ? userSession.name.substring(0, 2).toUpperCase() : 'VIP'}</span>
+                  )}
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-900" />
+              </div>
+
+              <div className="text-left hidden sm:block leading-tight">
+                <div className="font-bold text-[11px] text-amber-300 group-hover:text-amber-200 truncate max-w-[110px]">
+                  {userSession?.name || 'Abonné VIP'}
+                </div>
+                <div className="text-[9px] text-slate-400 flex items-center gap-1">
+                  <span>J-{subscription.daysRemaining}</span>
+                  <span className="text-emerald-400">• Actif</span>
+                </div>
+              </div>
+
+              <span className="sm:hidden text-[10px] bg-emerald-500 text-slate-950 px-1.5 py-0.5 rounded font-bold">
                 J-{subscription.daysRemaining}
               </span>
-            </div>
+            </button>
           ) : (
             <button
               onClick={onOpenSubscribeModal}
@@ -304,6 +328,28 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                 >
                   <Zap className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Émettre un Signal
                 </button>
+
+                {/* Subscriber Profile Option */}
+                {isSubscriberActive && onOpenProfileModal && (
+                  <button
+                    onClick={onOpenProfileModal}
+                    className="w-full text-left px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 flex items-center justify-between transition-colors font-bold"
+                  >
+                    <span className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full overflow-hidden bg-amber-500 text-slate-950 flex items-center justify-center text-[9px] font-bold shrink-0">
+                        {userSession?.avatarUrl ? (
+                          <img src={userSession.avatarUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <span>P</span>
+                        )}
+                      </div>
+                      Mon Profil & Photo
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded font-bold bg-amber-500 text-slate-950">
+                      VIP
+                    </span>
+                  </button>
+                )}
 
                 {/* Login or Profile switch */}
                 {!isSubscriberActive && (

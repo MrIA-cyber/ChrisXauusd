@@ -63,7 +63,7 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl font-black tracking-wider text-[#0F172A] font-mono">
+                <span className="text-base sm:text-lg font-bold tracking-wider text-[#0F172A] font-mono">
                   XAU/USD
                 </span>
                 <span className="text-[10px] bg-amber-50 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full font-mono font-bold uppercase tracking-wider">
@@ -80,7 +80,7 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
           {/* MAIN PRICE CENTERPIECE WITH DYNAMIC TICK ANIMATION */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <div
-              className={`text-2xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight transition-all duration-300 px-3 sm:px-4 py-1 sm:py-1.5 rounded-[16px] sm:rounded-[20px] ${
+              className={`text-xl sm:text-2xl lg:text-3xl font-extrabold font-mono tracking-tight transition-all duration-300 px-3 py-1 rounded-xl sm:rounded-2xl ${
                 tickDirection === 'UP'
                   ? 'text-emerald-700 bg-emerald-50 shadow-[0_0_25px_rgba(22,163,74,0.25)] border border-emerald-300 scale-[1.02]'
                   : tickDirection === 'DOWN'
