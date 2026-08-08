@@ -9,8 +9,8 @@ import { generateSignal } from '../services/signalGenerator.js';
 import Signal from '../models/Signal.js';
 import { saveSetupToFirestore } from '../src/lib/firebase.js';
 
-// Liste des paires à surveiller
-const FOREX_PAIRS = ['XAU/USD', 'EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD'];
+// Liste des paires à surveiller (uniquement XAU/USD)
+const FOREX_PAIRS = ['XAU/USD'];
 
 /**
  * Fonction d'exécution de l'analyse globale
