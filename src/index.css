@@ -36,9 +36,9 @@
 
     --bg-card-glass: rgba(15, 23, 42, 0.85);
     --border-glass: rgba(255, 255, 255, 0.08);
-    --border-gold-soft: rgba(245, 158, 11, 0.3);
-    --gold-primary: #f59e0b;
-    --gold-glow: rgba(245, 158, 11, 0.2);
+    --border-gold-soft: rgba(59, 130, 246, 0.4);
+    --gold-primary: #3b82f6;
+    --gold-glow: rgba(59, 130, 246, 0.25);
     --green-bull: #10b981;
     --red-bear: #f43f5e;
   }
