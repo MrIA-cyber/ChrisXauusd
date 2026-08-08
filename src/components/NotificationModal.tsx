@@ -43,12 +43,6 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
       return;
     }
 
-    if (isInIframe && permission !== 'granted') {
-      // If inside iframe, open in new tab so permission prompt can be triggered
-      window.open(window.location.href, '_blank');
-      return;
-    }
-
     const res = await requestWebNotificationPermission();
     setPermission(res);
     if (res === 'granted') {
