@@ -25,6 +25,13 @@ import {
   createDatesForDaysLeft,
   generateActiveSubscription,
 } from './lib/subscriptionService';
+import {
+  saveSetupToFirestore,
+  saveMultipleSetupsToFirestore,
+  subscribeToSetupsFromFirestore,
+  saveUserSubscriptionToFirestore,
+} from './lib/firebase';
+import { fetchLiveXauUsdQuote } from './lib/twelveDataService';
 
 import { TerminalHeader } from './components/TerminalHeader';
 import { LivePriceBanner } from './components/LivePriceBanner';
@@ -32,6 +39,7 @@ import { StatsGrid } from './components/StatsGrid';
 import { TradeTicket } from './components/TradeTicket';
 import { LiveChartWidget } from './components/LiveChartWidget';
 import { TradeJournalTable } from './components/TradeJournalTable';
+import { RailwayLiveSignals } from './components/RailwayLiveSignals';
 import { RiskCalculatorModal } from './components/RiskCalculatorModal';
 import { LegalFooter } from './components/LegalFooter';
 
@@ -183,6 +191,65 @@ export default function App() {
   // Trades History and Active Setups
   const [trades, setTrades] = useState<TradeSetup[]>(() => generateInitialHistory(2385.50));
 
+  // Firebase Firestore Real-Time Listener & Initial Seeding
+  useEffect(() => {
+    let unsubscribe: () => void = () => {};
+    let isSubscribed = true;
+
+    unsubscribe = subscribeToSetupsFromFirestore((firestoreSetups) => {
+      if (!isSubscribed) return;
+      if (firestoreSetups && firestoreSetups.length > 0) {
+        // Keep active setup at top or sort by timestamp
+        const sorted = [...firestoreSetups].sort((a, b) => {
+          if (a.status === 'ACTIVE' && b.status !== 'ACTIVE') return -1;
+          if (a.status !== 'ACTIVE' && b.status === 'ACTIVE') return 1;
+          return 0;
+        });
+        setTrades(sorted);
+      } else {
+        // If Firestore is empty on first launch, seed initial setups
+        const initial = generateInitialHistory(2385.50);
+        saveMultipleSetupsToFirestore(initial);
+      }
+    });
+
+    return () => {
+      isSubscribed = false;
+      unsubscribe();
+    };
+  }, []);
+
+  // Twelve Data Real-Time Price Fetcher for XAU/USD (Gold)
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchQuote = async () => {
+      const quote = await fetchLiveXauUsdQuote();
+      if (quote && isMounted) {
+        const livePrice = quote.price;
+        setCurrentPrice(livePrice);
+        setCurrentTick((prev) => ({
+          ...prev,
+          price: livePrice,
+          bid: Number((livePrice - 0.10).toFixed(2)),
+          ask: Number((livePrice + 0.10).toFixed(2)),
+          high24h: quote.high24h,
+          low24h: quote.low24h,
+          change24h: quote.change24h,
+          changePercent24h: quote.changePercent24h,
+        }));
+      }
+    };
+
+    fetchQuote();
+    const interval = setInterval(fetchQuote, 10000); // Refresh live baseline every 10 seconds
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
   // Refs for interval closures
   const currentPriceRef = useRef(currentPrice);
   currentPriceRef.current = currentPrice;
@@ -296,7 +363,7 @@ export default function App() {
           soundService.playSlHitSound(soundEnabledRef.current);
         }
 
-        return {
+        const closedTrade = {
           ...t,
           status: statusHit,
           closedAt: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
@@ -304,6 +371,8 @@ export default function App() {
           pnlPips,
           pnlAmount: pnlPips * 10,
         };
+        saveSetupToFirestore(closedTrade);
+        return closedTrade;
       }
 
       return t;
@@ -343,12 +412,13 @@ export default function App() {
   const handleGenerateNewSignal = (forceType?: 'BUY' | 'SELL') => {
     const newSetup = createNewTradeSetup(currentPriceRef.current, forceType);
     soundService.playNewSignalSound(soundEnabledRef.current);
+    saveSetupToFirestore(newSetup);
 
     setTrades((prev) => {
       // Close any previous active trades so only 1 active signal exists
       const sanitized = prev.map((t) => {
         if (t.status === 'ACTIVE') {
-          return {
+          const closed = {
             ...t,
             status: 'SL_HIT' as const,
             closedAt: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
@@ -356,6 +426,8 @@ export default function App() {
             pnlPips: -t.riskPips,
             pnlAmount: -t.riskPips * 10,
           };
+          saveSetupToFirestore(closed);
+          return closed;
         }
         return t;
       });
@@ -400,8 +472,9 @@ export default function App() {
     setSubscription(newSub);
     saveSubscription(newSub);
 
+    const userId = userSession?.id || 'user-' + Date.now();
     const newUser: AuthUser = {
-      id: userSession?.id || 'user-' + Date.now(),
+      id: userId,
       email: userDetails?.email || userSession?.email || 'trader@xau-scalp.com',
       name: userDetails?.name || userSession?.name || 'Abonné XAU',
       subscription: newSub,
@@ -409,6 +482,7 @@ export default function App() {
 
     setUserSession(newUser);
     saveUserSession(newUser);
+    saveUserSubscriptionToFirestore(userId, newSub, { name: newUser.name, email: newUser.email });
     localStorage.setItem('xau_scalp_profile_choice_v1', 'TRADER');
     setIsOnboardingView(false); // Seamless redirect to main page with full access
     setBioProfileType('TRADER');
@@ -420,6 +494,7 @@ export default function App() {
     saveUserSession(user);
     setSubscription(user.subscription);
     saveSubscription(user.subscription);
+    saveUserSubscriptionToFirestore(user.id, user.subscription, { name: user.name, email: user.email });
     localStorage.setItem('xau_scalp_profile_choice_v1', 'TRADER');
     setIsOnboardingView(false); // Seamless redirect to main page
     setBioProfileType('TRADER');
@@ -727,6 +802,9 @@ export default function App() {
               </div>
 
             </div>
+
+            {/* 6.5. Live Signals from Railway Backend API */}
+            <RailwayLiveSignals />
 
             {/* 7. Trade Journal Table (Full Session History) */}
             <TradeJournalTable

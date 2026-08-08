@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "setups": {
+      "title": "Trade Setups",
+      "description": "Trading signals and setups generated or executed on XAU/USD",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ticketNumber": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "type": { "type": "string" },
+        "timeframe": { "type": "string" },
+        "entryPrice": { "type": "number" },
+        "stopLoss": { "type": "number" },
+        "takeProfit": { "type": "number" },
+        "takeProfit2": { "type": "number" },
+        "rrRatio": { "type": "number" },
+        "riskPips": { "type": "number" },
+        "rewardPips": { "type": "number" },
+        "status": { "type": "string" },
+        "confluence": { "type": "array", "items": { "type": "string" } },
+        "confluenceFactors": { "type": "array" },
+        "grade": { "type": "string" },
+        "score": { "type": "number" },
+        "notes": { "type": "string" },
+        "entryReason": { "type": "string" },
+        "closedAt": { "type": "string" },
+        "closedPrice": { "type": "number" },
+        "pnlPips": { "type": "number" },
+        "pnlAmount": { "type": "number" }
+      },
+      "required": ["id", "ticketNumber", "type", "entryPrice", "stopLoss", "takeProfit", "status"]
+    },
+    "subscriptions": {
+      "title": "User Subscriptions",
+      "description": "User profile subscription status and expiry dates",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "startDate": { "type": "string" },
+        "expirationDate": { "type": "string" },
+        "daysRemaining": { "type": "number" },
+        "paymentMethod": { "type": "string" },
+        "amountFcfa": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["status", "amountFcfa"]
+    }
+  }
+}
