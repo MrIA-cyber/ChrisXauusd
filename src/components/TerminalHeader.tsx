@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download } from 'lucide-react';
+import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 import { useLongPress } from '../lib/useLongPress';
+import { getNotificationPermission, requestWebNotificationPermission, sendWebPushNotification } from '../lib/notificationService';
+import { NotificationModal } from './NotificationModal';
 
 interface TerminalHeaderProps {
   soundEnabled: boolean;
@@ -47,6 +49,12 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
 }) => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isNotifModalOpen, setIsNotifModalOpen] = useState<boolean>(false);
+  const [notifPermission, setNotifPermission] = useState<string>(() => getNotificationPermission());
+
+  const handleTogglePushNotifications = () => {
+    setIsNotifModalOpen(true);
+  };
 
   // 5-second long press hook for secret administrator portal trigger
   const { isPressing, progress, handlers } = useLongPress({
@@ -168,7 +176,18 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
         <div className="flex items-center gap-2">
           
           {/* Main Primary Visible CTA & User Profile Button */}
-          {isSubscriberActive ? (
+          {subscription.status === 'PENDING_VERIFICATION' ? (
+            <button
+              type="button"
+              onClick={onOpenSubscribeModal}
+              className="flex items-center gap-1.5 bg-amber-500/20 text-amber-950 dark:text-amber-300 border-2 border-amber-500 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-xs font-mono font-bold shadow-md hover:bg-amber-500/30 transition-all cursor-pointer animate-pulse shrink-0"
+              title="Votre reçu Mobile Money est en cours de vérification par Chris Pokam (640406412)"
+            >
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
+              <span className="hidden sm:inline">Validation WhatsApp en cours</span>
+              <span className="sm:hidden text-[10px] bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded font-bold">En vérification</span>
+            </button>
+          ) : isSubscriberActive ? (
             <button
               type="button"
               onClick={onOpenProfileModal}
@@ -211,6 +230,33 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
               </span>
             </button>
           )}
+
+          {/* Dedicated Web Push Notification Button */}
+          <button
+            onClick={handleTogglePushNotifications}
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all active:scale-95 cursor-pointer shadow-2xs border ${
+              notifPermission === 'granted'
+                ? 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-500/40'
+                : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/30'
+            }`}
+            title={
+              notifPermission === 'granted'
+                ? 'Notifications Push Actives (Cliquer pour tester)'
+                : 'Activer les notifications Push Web sur cet appareil'
+            }
+          >
+            {notifPermission === 'granted' ? (
+              <>
+                <BellRing className="w-3.5 h-3.5 text-emerald-500 animate-bounce" />
+                <span className="hidden md:inline">Push Actif</span>
+              </>
+            ) : (
+              <>
+                <Bell className="w-3.5 h-3.5 text-amber-500" />
+                <span className="hidden md:inline">Notifications Push</span>
+              </>
+            )}
+          </button>
 
           {/* Dedicated PWA Install App Button */}
           {onOpenInstallModal && (
@@ -383,6 +429,13 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
         </div>
 
       </div>
+
+      <NotificationModal
+        isOpen={isNotifModalOpen}
+        onClose={() => setIsNotifModalOpen(false)}
+        soundEnabled={soundEnabled}
+        onToggleSound={onToggleSound}
+      />
     </header>
   );
 };

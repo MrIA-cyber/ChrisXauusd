@@ -103,7 +103,7 @@ export interface RiskCalculatorParams {
 }
 
 // Subscription & Auth Types
-export type SubscriptionStatus = 'VISITOR' | 'ACTIVE' | 'EXPIRING_SOON' | 'EXPIRED';
+export type SubscriptionStatus = 'VISITOR' | 'ACTIVE' | 'EXPIRING_SOON' | 'EXPIRED' | 'PENDING_VERIFICATION';
 
 export interface UserSubscription {
   status: SubscriptionStatus;

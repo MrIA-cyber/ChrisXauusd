@@ -30,8 +30,10 @@ import {
   ExternalLink,
   MessageSquare,
   Send,
+  Clock,
+  ChevronRight,
 } from 'lucide-react';
-import { formatFcfa, SUBSCRIPTION_PRICE_FCFA, generateActiveSubscription } from '../lib/subscriptionService';
+import { formatFcfa, SUBSCRIPTION_PRICE_FCFA, generateActiveSubscription, generatePendingSubscription } from '../lib/subscriptionService';
 import { UserSubscription } from '../types';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 
@@ -506,6 +508,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isPendingScreenshot, setIsPendingScreenshot] = useState<boolean>(false);
+  const [showVerificationChoice, setShowVerificationChoice] = useState<boolean>(false);
   const [copiedNumber, setCopiedNumber] = useState<boolean>(false);
 
   // Filtered countries search
@@ -735,64 +738,64 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 exit={{ opacity: 0 }}
                 className="py-2 space-y-5"
               >
-                {/* Header Banner */}
-                <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-center space-y-2">
-                  <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-black text-2xl shadow-lg shadow-amber-500/20">
+                {/* Header Banner with high contrast */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-amber-100 dark:bg-amber-950/90 border-2 border-amber-500 dark:border-amber-600 text-center space-y-2.5 shadow-md">
+                  <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-2xl shadow-lg shadow-amber-500/30">
                     📱
                   </div>
-                  <h3 className="text-base font-black font-mono tracking-tight text-amber-800 dark:text-amber-300 uppercase">
+                  <h3 className="text-base sm:text-lg font-black font-mono tracking-tight text-amber-950 dark:text-amber-300 uppercase">
                     Formulaire Enregistré avec Succès !
                   </h3>
-                  <p className="text-xs text-slate-700 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
-                    Pour activer votre compte, effectuez le transfert Mobile Money puis <strong className="text-amber-600 dark:text-amber-400 font-bold">envoyez la capture d'écran du reçu au 640406412</strong> sur WhatsApp.
+                  <p className="text-xs sm:text-sm text-slate-900 dark:text-slate-100 font-semibold max-w-md mx-auto leading-relaxed">
+                    Pour activer votre compte, effectuez le transfert Mobile Money puis <span className="text-amber-900 dark:text-amber-300 font-extrabold underline decoration-amber-500">envoyez la capture d'écran du reçu au 640406412</span> sur WhatsApp.
                   </p>
                 </div>
 
-                {/* Instructions Box */}
-                <div className="bg-slate-50 dark:bg-slate-800/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4">
-                  <h4 className="text-xs font-mono font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-500" />
+                {/* Instructions Box with high contrast */}
+                <div className="bg-slate-900 dark:bg-slate-800 text-white p-5 rounded-2xl border-2 border-slate-700 space-y-4 shadow-xl">
+                  <h4 className="text-xs sm:text-sm font-mono font-bold text-amber-400 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
                     <span>INSTRUCTIONS DE PAIEMENT RAPIDE :</span>
                   </h4>
 
-                  <ol className="text-xs text-slate-700 dark:text-slate-300 space-y-3 pl-1 font-sans">
+                  <ol className="text-xs sm:text-sm text-slate-200 space-y-3.5 pl-1 font-sans">
                     <li className="flex items-start gap-2.5">
-                      <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
-                      <span>
-                        Effectuez votre dépôt / transfert du montant de <strong className="text-amber-600 dark:text-amber-400 font-mono font-bold">{formatFcfa(SUBSCRIPTION_PRICE_FCFA)}</strong> vers le numéro : <strong className="font-mono text-slate-900 dark:text-white text-sm bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30 font-bold">640406412</strong> (Chris Pokam).
+                      <span className="w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-black flex items-center justify-center text-xs shrink-0 mt-0.5">1</span>
+                      <span className="leading-snug">
+                        Effectuez votre dépôt / transfert du montant de <strong className="text-amber-300 font-mono font-black">{formatFcfa(SUBSCRIPTION_PRICE_FCFA)}</strong> vers le numéro : <strong className="font-mono text-amber-300 text-sm bg-slate-800 px-2 py-0.5 rounded border border-amber-400/50 font-black">640406412</strong> (Chris Pokam).
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
-                      <span>
-                        Prenez une <strong>capture d'écran du reçu</strong> de confirmation de la transaction.
+                      <span className="w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-black flex items-center justify-center text-xs shrink-0 mt-0.5">2</span>
+                      <span className="leading-snug">
+                        Prenez une <strong className="text-white font-bold underline">capture d'écran du reçu</strong> de confirmation de la transaction.
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">3</span>
-                      <span>
-                        Cliquez sur le bouton ci-dessous pour ouvrir WhatsApp avec le numéro <strong className="text-emerald-600 dark:text-emerald-400 font-bold">640406412</strong> et joindre votre capture d'écran.
+                      <span className="w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-black flex items-center justify-center text-xs shrink-0 mt-0.5">3</span>
+                      <span className="leading-snug">
+                        Cliquez sur le bouton ci-dessous pour ouvrir WhatsApp avec le numéro <strong className="text-emerald-400 font-black text-sm">640406412</strong> et joindre votre capture d'écran.
                       </span>
                     </li>
                   </ol>
 
                   {/* Summary recap table */}
-                  <div className="p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300">
-                    <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span>Nom du client :</span>
-                      <span className="font-bold text-slate-900 dark:text-white">{cleanFullName}</span>
+                  <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs space-y-2 text-slate-300 shadow-inner">
+                    <div className="flex justify-between border-b border-slate-800 pb-1.5">
+                      <span className="text-slate-400">Nom du client :</span>
+                      <span className="font-bold text-white">{cleanFullName}</span>
                     </div>
-                    <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span>Email :</span>
-                      <span className="font-bold text-slate-900 dark:text-white">{cleanEmail}</span>
+                    <div className="flex justify-between border-b border-slate-800 pb-1.5">
+                      <span className="text-slate-400">Email :</span>
+                      <span className="font-bold text-white">{cleanEmail}</span>
                     </div>
-                    <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span>Téléphone Mobile Money :</span>
-                      <span className="font-bold text-slate-900 dark:text-white">{selectedCountry.dialCode} {cleanPhoneDigits}</span>
+                    <div className="flex justify-between border-b border-slate-800 pb-1.5">
+                      <span className="text-slate-400">Téléphone Mobile Money :</span>
+                      <span className="font-bold text-white">{selectedCountry.dialCode} {cleanPhoneDigits}</span>
                     </div>
-                    <div className="flex justify-between pt-0.5 font-bold text-xs">
-                      <span>Montant total :</span>
-                      <span className="text-amber-500">{formatFcfa(SUBSCRIPTION_PRICE_FCFA)}</span>
+                    <div className="flex justify-between pt-1 font-bold text-xs sm:text-sm">
+                      <span className="text-slate-300">Montant total :</span>
+                      <span className="text-amber-400 font-black">{formatFcfa(SUBSCRIPTION_PRICE_FCFA)}</span>
                     </div>
                   </div>
                 </div>
@@ -804,15 +807,15 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                     href={getWhatsAppPaymentUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-4 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold text-xs sm:text-sm shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2.5 transition-all transform active:scale-98 cursor-pointer"
+                    className="w-full py-4 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-black text-xs sm:text-sm shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2.5 transition-all transform active:scale-98 cursor-pointer"
                   >
                     <Send className="w-4 h-4 fill-current shrink-0" />
                     <span>Envoyer la capture sur WhatsApp (640406412)</span>
                     <ExternalLink className="w-3.5 h-3.5 opacity-80 shrink-0" />
                   </a>
 
-                  {/* Copy Number & Auto Validate Buttons */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {/* Copy Number & Auto Validate Buttons with High Contrast */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <button
                       type="button"
                       onClick={() => {
@@ -820,34 +823,90 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                         setCopiedNumber(true);
                         setTimeout(() => setCopiedNumber(false), 2000);
                       }}
-                      className="py-3 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-mono text-xs font-bold border border-slate-300 dark:border-slate-700 flex items-center justify-center gap-1.5 transition-colors"
+                      className="py-3.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-mono text-xs font-bold border border-slate-600 flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-md"
                     >
-                      {copiedNumber ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-amber-500" />}
+                      {copiedNumber ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-amber-400" />}
                       <span>{copiedNumber ? 'Numéro Copié (640406412) !' : 'Copier le numéro 640406412'}</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => {
-                        const activeOpName =
-                          selectedCountry.operators.find((op) => op.id === selectedOperatorId)?.name || 'Mobile Money';
-                        const activeSub = generateActiveSubscription(
-                          `Mobile Money (${activeOpName} - ${selectedCountry.dialCode} ${cleanPhoneDigits})`
-                        );
-                        setIsPendingScreenshot(false);
-                        setIsSuccess(true);
-                        setTimeout(() => {
-                          onSubscriptionActivated(activeSub, { name: cleanFullName, email: cleanEmail });
-                          setIsSuccess(false);
-                          onClose();
-                        }, 1800);
+                        setShowVerificationChoice(true);
                       }}
-                      className="py-3 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 font-mono text-xs font-bold border border-amber-500/30 transition-colors flex items-center justify-center gap-1.5"
+                      className="py-3.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-xs font-black border border-amber-400 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
+                      <CheckCircle2 className="w-4 h-4 text-slate-950 fill-amber-300" />
                       <span>J'ai déjà envoyé ma capture</span>
                     </button>
                   </div>
+                </div>
+              </motion.div>
+            ) : showVerificationChoice ? (
+              <motion.div
+                key="verification_choice"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                className="py-2 space-y-5 font-mono"
+              >
+                <div className="p-5 rounded-2xl bg-amber-500/10 border-2 border-amber-500 text-center space-y-3 shadow-md">
+                  <div className="w-12 h-12 mx-auto rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-2xl shadow-lg">
+                    ⏳
+                  </div>
+                  <h3 className="text-base sm:text-lg font-black text-amber-950 dark:text-amber-300 uppercase">
+                    Vérification du Reçu WhatsApp
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-sans leading-relaxed">
+                    Bonjour <strong className="text-amber-600 dark:text-amber-400">{cleanFullName}</strong>, afin de sécuriser l'accès au réseau ChrisXauusd, chaque paiement Mobile Money est contrôlé par <strong>Chris Pokam</strong> sur WhatsApp au <strong>+237 640406412</strong>.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  {/* Option 1: WhatsApp link */}
+                  <a
+                    href={getWhatsAppPaymentUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md flex items-center justify-between transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Send className="w-4 h-4 fill-current shrink-0" />
+                      <span>1. Re-contacter WhatsApp (+237 640406412)</span>
+                    </div>
+                    <ExternalLink className="w-4 h-4 shrink-0 opacity-80" />
+                  </a>
+
+                  {/* Option 2: Put in Pending Verification */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const activeOpName =
+                        selectedCountry.operators.find((op) => op.id === selectedOperatorId)?.name || 'Mobile Money';
+                      const pendingSub = generatePendingSubscription(
+                        `Mobile Money (${activeOpName} - ${selectedCountry.dialCode} ${cleanPhoneDigits})`
+                      );
+                      setShowVerificationChoice(false);
+                      setIsPendingScreenshot(false);
+                      onSubscriptionActivated(pendingSub, { name: cleanFullName, email: cleanEmail });
+                      onClose();
+                    }}
+                    className="w-full py-4 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm border border-amber-400 flex items-center justify-between transition-all cursor-pointer shadow-md"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Clock className="w-4 h-4 text-slate-950 shrink-0" />
+                      <span>2. Soumettre pour validation par Chris Pokam</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-950 shrink-0" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowVerificationChoice(false)}
+                    className="w-full py-2 text-center text-xs text-slate-400 hover:text-white underline cursor-pointer"
+                  >
+                    ← Retourner aux instructions de paiement
+                  </button>
                 </div>
               </motion.div>
             ) : isProcessing ? (

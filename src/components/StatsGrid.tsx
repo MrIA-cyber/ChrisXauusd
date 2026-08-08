@@ -30,7 +30,7 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
           </div>
           <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1.5 sm:gap-2">
             <span className="text-xl sm:text-3xl font-black font-mono text-[#0F172A] tracking-tight">
-              {stats.totalSetups}
+              {stats.totalSetups} <span className="text-sm font-normal text-slate-400">/ 4 max</span>
             </span>
             <span className="text-[10px] sm:text-xs font-mono text-blue-800 font-bold bg-blue-50 px-2 sm:px-2.5 py-0.5 rounded-full border border-blue-200">
               {stats.active} en cours
@@ -38,7 +38,7 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ stats }) => {
           </div>
           <div className="mt-2.5 sm:mt-3 flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-600 font-mono font-semibold truncate">
             <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
-            <span>Strictement R:R ≥ 1:1.5</span>
+            <span>Limite stricte : 4 trades / jour</span>
           </div>
         </motion.div>
 

@@ -14,8 +14,14 @@ import {
   getMarketSessions,
   generateInitialCandles,
   calculateDailyStats,
+  MAX_DAILY_TRADES,
 } from './lib/marketEngine';
 import { soundService } from './lib/audioService';
+import {
+  sendNewSignalWebNotification,
+  sendTpNotification,
+  sendSlNotification,
+} from './lib/notificationService';
 import {
   loadSavedSubscription,
   saveSubscription,
@@ -267,6 +273,7 @@ export default function App() {
   // Trigger next sequential signal after a short 3.5s delay
   const triggerNextSequentialSignal = () => {
     if (isAnalyzingRef.current) return;
+    if (tradesRef.current.length >= MAX_DAILY_TRADES) return;
     isAnalyzingRef.current = true;
     setIsAnalyzingNextSignal(true);
     setNextSignalCountdown(3);
@@ -363,8 +370,10 @@ export default function App() {
 
         if (isWin) {
           soundService.playTpHitSound(soundEnabledRef.current);
+          sendTpNotification(t.takeProfit, t.rewardPips);
         } else {
           soundService.playSlHitSound(soundEnabledRef.current);
+          sendSlNotification(t.stopLoss);
         }
 
         const closedTrade = {
@@ -390,10 +399,10 @@ export default function App() {
     }
   };
 
-  // Ensure 1 active signal is running at initial load
+  // Ensure 1 active signal is running at initial load (if daily limit not reached)
   useEffect(() => {
     const hasActive = tradesRef.current.some((t) => t.status === 'ACTIVE');
-    if (!hasActive && !isAnalyzingRef.current) {
+    if (!hasActive && !isAnalyzingRef.current && tradesRef.current.length < MAX_DAILY_TRADES) {
       handleGenerateNewSignal();
     }
   }, []);
@@ -404,7 +413,7 @@ export default function App() {
 
     const signalTimer = setInterval(() => {
       const activeCount = tradesRef.current.filter((t) => t.status === 'ACTIVE').length;
-      if (activeCount === 0 && !isAnalyzingRef.current) {
+      if (activeCount === 0 && !isAnalyzingRef.current && tradesRef.current.length < MAX_DAILY_TRADES) {
         triggerNextSequentialSignal();
       }
     }, 4000);
@@ -412,10 +421,17 @@ export default function App() {
     return () => clearInterval(signalTimer);
   }, [autoSignalActive]);
 
-  // Manual / Auto Signal Generator Trigger (strictly maintains 1 active signal at a time)
+  // Manual / Auto Signal Generator Trigger (strictly maintains 1 active signal at a time, max 4 trades per day)
   const handleGenerateNewSignal = (forceType?: 'BUY' | 'SELL') => {
+    const hasActive = tradesRef.current.some((t) => t.status === 'ACTIVE');
+    if (tradesRef.current.length >= MAX_DAILY_TRADES && !hasActive) {
+      alert("Quota journalier atteint (4/4 trades). La plateforme ChrisXauusd est limitée à un maximum de 4 trades par jour pour garantir une gestion stricte du risque.");
+      return;
+    }
+
     const newSetup = createNewTradeSetup(currentPriceRef.current, forceType);
     soundService.playNewSignalSound(soundEnabledRef.current);
+    sendNewSignalWebNotification(newSetup.type, newSetup.entryPrice, newSetup.takeProfit, newSetup.stopLoss);
     saveSetupToFirestore(newSetup);
 
     setTrades((prev) => {
@@ -687,33 +703,53 @@ export default function App() {
               <div className="lg:col-span-7 space-y-4">
                 
                 {/* Section Header Card */}
-                <div className="flex items-center justify-between bg-white p-4.5 rounded-[20px] border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] backdrop-blur-md">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-4.5 rounded-[20px] border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] backdrop-blur-md gap-3">
                   <div className="flex items-center gap-2.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
-                    <h2 className="text-xs sm:text-sm font-bold text-[#0F172A] flex items-center gap-2 font-mono">
-                      <Ticket className="w-4 h-4 text-amber-500" />
-                      <span>SIGNAL SÉQUENTIEL EN TEMPS RÉEL</span>
-                    </h2>
+                    <div>
+                      <h2 className="text-xs sm:text-sm font-bold text-[#0F172A] flex items-center gap-2 font-mono">
+                        <Ticket className="w-4 h-4 text-amber-500" />
+                        <span>SIGNAL SÉQUENTIEL EN TEMPS RÉEL</span>
+                      </h2>
+                      <div className="text-[11px] font-mono font-semibold text-slate-500 mt-0.5">
+                        Quota quotidien : <strong className="text-amber-600">{trades.length} / {MAX_DAILY_TRADES} trades max</strong>
+                      </div>
+                    </div>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-xs font-mono">
-                    <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Abonné VIP
+                  <div className="flex items-center gap-2 text-xs font-mono shrink-0">
+                    <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" /> VIP
                     </span>
                     <button
                       onClick={() => handleGenerateNewSignal('BUY')}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-700 px-3 py-1 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95"
+                      disabled={trades.length >= MAX_DAILY_TRADES && !activeSetup}
+                      className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white border border-emerald-700 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
                     >
                       + ACHAT
                     </button>
                     <button
                       onClick={() => handleGenerateNewSignal('SELL')}
-                      className="bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 px-3 py-1 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95"
+                      disabled={trades.length >= MAX_DAILY_TRADES && !activeSetup}
+                      className="bg-rose-600 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed text-white border border-rose-700 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
                     >
                       + VENTE
                     </button>
                   </div>
                 </div>
+
+                {/* Daily Quota Reached Banner */}
+                {trades.length >= MAX_DAILY_TRADES && !activeSetup && !isAnalyzingNextSignal && (
+                  <div className="bg-[#0F172A] border-2 border-amber-500 rounded-[20px] p-5 text-white font-mono space-y-2.5 shadow-xl">
+                    <div className="flex items-center gap-2.5 text-amber-400 font-black text-sm uppercase">
+                      <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0" />
+                      <span>QUOTA MAXIMUM DE {MAX_DAILY_TRADES} TRADES PAR JOUR ATTEINT ({trades.length}/{MAX_DAILY_TRADES})</span>
+                    </div>
+                    <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                      Afin d'assurer une régularité maximale et de respecter une discipline stricte de gestion du capital, la plateforme <strong>ChrisXauusd</strong> est limitée à <strong>un maximum de {MAX_DAILY_TRADES} trades par jour</strong> sur le Gold (XAU/USD). Tous les trades programmés pour aujourd'hui ont été exécutés.
+                    </p>
+                  </div>
+                )}
 
                 {/* Analysis Transition State Banner when generating next signal */}
                 {isAnalyzingNextSignal && (

@@ -173,10 +173,12 @@ export function createNewTradeSetup(
   };
 }
 
-// Generate initial historical trades for a realistic terminal experience
+export const MAX_DAILY_TRADES = 4;
+
+// Generate initial historical trades for a realistic terminal experience (Max 3 past trades + 1 active = 4 trades max per day)
 export function generateInitialHistory(basePrice: number): TradeSetup[] {
   const initialSetups: TradeSetup[] = [];
-  const count = 12; // 12 trades earlier today
+  const count = 3; // Exactly 3 past closed trades for today to respect the 4 trades/day limit
   
   let price = basePrice - 8.50; // Previous price area
 

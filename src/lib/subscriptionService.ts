@@ -15,11 +15,12 @@ export function formatFcfa(amount: number): string {
 // Helper to calculate days remaining until expiration
 export function calculateSubscriptionDetails(
   startDateIso: string | null,
-  expirationDateIso: string | null
+  expirationDateIso: string | null,
+  currentStatus?: SubscriptionStatus
 ): UserSubscription {
   if (!startDateIso || !expirationDateIso) {
     return {
-      status: 'VISITOR',
+      status: currentStatus === 'PENDING_VERIFICATION' ? 'PENDING_VERIFICATION' : 'VISITOR',
       startDate: null,
       expirationDate: null,
       daysRemaining: 0,
@@ -32,12 +33,14 @@ export function calculateSubscriptionDetails(
   const diffTime = expDate.getTime() - now.getTime();
   const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  let status: SubscriptionStatus = 'ACTIVE';
+  let status: SubscriptionStatus = currentStatus === 'PENDING_VERIFICATION' ? 'PENDING_VERIFICATION' : 'ACTIVE';
 
-  if (daysRemaining <= 0) {
-    status = 'EXPIRED';
-  } else if (daysRemaining <= WARNING_THRESHOLD_DAYS) {
-    status = 'EXPIRING_SOON';
+  if (status !== 'PENDING_VERIFICATION') {
+    if (daysRemaining <= 0) {
+      status = 'EXPIRED';
+    } else if (daysRemaining <= WARNING_THRESHOLD_DAYS) {
+      status = 'EXPIRING_SOON';
+    }
   }
 
   return {
@@ -157,6 +160,19 @@ export function generateActiveSubscription(paymentMethod = 'Mobile Money'): User
   };
 }
 
+// Generate a pending verification subscription object
+export function generatePendingSubscription(paymentMethod = 'Mobile Money'): UserSubscription {
+  const dates = createDatesForDaysLeft(30);
+  return {
+    status: 'PENDING_VERIFICATION',
+    startDate: dates.startDate,
+    expirationDate: dates.expirationDate,
+    daysRemaining: 30,
+    paymentMethod,
+    amountFcfa: SUBSCRIPTION_PRICE_FCFA,
+  };
+}
+
 // Load initial subscription state from localStorage or default to VISITOR
 export function loadSavedSubscription(): UserSubscription {
   try {
@@ -171,7 +187,7 @@ export function loadSavedSubscription(): UserSubscription {
       };
     }
     const parsed = JSON.parse(raw);
-    return calculateSubscriptionDetails(parsed.startDate, parsed.expirationDate);
+    return calculateSubscriptionDetails(parsed.startDate, parsed.expirationDate, parsed.status);
   } catch (e) {
     return {
       status: 'VISITOR',
@@ -201,7 +217,8 @@ export function loadSavedUserSession(): AuthUser | null {
     // Refresh subscription status
     const refreshedSub = calculateSubscriptionDetails(
       user.subscription.startDate,
-      user.subscription.expirationDate
+      user.subscription.expirationDate,
+      user.subscription.status
     );
     user.subscription = refreshedSub;
     return user;
