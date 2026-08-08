@@ -121,6 +121,15 @@ export interface AuthUser {
   name: string;
   avatarUrl?: string;
   subscription: UserSubscription;
+  // VIP Trader Preferences & Customizations
+  traderLevel?: 'DEBUTANT' | 'INTERMEDIAIRE' | 'SCALPER_PRO' | 'MASTER_TRADER';
+  tradingAccountBalance?: number;
+  preferredCurrency?: 'USD' | 'EUR' | 'FCFA' | 'NGN' | 'GBP';
+  preferredRiskPercentage?: number;
+  tradingStyle?: 'SCALPING_M1_M5' | 'DAY_TRADING' | 'SWING_TRADING' | 'BREAKOUT';
+  telegramUsername?: string;
+  tradingPlatform?: 'MT4' | 'MT5' | 'TRADINGVIEW' | 'CTRADER';
+  privacyMode?: boolean;
 }
 
 // News & Education Types

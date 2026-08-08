@@ -48,7 +48,8 @@ import {
   MoreVertical,
   CheckSquare,
   Copy,
-  Info
+  Info,
+  Award
 } from 'lucide-react';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA, formatDateFr } from '../../lib/subscriptionService';
 
@@ -67,6 +68,8 @@ export interface AdminUserRecord {
   lastLogin: string;
   totalPaidFcfa: number;
   paymentMethod: 'Orange Money' | 'MTN Mobile Money' | 'Wave' | 'Carte Bancaire' | 'Crypto USDT' | 'Airtel Money';
+  traderLevel?: 'DEBUTANT' | 'INTERMEDIAIRE' | 'SCALPER_PRO' | 'MASTER_TRADER';
+  customBadge?: string;
 }
 
 export interface PaymentTransactionRecord {
@@ -460,6 +463,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
     showToast(msg, 'success');
     logAudit('PROLONG_SUB', `${user.name} (${user.id})`, `Extension de +${daysToAdd} jours. Date : ${newExp.toISOString()}`);
     setSelectedUserForEdit(null);
+  };
+
+  // Update Trader Level & Custom Badge by Admin
+  const handleUpdateTraderLevelAndBadge = (user: AdminUserRecord, level: 'DEBUTANT' | 'INTERMEDIAIRE' | 'SCALPER_PRO' | 'MASTER_TRADER', badge?: string) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === user.id ? { ...u, traderLevel: level, customBadge: badge } : u))
+    );
+    showToast(`Niveau VIP (${level}) et Badge attribués à ${user.name}`, 'success');
+    logAudit('EDIT_USER', `${user.name} (${user.id})`, `Attribution Niveau Trader: ${level}, Badge: ${badge || 'Aucun'}`);
   };
 
   // Toggle Suspend Status
@@ -1290,10 +1302,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                                 {/* User Details */}
                                 <td className="p-3.5">
                                   <div className="font-mono font-bold text-slate-100 flex items-center gap-2">
-                                    <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center text-xs">
+                                    <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center text-xs shrink-0">
                                       {u.name.charAt(0)}
                                     </div>
-                                    <span>{u.name}</span>
+                                    <div className="flex flex-col">
+                                      <div className="flex items-center gap-1.5">
+                                        <span>{u.name}</span>
+                                        {u.traderLevel === 'MASTER_TRADER' && <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded font-bold">👑 Master</span>}
+                                        {u.traderLevel === 'SCALPER_PRO' && <span className="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/40 px-1.5 py-0.2 rounded font-bold">⚡ Scalper</span>}
+                                        {u.traderLevel === 'INTERMEDIAIRE' && <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/40 px-1.5 py-0.2 rounded font-bold">📈 Trader</span>}
+                                        {u.traderLevel === 'DEBUTANT' && <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.2 rounded font-bold">🌱 VIP</span>}
+                                      </div>
+                                      {u.customBadge && <span className="text-[9px] text-amber-400 font-bold">{u.customBadge}</span>}
+                                    </div>
                                   </div>
                                   <div className="text-[11px] text-slate-400 font-mono pl-9">{u.email}</div>
                                 </td>
@@ -1832,6 +1853,37 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                   >
                     Valider
                   </button>
+                </div>
+              </div>
+
+              {/* VIP Trader Level & Badge Assignment by Admin */}
+              <div className="space-y-3 pt-3 border-t border-slate-800">
+                <div className="flex items-center justify-between">
+                  <label className="text-amber-400 font-bold flex items-center gap-1.5 text-xs">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>Attribution Rôle & Badge VIP Trader (Exclusif Admin) :</span>
+                  </label>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: 'MASTER_TRADER', label: '👑 Master Elite', badge: 'Certified Master VIP' },
+                    { id: 'SCALPER_PRO', label: '⚡ Scalper Pro', badge: 'Pro Scalper XAU' },
+                    { id: 'INTERMEDIAIRE', label: '📈 Intermédiaire', badge: 'Active Trader' },
+                    { id: 'DEBUTANT', label: '🌱 Débutant VIP', badge: 'VIP Member' },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleUpdateTraderLevelAndBadge(selectedUserForEdit, item.id as any, item.badge)}
+                      className={`p-2.5 rounded-xl border text-left font-mono text-xs transition-all flex flex-col gap-0.5 cursor-pointer ${
+                        selectedUserForEdit.traderLevel === item.id
+                          ? 'bg-amber-500/20 border-amber-500 text-amber-300 font-bold shadow-sm'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      <span className="text-[10px] text-slate-500">{item.badge}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
             </motion.div>

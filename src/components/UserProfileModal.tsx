@@ -18,6 +18,17 @@ import {
   Calendar,
   Save,
   Clock,
+  Briefcase,
+  Sliders,
+  DollarSign,
+  ShieldCheck,
+  Eye,
+  EyeOff,
+  Send,
+  Zap,
+  Activity,
+  Award,
+  Layers,
 } from 'lucide-react';
 import { AuthUser } from '../types';
 import { PRESET_TRADER_AVATARS, formatDateFr, formatFcfa } from '../lib/subscriptionService';
@@ -47,7 +58,33 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   const [customUrlInput, setCustomUrlInput] = useState<string>('');
   const [showUrlInput, setShowUrlInput] = useState<boolean>(false);
 
-  const [activeTab, setActiveTab] = useState<'PHOTO' | 'INFO'>('PHOTO');
+  // Advanced VIP Preferences State
+  const [traderLevel, setTraderLevel] = useState<'DEBUTANT' | 'INTERMEDIAIRE' | 'SCALPER_PRO' | 'MASTER_TRADER'>(
+    userSession?.traderLevel || 'SCALPER_PRO'
+  );
+  const [tradingAccountBalance, setTradingAccountBalance] = useState<number>(
+    userSession?.tradingAccountBalance || 5000
+  );
+  const [preferredCurrency, setPreferredCurrency] = useState<'USD' | 'EUR' | 'FCFA' | 'NGN' | 'GBP'>(
+    userSession?.preferredCurrency || 'USD'
+  );
+  const [preferredRiskPercentage, setPreferredRiskPercentage] = useState<number>(
+    userSession?.preferredRiskPercentage || 1.0
+  );
+  const [tradingStyle, setTradingStyle] = useState<'SCALPING_M1_M5' | 'DAY_TRADING' | 'SWING_TRADING' | 'BREAKOUT'>(
+    userSession?.tradingStyle || 'SCALPING_M1_M5'
+  );
+  const [telegramUsername, setTelegramUsername] = useState<string>(
+    userSession?.telegramUsername || ''
+  );
+  const [tradingPlatform, setTradingPlatform] = useState<'MT4' | 'MT5' | 'TRADINGVIEW' | 'CTRADER'>(
+    userSession?.tradingPlatform || 'MT5'
+  );
+  const [privacyMode, setPrivacyMode] = useState<boolean>(
+    userSession?.privacyMode || false
+  );
+
+  const [activeTab, setActiveTab] = useState<'PHOTO' | 'INFO' | 'TRADING' | 'PREF'>('PHOTO');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
   const [isProcessingImage, setIsProcessingImage] = useState<boolean>(false);
 
@@ -58,6 +95,14 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
       setEmail(userSession.email || '');
       setPhone(userSession.phone || '');
       setAvatarUrl(userSession.avatarUrl || '');
+      setTraderLevel(userSession.traderLevel || 'SCALPER_PRO');
+      setTradingAccountBalance(userSession.tradingAccountBalance || 5000);
+      setPreferredCurrency(userSession.preferredCurrency || 'USD');
+      setPreferredRiskPercentage(userSession.preferredRiskPercentage || 1.0);
+      setTradingStyle(userSession.tradingStyle || 'SCALPING_M1_M5');
+      setTelegramUsername(userSession.telegramUsername || '');
+      setTradingPlatform(userSession.tradingPlatform || 'MT5');
+      setPrivacyMode(userSession.privacyMode || false);
     }
   }, [userSession, isOpen]);
 
@@ -90,8 +135,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   };
 
   // Handle saving changes
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSave = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!name.trim()) {
       alert("Veuillez saisir votre nom.");
       return;
@@ -103,10 +148,18 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
       email: email.trim(),
       phone: phone.trim(),
       avatarUrl: avatarUrl.trim() || undefined,
+      traderLevel,
+      tradingAccountBalance: Number(tradingAccountBalance) || 5000,
+      preferredCurrency,
+      preferredRiskPercentage: Number(preferredRiskPercentage) || 1.0,
+      tradingStyle,
+      telegramUsername: telegramUsername.trim(),
+      tradingPlatform,
+      privacyMode,
     };
 
     onSaveProfile(updatedUser);
-    setSaveSuccessMsg("Profil mis à jour avec succès !");
+    setSaveSuccessMsg("Profil VIP mis à jour avec succès !");
     setTimeout(() => {
       setSaveSuccessMsg(null);
       onClose();
@@ -206,40 +259,77 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 <span>{userSession.name}</span>
                 <Crown className="w-4 h-4 text-amber-400 fill-amber-400 shrink-0" />
               </h2>
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>Membre VIP ChrisXauusd</span>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>
+                    {traderLevel === 'MASTER_TRADER' && '👑 Master Elite'}
+                    {traderLevel === 'SCALPER_PRO' && '⚡ Scalper Pro'}
+                    {traderLevel === 'INTERMEDIAIRE' && '📈 Trader Intermédiaire'}
+                    {traderLevel === 'DEBUTANT' && '🌱 Débutant VIP'}
+                  </span>
+                </div>
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                  <DollarSign className="w-3 h-3 text-emerald-400" />
+                  <span>{privacyMode ? '••••••' : `$${tradingAccountBalance.toLocaleString()}`}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+        <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => setActiveTab('PHOTO')}
-            className={`flex-1 py-3 text-xs sm:text-sm font-bold font-mono text-center flex items-center justify-center gap-2 border-b-2 transition-all cursor-pointer ${
+            className={`flex-1 min-w-[100px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'PHOTO'
                 ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
-            <Camera className="w-4 h-4" />
-            <span>Photo de Profil</span>
+            <Camera className="w-3.5 h-3.5" />
+            <span>Photo</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('INFO')}
-            className={`flex-1 py-3 text-xs sm:text-sm font-bold font-mono text-center flex items-center justify-center gap-2 border-b-2 transition-all cursor-pointer ${
+            className={`flex-1 min-w-[100px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'INFO'
                 ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
             }`}
           >
-            <User className="w-4 h-4" />
-            <span>Mes Informations</span>
+            <User className="w-3.5 h-3.5" />
+            <span>Contact</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('TRADING')}
+            className={`flex-1 min-w-[120px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'TRADING'
+                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+            }`}
+          >
+            <Briefcase className="w-3.5 h-3.5 text-amber-500" />
+            <span>Trading VIP</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('PREF')}
+            className={`flex-1 min-w-[120px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'PREF'
+                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+            }`}
+          >
+            <Sliders className="w-3.5 h-3.5" />
+            <span>Préférences</span>
           </button>
         </div>
 
@@ -427,6 +517,238 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
               </div>
 
             </form>
+          )}
+
+          {/* TAB 3: VIP Trading Options */}
+          {activeTab === 'TRADING' && (
+            <div className="space-y-4">
+              {/* Trader Level Select */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Award className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Niveau d'Expérience Trader :</span>
+                  </span>
+                  <span className="text-[10px] bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                    Certifié Admin
+                  </span>
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { id: 'DEBUTANT', label: 'Débutant', icon: '🌱' },
+                    { id: 'INTERMEDIAIRE', label: 'Intermédiaire', icon: '📈' },
+                    { id: 'SCALPER_PRO', label: 'Scalper Pro', icon: '⚡' },
+                    { id: 'MASTER_TRADER', label: 'Master Elite', icon: '👑' },
+                  ].map((lvl) => (
+                    <button
+                      key={lvl.id}
+                      type="button"
+                      onClick={() => setTraderLevel(lvl.id as any)}
+                      className={`p-2.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                        traderLevel === lvl.id
+                          ? 'bg-amber-500/15 border-amber-500 text-amber-700 dark:text-amber-300 shadow-2xs'
+                          : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      <span className="text-base">{lvl.icon}</span>
+                      <span>{lvl.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Capital & Currency Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Account Balance */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Taille Compte Trading ($)</span>
+                  </label>
+                  <input
+                    type="number"
+                    value={tradingAccountBalance}
+                    onChange={(e) => setTradingAccountBalance(Number(e.target.value))}
+                    step="500"
+                    min="100"
+                    placeholder="Ex: 5000"
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none"
+                  />
+                  {/* Presets */}
+                  <div className="flex gap-1.5 pt-0.5">
+                    {[1000, 5000, 10000, 25000].map((amt) => (
+                      <button
+                        key={amt}
+                        type="button"
+                        onClick={() => setTradingAccountBalance(amt)}
+                        className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 hover:bg-amber-500/20 text-[10px] font-mono text-slate-600 dark:text-slate-300 rounded-md border border-slate-200 dark:border-slate-700"
+                      >
+                        ${amt >= 1000 ? `${amt / 1000}k` : amt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Preferred Currency */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Layers className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Devise d'Affichage</span>
+                  </label>
+                  <select
+                    value={preferredCurrency}
+                    onChange={(e) => setPreferredCurrency(e.target.value as any)}
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none cursor-pointer"
+                  >
+                    <option value="USD">USD ($) - Dollar US</option>
+                    <option value="EUR">EUR (€) - Euro</option>
+                    <option value="FCFA">FCFA (CFA) - Franc CFA</option>
+                    <option value="NGN">NGN (₦) - Naira</option>
+                    <option value="GBP">GBP (£) - Livre Sterling</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Risk % & Trading Platform */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Max Risk % */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Risque Max par Trade (% Capital)</span>
+                  </label>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {[0.5, 1.0, 2.0, 3.0].map((r) => (
+                      <button
+                        key={r}
+                        type="button"
+                        onClick={() => setPreferredRiskPercentage(r)}
+                        className={`py-2 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer ${
+                          preferredRiskPercentage === r
+                            ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-2xs'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                        }`}
+                      >
+                        {r}%
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Platform MT4/MT5 */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Plateforme d'Exécution</span>
+                  </label>
+                  <select
+                    value={tradingPlatform}
+                    onChange={(e) => setTradingPlatform(e.target.value as any)}
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none cursor-pointer"
+                  >
+                    <option value="MT5">MetaTrader 5 (MT5 Recommandé)</option>
+                    <option value="MT4">MetaTrader 4 (MT4)</option>
+                    <option value="TRADINGVIEW">TradingView Web</option>
+                    <option value="CTRADER">cTrader</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Style de Trading */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <Briefcase className="w-3.5 h-3.5 text-purple-500" />
+                  <span>Style de Trading Préféré XAU/USD</span>
+                </label>
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                  {[
+                    { id: 'SCALPING_M1_M5', label: 'Scalping Rapide (M1/M5)' },
+                    { id: 'DAY_TRADING', label: 'Day Trading (M15/H1)' },
+                    { id: 'SWING_TRADING', label: 'Swing Trading (H4/D1)' },
+                    { id: 'BREAKOUT', label: 'Breakout & Rejection' },
+                  ].map((st) => (
+                    <button
+                      key={st.id}
+                      type="button"
+                      onClick={() => setTradingStyle(st.id as any)}
+                      className={`p-2.5 rounded-xl border font-bold text-left transition-all cursor-pointer ${
+                        tradingStyle === st.id
+                          ? 'bg-purple-500/15 border-purple-500 text-purple-700 dark:text-purple-300'
+                          : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      {st.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: Preferences & Privacy */}
+          {activeTab === 'PREF' && (
+            <div className="space-y-4">
+              {/* Telegram Username */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <Send className="w-3.5 h-3.5 text-sky-500" />
+                  <span>Nom d'utilisateur Telegram (Alertes Directes VIP)</span>
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-3 text-xs text-slate-400 font-mono">@</span>
+                  <input
+                    type="text"
+                    value={telegramUsername}
+                    onChange={(e) => setTelegramUsername(e.target.value.replace(/^@/, ''))}
+                    placeholder="votre_pseudo_telegram"
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-xl pl-8 pr-4 py-2.5 text-xs text-slate-900 dark:text-white font-mono outline-none"
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 font-mono">
+                  Permet de recevoir les notifications directement dans le canal privé Telegram.
+                </p>
+              </div>
+
+              {/* Privacy Mode Toggle */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    {privacyMode ? (
+                      <EyeOff className="w-4 h-4 text-amber-500" />
+                    ) : (
+                      <Eye className="w-4 h-4 text-emerald-500" />
+                    )}
+                    <div>
+                      <h4 className="text-xs font-mono font-bold text-slate-900 dark:text-white">
+                        Mode Incognito & Confidentialité
+                      </h4>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                        Masquer les montants en argent réel sur le terminal lors de vos captures d'écran.
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setPrivacyMode(!privacyMode)}
+                    className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
+                      privacyMode
+                        ? 'bg-amber-500 text-slate-950 shadow-2xs'
+                        : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                    }`}
+                  >
+                    {privacyMode ? 'ACTIVÉ' : 'DÉSACTIVÉ'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Security Banner */}
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center gap-2.5 text-xs font-mono text-emerald-700 dark:text-emerald-300">
+                <ShieldCheck className="w-4 h-4 shrink-0" />
+                <span>Toutes vos préférences VIP sont stockées de façon cryptée et confidentielle.</span>
+              </div>
+            </div>
           )}
 
           {/* Subscription Summary Card */}
