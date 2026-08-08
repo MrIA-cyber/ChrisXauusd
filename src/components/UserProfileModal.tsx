@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { AuthUser } from '../types';
 import { PRESET_TRADER_AVATARS, formatDateFr, formatFcfa } from '../lib/subscriptionService';
+import { EconomicCalendarView } from './EconomicCalendarView';
 
 interface UserProfileModalProps {
   isOpen: boolean;
@@ -84,7 +85,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
     userSession?.privacyMode || false
   );
 
-  const [activeTab, setActiveTab] = useState<'PHOTO' | 'INFO' | 'TRADING' | 'PREF'>('PHOTO');
+  const [activeTab, setActiveTab] = useState<'PHOTO' | 'INFO' | 'TRADING' | 'PREF' | 'CALENDAR'>('PHOTO');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
   const [isProcessingImage, setIsProcessingImage] = useState<boolean>(false);
 
@@ -403,7 +404,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('PREF')}
-            className={`flex-1 min-w-[120px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+            className={`flex-1 min-w-[110px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
               activeTab === 'PREF'
                 ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
@@ -411,6 +412,19 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           >
             <Sliders className="w-3.5 h-3.5" />
             <span>Préférences</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('CALENDAR')}
+            className={`flex-1 min-w-[130px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'CALENDAR'
+                ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900'
+                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5 text-amber-500" />
+            <span>Calendrier Macro</span>
           </button>
         </div>
 
@@ -879,6 +893,11 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 <span>Toutes vos préférences VIP sont stockées de façon cryptée et confidentielle.</span>
               </div>
             </div>
+          )}
+
+          {/* TAB 5: Calendrier Économique Macro Réel */}
+          {activeTab === 'CALENDAR' && (
+            <EconomicCalendarView />
           )}
 
           {/* Subscription Summary Card */}

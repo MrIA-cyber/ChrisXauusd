@@ -33,24 +33,22 @@ let ticketCounter = 8040;
  */
 export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   factors: ConfluenceFactor[];
-  score: number; // 3, 4, or 5
-  grade: SetupGrade; // 'A+' | 'A' | 'B'
+  score: number; // 4 or 5
+  grade: SetupGrade; // 'A+' | 'A'
   confluenceStrings: string[];
 } {
-  // Determine target score weighted toward ultra-high confluence Grade A+ (75% A+ 5/5, 20% A 4/5)
+  // Ultra-strict institutional filtering: 85% Grade A+ (5/5), 15% Grade A (4/5)
   const rand = Math.random();
   let targetScore = 5; // Setup A+ Ultra High Confluence (5/5)
-  if (rand > 0.75 && rand <= 0.95) {
+  if (rand > 0.85) {
     targetScore = 4; // Setup A High Confluence (4/5)
-  } else if (rand > 0.95) {
-    targetScore = 3; // Setup B Moderated Confluence (3/5)
   }
 
   // 1. Structure de marché (BOS / CHoCH M5/M15)
   const factorStructure: ConfluenceFactor = {
     id: 'STRUCTURE',
     name: 'Structure de marché (BOS/CHoCH M5)',
-    met: true, // Primary structural requirement
+    met: true, // Requirement
     details: isBuy
       ? `Cassure haussière (BOS M5) + CHoCH M15 confirmé à $${entryPrice.toFixed(2)}`
       : `Cassure baissière (BOS M5) + CHoCH M15 confirmé à $${entryPrice.toFixed(2)}`,
@@ -59,8 +57,8 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   // 2. Zone de liquidité / Order Block
   const factorZone: ConfluenceFactor = {
     id: 'ZONE',
-    name: 'Zone d\'intérêt (Order Block & Fibo 61.8%)',
-    met: true, // Primary zone requirement
+    name: 'Zone d\'intérêt (Order Block & Fibo 61.8%-78.6%)',
+    met: true, // Requirement
     details: isBuy
       ? `Rejet Order Block acheteur à $${entryPrice.toFixed(2)} + FVG M5 comblé`
       : `Rejet Order Block vendeur à $${entryPrice.toFixed(2)} + Sweeping liquidité Buy-side`,
@@ -70,7 +68,7 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   const factorMomentum: ConfluenceFactor = {
     id: 'MOMENTUM',
     name: 'Momentum de confirmation (RSI/MACD)',
-    met: targetScore >= 4,
+    met: true,
     details: isBuy
       ? 'Divergence haussière RSI (28) + Croisement haussier MACD M5'
       : 'Divergence baissière RSI (74) + Pression vendeuse MACD M5',
@@ -80,7 +78,7 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   const factorSession: ConfluenceFactor = {
     id: 'SESSION',
     name: 'Contexte de session & Filtre Macro',
-    met: targetScore === 5 || (targetScore === 3 && Math.random() > 0.5),
+    met: targetScore === 5,
     details: 'Session haute liquidité (Londres/NY Open) — Aucun impact news NFP/CPI imminent',
   };
 
@@ -88,7 +86,7 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   const factorMTF: ConfluenceFactor = {
     id: 'MTF',
     name: 'Alignement Multi-Timeframe (H1/H4)',
-    met: targetScore === 5 || (targetScore === 4 && !factorSession.met) || (targetScore === 3 && !factorSession.met),
+    met: true,
     details: isBuy
       ? 'Tendance majeure H1/H4 haussière alignée au scalp M1/M5'
       : 'Tendance majeure H1/H4 baissière alignée au scalp M1/M5',
@@ -111,6 +109,19 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   };
 }
 
+export function calculateConvictionRate(score: number, rrRatio: number, grade: SetupGrade): number {
+  let base = 70;
+  if (score === 5) base = 88;
+  else if (score === 4) base = 78;
+  else if (score === 3) base = 68;
+
+  // Add R:R bonus (up to +6%)
+  const rrBonus = Math.min(6, Math.round((rrRatio - 1.5) * 3));
+  const variance = Math.floor(Math.random() * 3);
+
+  return Math.min(98, base + Math.max(0, rrBonus) + variance);
+}
+
 export function createNewTradeSetup(
   currentPrice: number,
   forceType?: TradeType
@@ -119,12 +130,12 @@ export function createNewTradeSetup(
   const isBuy = forceType ? forceType === 'BUY' : Math.random() > 0.48;
   
   // Gold pricing: 1 pip = $0.10 ($1 = 10 pips)
-  // Scalping SL: Strict 12 to 22 pips ($1.20 to $2.20) for minimal drawdown
-  const slPips = Math.floor(Math.random() * 11) + 12;
+  // Ultra-tight Scalping SL: Strict 10 to 15 pips ($1.00 to $1.50) for minimal drawdown
+  const slPips = Math.floor(Math.random() * 6) + 10;
   const slOffset = slPips * 0.10;
   
-  // Risk / Reward Ratio: Minimum 1:1.8, up to 1:3.5 for maximum win expectancy
-  const rrRatio = Number((1.8 + Math.random() * 1.7).toFixed(2));
+  // High Yield Risk / Reward Ratio: Minimum 1:2.2, up to 1:3.5 for maximum yield
+  const rrRatio = Number((2.2 + Math.random() * 1.3).toFixed(2));
   const tpPips = Math.round(slPips * rrRatio);
   const tpOffset = tpPips * 0.10;
 
@@ -145,6 +156,7 @@ export function createNewTradeSetup(
 
   // Generate Confluence Factors and Setup Quality Grade
   const { factors, score, grade, confluenceStrings } = buildConfluenceSet(isBuy, entryPrice);
+  const convictionRate = calculateConvictionRate(score, rrRatio, grade);
 
   const now = new Date();
   const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -167,9 +179,10 @@ export function createNewTradeSetup(
     confluenceFactors: factors,
     grade,
     score,
+    convictionRate,
     entryReason: isBuy
-      ? `Scalp Long Confluence (${grade} - ${score}/5)`
-      : `Scalp Short Confluence (${grade} - ${score}/5)`,
+      ? `Scalp Long Confluence (${grade} - ${score}/5 • ${convictionRate}%)`
+      : `Scalp Short Confluence (${grade} - ${score}/5 • ${convictionRate}%)`,
   };
 }
 
@@ -185,8 +198,10 @@ export function generateInitialHistory(basePrice: number): TradeSetup[] {
   for (let i = count; i >= 1; i--) {
     ticketCounter += 1;
     const isBuy = Math.random() > 0.45;
-    const slPips = Math.floor(Math.random() * 12) + 16;
-    const rrRatio = Number((1.5 + Math.random() * 1.5).toFixed(2));
+    // Ultra-tight Scalping SL: Strict 10 to 15 pips
+    const slPips = Math.floor(Math.random() * 6) + 10;
+    // High Yield R:R: 2.2 to 3.5
+    const rrRatio = Number((2.2 + Math.random() * 1.3).toFixed(2));
     const tpPips = Math.round(slPips * rrRatio);
 
     const entryPrice = Number((price + (Math.random() * 2 - 1)).toFixed(2));
@@ -202,6 +217,7 @@ export function generateInitialHistory(basePrice: number): TradeSetup[] {
     }
 
     const { factors, score, grade, confluenceStrings } = buildConfluenceSet(isBuy, entryPrice);
+    const convictionRate = calculateConvictionRate(score, rrRatio, grade);
 
     // Realistic historical performance correlation:
     // Grade A+: ~85% win rate
@@ -236,54 +252,59 @@ export function generateInitialHistory(basePrice: number): TradeSetup[] {
       confluenceFactors: factors,
       grade,
       score,
+      convictionRate,
       closedAt: new Date(now.getTime() + 12 * 60 * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
       closedPrice: isWin ? takeProfit : stopLoss,
       pnlPips,
       pnlAmount,
-      entryReason: isBuy ? `Scalp Long (${grade} - ${score}/5)` : `Scalp Short (${grade} - ${score}/5)`,
+      entryReason: isBuy ? `Scalp Long (${grade} - ${score}/5 • ${convictionRate}%)` : `Scalp Short (${grade} - ${score}/5 • ${convictionRate}%)`,
     });
   }
 
   return initialSetups.reverse(); // Newest first
 }
 
-// Calculate Market Sessions
+// Calculate Market Sessions (Respecting Monday - Friday Forex Trading Days)
 export function getMarketSessions(): MarketSession[] {
   const now = new Date();
+  const utcDay = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
   const utcHours = now.getUTCHours();
+
+  // Forex/Gold Market is closed on Saturday and Sunday until 22:00 GMT
+  const isMarketClosedWeekend = utcDay === 6 || (utcDay === 0 && utcHours < 22);
 
   return [
     {
       name: 'Sydney',
       city: 'Sydney',
-      status: utcHours >= 22 || utcHours < 7 ? 'OPEN' : 'CLOSED',
+      status: !isMarketClosedWeekend && (utcHours >= 22 || utcHours < 7) ? 'OPEN' : 'CLOSED',
       openTimeGmt: '22:00',
       closeTimeGmt: '07:00',
-      isActiveNow: utcHours >= 22 || utcHours < 7,
+      isActiveNow: !isMarketClosedWeekend && (utcHours >= 22 || utcHours < 7),
     },
     {
       name: 'Tokyo',
       city: 'Tokyo',
-      status: utcHours >= 0 && utcHours < 9 ? 'OPEN' : 'CLOSED',
+      status: !isMarketClosedWeekend && (utcHours >= 0 && utcHours < 9) ? 'OPEN' : 'CLOSED',
       openTimeGmt: '00:00',
       closeTimeGmt: '09:00',
-      isActiveNow: utcHours >= 0 && utcHours < 9,
+      isActiveNow: !isMarketClosedWeekend && (utcHours >= 0 && utcHours < 9),
     },
     {
       name: 'Londres',
       city: 'London',
-      status: utcHours >= 8 && utcHours < 17 ? 'OPEN' : 'CLOSED',
+      status: !isMarketClosedWeekend && (utcHours >= 8 && utcHours < 17) ? 'OPEN' : 'CLOSED',
       openTimeGmt: '08:00',
       closeTimeGmt: '17:00',
-      isActiveNow: utcHours >= 8 && utcHours < 17,
+      isActiveNow: !isMarketClosedWeekend && (utcHours >= 8 && utcHours < 17),
     },
     {
       name: 'New York',
       city: 'New York',
-      status: utcHours >= 13 && utcHours < 22 ? 'OPEN' : 'CLOSED',
+      status: !isMarketClosedWeekend && (utcHours >= 13 && utcHours < 22) ? 'OPEN' : 'CLOSED',
       openTimeGmt: '13:00',
       closeTimeGmt: '22:00',
-      isActiveNow: utcHours >= 13 && utcHours < 22,
+      isActiveNow: !isMarketClosedWeekend && (utcHours >= 13 && utcHours < 22),
     },
   ];
 }

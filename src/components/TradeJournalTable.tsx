@@ -205,6 +205,7 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
               <thead className="bg-slate-500/10 text-slate-500 dark:text-slate-400 uppercase text-[9px] tracking-wider border-b border-[var(--border-color)] font-bold">
                 <tr>
                   <th className="px-3.5 py-2.5">Ticket</th>
+                  <th className="px-3.5 py-2.5">Qualité</th>
                   <th className="px-3.5 py-2.5">Sens</th>
                   <th className="px-3.5 py-2.5">Entrée</th>
                   <th className="px-3.5 py-2.5 text-rose-500">SL</th>
@@ -219,7 +220,7 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
               <tbody className="divide-y divide-[var(--border-color)]">
                 {filteredTrades.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="px-4 py-6 text-center text-slate-500 font-mono text-xs">
+                    <td colSpan={10} className="px-4 py-6 text-center text-slate-500 font-mono text-xs">
                       Aucun trade trouvé.
                     </td>
                   </tr>
@@ -229,6 +230,9 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
                     const isTpHit = t.status === 'TP_HIT';
                     const isSlHit = t.status === 'SL_HIT';
                     const isActive = t.status === 'ACTIVE';
+                    const score = t.score || 5;
+                    const grade = t.grade || (score === 5 ? 'A+' : score === 4 ? 'A' : 'B');
+                    const conviction = t.convictionRate || (score === 5 ? 92 : score === 4 ? 82 : 72);
 
                     return (
                       <tr
@@ -239,6 +243,17 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
                         <td className="px-3.5 py-2.5 whitespace-nowrap">
                           <div className="font-bold text-[var(--text-primary)] text-xs">{t.ticketNumber}</div>
                           <div className="text-[10px] text-slate-500">{t.timestamp}</div>
+                        </td>
+
+                        {/* Qualité & Conviction */}
+                        <td className="px-3.5 py-2.5 whitespace-nowrap">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                            grade === 'A+'
+                              ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30'
+                              : 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30'
+                          }`}>
+                            🔥 {conviction}% • {score}/5
+                          </span>
                         </td>
 
                         {/* Type BUY/SELL */}

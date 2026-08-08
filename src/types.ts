@@ -31,6 +31,7 @@ export interface TradeSetup {
   confluenceFactors: ConfluenceFactor[];
   grade: SetupGrade;
   score: number; // 3, 4, or 5 out of 5
+  convictionRate: number; // e.g. 82 (% conviction)
   notes?: string;
   closedAt?: string;
   closedPrice?: number;

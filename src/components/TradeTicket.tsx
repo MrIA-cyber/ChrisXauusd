@@ -55,6 +55,7 @@ export const TradeTicket: React.FC<TradeTicketProps> = ({
 
   const grade = setup.grade || 'A+';
   const score = setup.score || 5;
+  const conviction = setup.convictionRate || (score === 5 ? 92 : score === 4 ? 82 : 72);
 
   // Format professional trading setup text for MT4/MT5 clipboard
   const handleCopySignal = (e: React.MouseEvent) => {
@@ -178,7 +179,7 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
             ) : (
               <ShieldCheck className="w-3 h-3 text-slate-500" />
             )}
-            <span>Setup {grade} ({score}/5)</span>
+            <span>🔥 Conviction {conviction}% · Confirmation {score}/5</span>
             <Info className="w-2.5 h-2.5 opacity-70 ml-0.5" />
           </button>
 
@@ -551,9 +552,14 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
               >
                 <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
                   <span className="font-bold text-amber-800 dark:text-amber-400">AUDIT DE CONFLUENCE — SETUP {grade}</span>
-                  <span className="text-[10px] text-amber-900 dark:text-amber-300 font-bold bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded-md border border-amber-300 dark:border-amber-800">
-                    {score}/5 Critères
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-amber-900 dark:text-amber-300 font-bold bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded-md border border-amber-300 dark:border-amber-800">
+                      🔥 Conviction {conviction}%
+                    </span>
+                    <span className="text-[10px] text-slate-700 dark:text-slate-300 font-bold bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700">
+                      Confirmation {score}/5
+                    </span>
+                  </div>
                 </div>
 
                 <div className="space-y-1.5 pt-1">

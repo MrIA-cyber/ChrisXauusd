@@ -125,6 +125,11 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                   XAU/USD
                 </span>
 
+                {/* Schedule Lun - Ven */}
+                <span className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono text-slate-500 dark:text-slate-400 bg-slate-500/10 border border-slate-500/20">
+                  <Clock className="w-2.5 h-2.5" /> Lun — Ven
+                </span>
+
                 {/* LIVE Status Indicator */}
                 <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
