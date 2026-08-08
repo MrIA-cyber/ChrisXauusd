@@ -94,8 +94,8 @@ export async function runSignalAnalysis() {
         console.log(`[CRON] ℹ️ Signal pour ${pair} est ATTENDRE. Pas d'enregistrement.`);
       }
 
-      // Petite pause entre chaque appel d'API pour respecter les quotas Twelve Data
-      await new Promise((res) => setTimeout(res, 2000));
+      // Pause de 8 secondes entre chaque appel pour respecter rigoureusement le quota Twelve Data (max 8 requêtes / min)
+      await new Promise((res) => setTimeout(res, 8000));
     } catch (err) {
       console.error(`[CRON] ❌ Erreur lors du traitement de ${pair}:`, err.message);
     }
