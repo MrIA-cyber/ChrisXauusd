@@ -108,30 +108,111 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
 
   if (!isOpen || !userSession) return null;
 
-  // Handle local file upload (Device camera/gallery)
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // Process, optimize and compress image file using HTML5 Canvas (downscales to 350x350, WebP/JPEG format)
+  const processAndSetImage = async (file: File) => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const lowerType = file.type ? file.type.toLowerCase() : '';
+    
+    // Check format
+    if (file.type && !allowedTypes.includes(lowerType) && !file.type.startsWith('image/')) {
+      alert("Format d'image non supporté. Veuillez choisir un fichier JPG, JPEG, PNG ou WebP.");
+      return;
+    }
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert("La taille de la photo ne doit pas dépasser 5 Mo.");
+    if (file.size > 10 * 1024 * 1024) {
+      alert("La taille de la photo ne doit pas dépasser 10 Mo.");
       return;
     }
 
     setIsProcessingImage(true);
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const result = event.target?.result as string;
-      if (result) {
-        setAvatarUrl(result);
-      }
+
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const MAX_DIM = 350;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_DIM) {
+                height = Math.round((height * MAX_DIM) / width);
+                width = MAX_DIM;
+              }
+            } else {
+              if (height > MAX_DIM) {
+                width = Math.round((width * MAX_DIM) / height);
+                height = MAX_DIM;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+
+            if (!ctx) {
+              resolve(e.target?.result as string);
+              return;
+            }
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            try {
+              const webp = canvas.toDataURL('image/webp', 0.82);
+              if (webp.startsWith('data:image/webp')) {
+                resolve(webp);
+                return;
+              }
+            } catch {
+              // fallback
+            }
+
+            const jpeg = canvas.toDataURL('image/jpeg', 0.85);
+            resolve(jpeg);
+          };
+          img.onerror = () => reject(new Error("Erreur de chargement de la photo."));
+          img.src = e.target?.result as string;
+        };
+        reader.onerror = () => reject(new Error("Erreur de lecture du fichier."));
+        reader.readAsDataURL(file);
+      });
+
+      setAvatarUrl(dataUrl);
+      setSaveSuccessMsg("Photo chargée et optimisée ! Cliquez sur 'Enregistrer' pour valider.");
+      setTimeout(() => setSaveSuccessMsg(null), 3500);
+    } catch (err: any) {
+      alert(err?.message || "Erreur lors de l'optimisation de la photo.");
+    } finally {
       setIsProcessingImage(false);
-    };
-    reader.onerror = () => {
-      alert("Erreur lors de la lecture du fichier image.");
-      setIsProcessingImage(false);
-    };
-    reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle local file upload input
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processAndSetImage(file);
+    }
+    if (e.target) {
+      e.target.value = '';
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processAndSetImage(file);
+    }
   };
 
   // Handle saving changes
@@ -355,25 +436,70 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           {activeTab === 'PHOTO' && (
             <div className="space-y-5">
               
-              {/* Primary Action Buttons: Local Upload + URL */}
+              {/* Drag & Drop Upload Zone */}
+              <div
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className="relative border-2 border-dashed border-amber-400/60 dark:border-amber-500/40 hover:border-amber-500 bg-amber-500/5 hover:bg-amber-500/10 rounded-2xl p-6 text-center cursor-pointer transition-all group"
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+
+                <div className="flex flex-col items-center justify-center space-y-2">
+                  <div className="w-12 h-12 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Upload className="w-6 h-6 text-amber-500" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold font-mono text-slate-800 dark:text-slate-100">
+                      Glissez-déposez votre photo ici ou <span className="text-amber-600 dark:text-amber-400 underline">parcourir</span>
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                      Formats acceptés : JPG, JPEG, PNG, WebP (Max 10 Mo)
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="p-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-amber-500/20 active:scale-98 transition-all cursor-pointer"
+                  className="p-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-amber-500/20 active:scale-98 transition-all cursor-pointer"
                 >
-                  <Upload className="w-4 h-4" />
-                  <span>Importer depuis ma galerie</span>
+                  <Camera className="w-4 h-4" />
+                  <span>Choisir depuis mon appareil</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => setShowUrlInput((prev) => !prev)}
-                  className="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-mono font-bold text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 active:scale-98 transition-all cursor-pointer"
-                >
-                  <Link className="w-4 h-4 text-amber-500" />
-                  <span>Saisir un lien image URL</span>
-                </button>
+                {avatarUrl ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAvatarUrl('');
+                      setSaveSuccessMsg("Photo supprimée. Cliquez sur 'Enregistrer' pour réinitialiser l'avatar par défaut.");
+                      setTimeout(() => setSaveSuccessMsg(null), 3000);
+                    }}
+                    className="p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 font-mono font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer"
+                  >
+                    <Trash2 className="w-4 h-4 text-rose-500" />
+                    <span>Supprimer ma photo</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setShowUrlInput((prev) => !prev)}
+                    className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-mono font-bold text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 active:scale-98 transition-all cursor-pointer"
+                  >
+                    <Link className="w-4 h-4 text-amber-500" />
+                    <span>Lien URL d'une photo</span>
+                  </button>
+                )}
               </div>
 
               {/* Custom Image URL Input Field */}
@@ -421,11 +547,15 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                   {avatarUrl && (
                     <button
                       type="button"
-                      onClick={() => setAvatarUrl('')}
+                      onClick={() => {
+                        setAvatarUrl('');
+                        setSaveSuccessMsg("Avatar réinitialisé par défaut.");
+                        setTimeout(() => setSaveSuccessMsg(null), 2500);
+                      }}
                       className="text-[11px] text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1 font-sans"
                     >
                       <Trash2 className="w-3 h-3" />
-                      <span>Réinitialiser la photo</span>
+                      <span>Réinitialiser par défaut</span>
                     </button>
                   )}
                 </label>

@@ -11,8 +11,11 @@ import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 
 import Signal from './models/Signal.js';
+import User from './models/User.js';
+import Subscription from './models/Subscription.js';
+import { connectToDatabase, getDbStatus } from './services/db.js';
 import { startSignalCron, runSignalAnalysis } from './cron/signalCron.js';
-import { getForexData } from './services/forexData.js';
+import { getForexData, getLiveQuote } from './services/forexData.js';
 import { generateSignal } from './services/signalGenerator.js';
 
 dotenv.config();
@@ -23,25 +26,22 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(express.json());
 
-// 1. Connexion à la base de données MongoDB (Si l'URI est fournie)
-if (MONGODB_URI) {
-  console.log('[MongoDB] Connexion en cours à MongoDB...');
-  mongoose
-    .connect(MONGODB_URI)
-    .then(() => {
+// 1. Connexion à la base de données MongoDB via le service réutilisable
+connectToDatabase()
+  .then((conn) => {
+    if (conn) {
       console.log('✅ Connexion MongoDB établie avec succès.');
-    })
-    .catch((err) => {
-      console.error('❌ Erreur de connexion MongoDB:', err.message);
-      console.log('ℹ️ Le serveur continue de fonctionner en mode dégradé.');
-    });
-} else {
-  console.warn('⚠️ Variable MONGODB_URI non définie dans le fichier .env. Connexion MongoDB en attente.');
-}
+    } else {
+      console.warn('⚠️ MongoDB non connecté. Mode fallback actif.');
+    }
+  })
+  .catch((err) => {
+    console.error('❌ Erreur de connexion MongoDB:', err.message);
+  });
 
 // 2. Endpoint de vérification de santé du serveur
 app.get('/health', (req, res) => {
-  const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  const mongoStatus = getDbStatus();
   res.json({
     status: 'OK',
     app: 'ChrisXauusd Signal Engine',
@@ -50,55 +50,100 @@ app.get('/health', (req, res) => {
       type: 'MongoDB',
       status: mongoStatus,
     },
-    twelveDataApiKeyConfigured: !!(process.env.TWELVE_DATA_API_KEY || 'b7a3a115daf84f289e283ef25041cee4'),
+    twelveDataApiKeyConfigured: true,
   });
 });
 
-// Cache backend pour le prix XAU/USD
-let cachedQuote = {
-  price: 4342.53,
-  high24h: 4350.10,
-  low24h: 4310.20,
-  change24h: 1969.43,
-  changePercent24h: 82.99,
-  timestamp: Date.now(),
-};
-
+// Endpoint Twelve Data Real-Time Price
 app.get('/api/price/xauusd', async (req, res) => {
-  const apiKey = process.env.TWELVE_DATA_API_KEY || 'b7a3a115daf84f289e283ef25041cee4';
-  const url = `https://api.twelvedata.com/quote?symbol=XAU/USD&apikey=${apiKey}`;
-
   try {
-    const response = await fetch(url);
-    if (response.ok) {
-      const data = await response.json();
-      if (data && data.close && !data.message) {
-        const price = parseFloat(data.close || data.open);
-        if (!isNaN(price) && price > 0) {
-          cachedQuote = {
-            price,
-            high24h: parseFloat(data.high) || price + 5,
-            low24h: parseFloat(data.low) || price - 5,
-            change24h: parseFloat(data.change) || 0,
-            changePercent24h: parseFloat(data.percent_change) || 0,
-            timestamp: Date.now(),
-          };
-          return res.json({ success: true, isLive: true, data: cachedQuote });
-        }
-      }
-    }
+    const symbol = req.query.symbol || 'XAU/USD';
+    const quoteResult = await getLiveQuote(symbol);
+    return res.json(quoteResult);
   } catch (err) {
-    // Silent server fallback
+    return res.status(500).json({ success: false, error: 'Erreur lors de la récupération du prix' });
   }
+});
 
-  // Si l'API externe echoue ou atteint la limite, simuler de légères micro-fluctuations réalistes autour de la dernière cotation
-  const variation = (Math.random() - 0.49) * 0.15;
-  cachedQuote.price = Number((cachedQuote.price + variation).toFixed(2));
-  cachedQuote.high24h = Math.max(cachedQuote.high24h, cachedQuote.price);
-  cachedQuote.low24h = Math.min(cachedQuote.low24h, cachedQuote.price);
-  cachedQuote.timestamp = Date.now();
+// Endpoint Twelve Data Historical Candles & Time Series
+app.get('/api/forex/candles', async (req, res) => {
+  try {
+    const pair = (req.query.pair || 'XAU/USD').toString();
+    const interval = (req.query.interval || '15min').toString();
 
-  return res.json({ success: true, isLive: false, fallback: true, data: cachedQuote });
+    const candles = await getForexData(pair, interval);
+    return res.json({
+      success: true,
+      pair,
+      interval,
+      candles,
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: 'Erreur lors de la récupération des bougies' });
+  }
+});
+
+// Endpoint User Profile & Preferences
+app.get('/api/users', async (req, res) => {
+  try {
+    const email = req.query.email;
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email requis' });
+    }
+    if (getDbStatus() === 'connected') {
+      const user = await User.findOne({ email: email.toLowerCase().trim() });
+      return res.json({ success: true, source: 'MongoDB', data: user });
+    }
+    return res.json({ success: true, source: 'Memory', data: null });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/users', async (req, res) => {
+  try {
+    const { email, name, phone, subscription, traderLevel, tradingAccountBalance, preferredCurrency, preferredRiskPercentage, tradingStyle, telegramUsername, tradingPlatform, privacyMode } = req.body || {};
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email requis' });
+    }
+    if (getDbStatus() === 'connected') {
+      const cleanEmail = email.toLowerCase().trim();
+      let user = await User.findOne({ email: cleanEmail });
+      if (!user) {
+        user = new User({
+          email: cleanEmail,
+          name: name || cleanEmail.split('@')[0],
+          phone: phone || '',
+          subscription,
+          traderLevel,
+          tradingAccountBalance,
+          preferredCurrency,
+          preferredRiskPercentage,
+          tradingStyle,
+          telegramUsername,
+          tradingPlatform,
+          privacyMode,
+        });
+      } else {
+        if (name) user.name = name;
+        if (phone !== undefined) user.phone = phone;
+        if (subscription) user.subscription = { ...user.subscription, ...subscription };
+        if (traderLevel) user.traderLevel = traderLevel;
+        if (tradingAccountBalance !== undefined) user.tradingAccountBalance = tradingAccountBalance;
+        if (preferredCurrency) user.preferredCurrency = preferredCurrency;
+        if (preferredRiskPercentage !== undefined) user.preferredRiskPercentage = preferredRiskPercentage;
+        if (tradingStyle) user.tradingStyle = tradingStyle;
+        if (telegramUsername !== undefined) user.telegramUsername = telegramUsername;
+        if (tradingPlatform) user.tradingPlatform = tradingPlatform;
+        if (privacyMode !== undefined) user.privacyMode = privacyMode;
+      }
+      await user.save();
+      return res.json({ success: true, source: 'MongoDB', data: user });
+    }
+    return res.json({ success: true, source: 'Memory', data: req.body });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // 3. Endpoint API GET /api/signals - Récupère les 20 derniers signaux

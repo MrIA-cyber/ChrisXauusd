@@ -54,6 +54,53 @@ function generateFallbackCandles(pair = 'XAU/USD', count = 100) {
   return candles;
 }
 
+let cachedQuote = {
+  price: 2385.50,
+  high24h: 2392.10,
+  low24h: 2378.20,
+  change24h: 12.40,
+  changePercent24h: 0.52,
+  timestamp: Date.now(),
+};
+
+/**
+ * Récupère le prix en temps réel de Twelve Data pour XAU/USD ou un autre symbole.
+ */
+export async function getLiveQuote(symbol = 'XAU/USD') {
+  const apiKey = process.env.TWELVE_DATA_API_KEY || 'b7a3a115daf84f289e283ef25041cee4';
+  const url = `https://api.twelvedata.com/quote?symbol=${encodeURIComponent(symbol)}&apikey=${apiKey}`;
+
+  try {
+    const response = await axios.get(url, { timeout: 8000 });
+    const data = response.data;
+    if (data && data.close && !data.message && data.status !== 'error') {
+      const price = parseFloat(data.close || data.open);
+      if (!isNaN(price) && price > 0) {
+        cachedQuote = {
+          price,
+          high24h: parseFloat(data.high) || price + 5.0,
+          low24h: parseFloat(data.low) || price - 5.0,
+          change24h: parseFloat(data.change) || 0,
+          changePercent24h: parseFloat(data.percent_change) || 0,
+          timestamp: Date.now(),
+        };
+        return { success: true, isLive: true, data: cachedQuote };
+      }
+    }
+  } catch (err) {
+    // Fallback en cas d'erreur ou de quota dépassé
+  }
+
+  // Micro-fluctuations réalistes en mode fallback si limite ou réseau indisponible
+  const variation = (Math.random() - 0.49) * 0.15;
+  cachedQuote.price = Number((cachedQuote.price + variation).toFixed(2));
+  cachedQuote.high24h = Math.max(cachedQuote.high24h, cachedQuote.price);
+  cachedQuote.low24h = Math.min(cachedQuote.low24h, cachedQuote.price);
+  cachedQuote.timestamp = Date.now();
+
+  return { success: true, isLive: false, fallback: true, data: cachedQuote };
+}
+
 /**
  * Récupère l'historique des bougies (candles) pour une paire Forex donnée.
  * @param {string} pair - La paire d'actifs (ex: "EUR/USD", "XAU/USD")

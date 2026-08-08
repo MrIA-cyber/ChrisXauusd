@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Smartphone, Share, PlusSquare, CheckCircle2, X, Monitor, ShieldCheck, Zap, ExternalLink, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -99,9 +100,7 @@ export const InstallPwaModal: React.FC<InstallPwaModalProps> = ({ isOpen, onClos
 
           {/* Icon + Title */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/20 shrink-0">
-              ⚡
-            </div>
+            <ChrisXauusdLogoIcon className="w-12 h-12 shadow-lg shadow-amber-500/20 shrink-0" variant="dark" />
             <div>
               <h2 className="text-lg font-black tracking-tight flex items-center gap-2">
                 <span>Installer ChrisXauusd</span>

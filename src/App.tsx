@@ -530,6 +530,29 @@ export default function App() {
       phone: updatedUser.phone,
       avatarUrl: updatedUser.avatarUrl,
     });
+
+    // Sync profile changes with MongoDB backend
+    if (updatedUser.email) {
+      fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: updatedUser.email,
+          name: updatedUser.name,
+          phone: updatedUser.phone,
+          avatarUrl: updatedUser.avatarUrl || '',
+          subscription: updatedUser.subscription,
+          traderLevel: updatedUser.traderLevel,
+          tradingAccountBalance: updatedUser.tradingAccountBalance,
+          preferredCurrency: updatedUser.preferredCurrency,
+          preferredRiskPercentage: updatedUser.preferredRiskPercentage,
+          tradingStyle: updatedUser.tradingStyle,
+          telegramUsername: updatedUser.telegramUsername,
+          tradingPlatform: updatedUser.tradingPlatform,
+          privacyMode: updatedUser.privacyMode,
+        }),
+      }).catch((err) => console.log('API user profile sync notice:', err));
+    }
   };
 
   const handleLogout = () => {
