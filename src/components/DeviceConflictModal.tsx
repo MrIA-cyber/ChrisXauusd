@@ -41,9 +41,6 @@ export const DeviceConflictModal: React.FC<DeviceConflictModalProps> = ({
             </div>
 
             <div className="space-y-1">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40">
-                1 ABONNEMENT = 1 COMPTE = 1 APPAREIL
-              </span>
               <h3 className="text-base font-bold text-white uppercase tracking-tight">
                 Connexion Décelée sur un autre appareil
               </h3>

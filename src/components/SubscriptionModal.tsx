@@ -671,11 +671,6 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
               <h2 className="text-base sm:text-lg font-bold font-sans tracking-tight text-white uppercase">
                 ACTIVER VOTRE ABONNEMENT
               </h2>
-              <div className="pt-1">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
-                  1 abonnement actif = 1 compte = 1 appareil autorisé
-                </span>
-              </div>
             </div>
           </div>
         </div>
