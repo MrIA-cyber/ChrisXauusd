@@ -64,12 +64,17 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     setTimeout(() => {
       setIsLoading(false);
       const cleanId = identifier.trim().toLowerCase().replaceAll(' ', '');
+      const cleanPass = password.trim();
 
       // Check for Admin credentials (658151516 / danielle1996 or admin@chrisxauusd.com / Chris2026!)
-      if (
-        (cleanId === '658151516' || cleanId.includes('658151516') || cleanId === 'admin@chrisxauusd.com') &&
-        (password === 'danielle1996' || password === 'Chris2026!')
-      ) {
+      const isAdminId = cleanId === '658151516' || cleanId.includes('658151516') || cleanId === 'admin@chrisxauusd.com';
+      const isAdminPass =
+        cleanPass === 'danielle1996' ||
+        cleanPass.toLowerCase() === 'danielle1996' ||
+        cleanPass === 'Chris2026!' ||
+        cleanPass.toLowerCase() === 'chris2026!';
+
+      if (isAdminId && isAdminPass) {
         localStorage.setItem('chris_admin_auth_v1', 'true');
         const dates = createDatesForDaysLeft(365);
         const subDetails = calculateSubscriptionDetails(dates.startDate, dates.expirationDate);

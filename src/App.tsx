@@ -185,12 +185,13 @@ export default function App() {
     setIsProfileModalOpen(true);
   };
 
-  // Admin Portal Mode State (Triggered via /admin.chris or Ctrl+Shift+A)
+  // Admin Portal Mode State (Triggered via /admin.chris, Ctrl+Shift+A, or Admin Login)
   const [isAdminMode, setIsAdminMode] = useState<boolean>(() => {
     const path = window.location.pathname;
     const search = window.location.search;
     const hash = window.location.hash;
-    return path.includes('admin.chris') || search.includes('admin.chris') || hash.includes('admin.chris');
+    const isAuthAdmin = localStorage.getItem('chris_admin_auth_v1') === 'true';
+    return path.includes('admin.chris') || search.includes('admin.chris') || hash.includes('admin.chris') || isAuthAdmin;
   });
 
   useEffect(() => {
@@ -578,6 +579,16 @@ export default function App() {
     setIsOnboardingView(false); // Seamless redirect to main page
     setBioProfileType('TRADER');
     setShowBioBubble(true);
+
+    // Auto-direct to Admin Portal if logging in as Admin
+    if (
+      user.id === 'admin-master' ||
+      (user.phone && user.phone.includes('658151516')) ||
+      user.email === 'admin@chrisxauusd.com' ||
+      localStorage.getItem('chris_admin_auth_v1') === 'true'
+    ) {
+      setIsAdminMode(true);
+    }
   };
 
   const handleSaveProfile = (updatedUser: AuthUser) => {
@@ -709,6 +720,7 @@ export default function App() {
             handleLoginSuccess(user);
             setIsOnboardingView(false);
           }}
+          onAdminLogin={() => setIsAdminMode(true)}
           onOpenSubscriptionModal={() => {
             setIsLoginModalOpen(false);
             setIsSubscribeModalOpen(true);

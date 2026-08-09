@@ -25,12 +25,17 @@ export const SecretAdminModal: React.FC<SecretAdminModalProps> = ({
     e.preventDefault();
 
     const cleanInput = emailInput.trim().toLowerCase().replaceAll(' ', '');
+    const cleanPass = passwordInput.trim();
+
+    const isAdminId = cleanInput === 'admin@chrisxauusd.com' || cleanInput === '658151516' || cleanInput.includes('658151516');
+    const isAdminPass =
+      cleanPass === 'danielle1996' ||
+      cleanPass.toLowerCase() === 'danielle1996' ||
+      cleanPass === 'Chris2026!' ||
+      cleanPass.toLowerCase() === 'chris2026!';
 
     // Verify credentials & role
-    if (
-      (cleanInput === 'admin@chrisxauusd.com' || cleanInput === '658151516' || cleanInput.includes('658151516')) &&
-      (passwordInput === 'Chris2026!' || passwordInput === 'danielle1996')
-    ) {
+    if (isAdminId && isAdminPass) {
       // Save authenticated session in localStorage
       localStorage.setItem('chris_admin_auth_v1', 'true');
       setErrorMessage(null);
