@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing, Calendar, BookOpen, Newspaper, Info, Settings, Check, Trash2, TrendingUp, TrendingDown, ShieldAlert, SlidersHorizontal } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing, Calendar, BookOpen, Newspaper, Info, Settings, Check, Trash2, TrendingUp, TrendingDown, ShieldAlert, SlidersHorizontal, Brain, X } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 import { useLongPress } from '../lib/useLongPress';
 import { getNotificationPermission, requestWebNotificationPermission, sendWebPushNotification } from '../lib/notificationService';
 import { soundService } from '../lib/audioService';
 import { NotificationModal } from './NotificationModal';
+
+const AIPredictiveSentimentModule = React.lazy(() =>
+  import('./AIPredictiveSentimentModule').then((m) => ({ default: m.AIPredictiveSentimentModule }))
+);
 
 interface TerminalHeaderProps {
   soundEnabled: boolean;
@@ -106,6 +111,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   const [isInfosMenuOpen, setIsInfosMenuOpen] = useState<boolean>(false);
   const [isNotifPopoverOpen, setIsNotifPopoverOpen] = useState<boolean>(false);
   const [isNotifModalOpen, setIsNotifModalOpen] = useState<boolean>(false);
+  const [isAIMacroModalOpen, setIsAIMacroModalOpen] = useState<boolean>(false);
   const [notifPermission, setNotifPermission] = useState<string>(() => getNotificationPermission());
   const [pushEnabled, setPushEnabled] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true;
@@ -734,63 +740,20 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                   </button>
                 )}
 
-                {/* Theme Switcher in Dropdown */}
-                {onToggleTheme && (
-                  <button
-                    type="button"
-                    onClick={onToggleTheme}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
-                  >
-                    <span className="flex items-center gap-1.5 text-[10px] whitespace-nowrap">
-                      {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-500 shrink-0" /> : <Moon className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300 shrink-0" />}
-                      Mode Thème
-                    </span>
-                    <span className="text-[8px] sm:text-[9px] px-1.5 py-0.2 rounded font-bold bg-amber-500/15 text-amber-900 dark:text-amber-300 border border-amber-500/30 shrink-0 whitespace-nowrap">
-                      {theme === 'dark' ? 'Sombre' : 'Clair'}
-                    </span>
-                  </button>
-                )}
-
-                {/* Notifications & Alertes Setups */}
+                {/* IA Prédictive & Sentiment Macro */}
                 <button
                   type="button"
                   onClick={() => {
-                    handleTogglePush();
+                    setIsAIMacroModalOpen(true);
                     setIsMenuOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-950 dark:text-cyan-300 flex items-center justify-between transition-colors font-medium cursor-pointer"
                 >
                   <span className="flex items-center gap-1.5 text-[10px] whitespace-nowrap">
-                    <BellRing className="w-3.5 h-3.5 text-amber-500 shrink-0" /> Notifications Setups
+                    <Brain className="w-3.5 h-3.5 text-cyan-500 shrink-0" /> IA Prédictive & Sentiment
                   </span>
-                  <span className={`text-[8px] sm:text-[9px] px-1.5 py-0.2 rounded font-bold shrink-0 whitespace-nowrap ${pushEnabled && notifPermission === 'granted' ? 'bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-500/30'}`}>
-                    {pushEnabled && notifPermission === 'granted' ? 'ACTIVÉ' : 'DÉSACTIVÉ'}
-                  </span>
-                </button>
-
-                {/* Risk Calculator */}
-                <button
-                  type="button"
-                  onClick={onOpenCalculator}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
-                >
-                  <span className="flex items-center gap-1.5 text-[10px] whitespace-nowrap">
-                    <Calculator className="w-3.5 h-3.5 text-blue-500 shrink-0" /> Calcul Risque
-                  </span>
-                </button>
-
-                {/* Sound Toggle */}
-                <button
-                  type="button"
-                  onClick={onToggleSound}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
-                >
-                  <span className="flex items-center gap-1.5 text-[10px] whitespace-nowrap">
-                    {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> : <VolumeX className="w-3.5 h-3.5 text-slate-500 shrink-0" />}
-                    Avertissements Sonores
-                  </span>
-                  <span className={`text-[8px] sm:text-[9px] px-1.5 py-0.2 rounded font-bold shrink-0 whitespace-nowrap ${soundEnabled ? 'bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30' : 'bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200'}`}>
-                    {soundEnabled ? 'ON' : 'OFF'}
+                  <span className="text-[8px] sm:text-[9px] px-1.5 py-0.2 rounded font-bold bg-cyan-500 text-slate-950 shrink-0 whitespace-nowrap">
+                    IA
                   </span>
                 </button>
 
@@ -868,6 +831,32 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
         soundEnabled={soundEnabled}
         onToggleSound={onToggleSound}
       />
+
+      {/* Modal IA Prédictive & Sentiment Macro */}
+      {isAIMacroModalOpen && createPortal(
+        <div className="fixed inset-0 z-[99999] bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-5 overflow-y-auto animate-in fade-in duration-200 font-sans">
+          <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-2xl shadow-2xl bg-slate-900 border border-cyan-500/30 p-2 sm:p-4 my-auto">
+            <button
+              onClick={() => setIsAIMacroModalOpen(false)}
+              className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-10 p-1.5 sm:p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 cursor-pointer"
+              title="Fermer"
+            >
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+            <React.Suspense fallback={
+              <div className="py-12 text-center space-y-3 font-mono">
+                <Brain className="w-8 h-8 text-cyan-400 animate-spin mx-auto" />
+                <p className="text-xs text-cyan-300 animate-pulse">
+                  Chargement asynchrone du module IA Gemini...
+                </p>
+              </div>
+            }>
+              <AIPredictiveSentimentModule className="my-0 border-0 bg-transparent p-1 sm:p-3 shadow-none" />
+            </React.Suspense>
+          </div>
+        </div>,
+        document.body
+      )}
     </header>
   );
 };

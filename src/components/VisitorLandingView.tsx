@@ -24,8 +24,10 @@ import {
   Activity,
   Globe,
   Lock,
-  LogIn
+  LogIn,
+  Brain
 } from 'lucide-react';
+import { GlobalRankingCard } from './GlobalRankingCard';
 
 interface VisitorLandingViewProps {
   onOpenSubscribeModal: () => void;
@@ -232,6 +234,8 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               { title: 'Analyse en temps réel', desc: 'M1 & M5 scalping continu' },
               { title: 'Entrées précises', desc: 'Zones d\'Order Block & SMC' },
               { title: 'Stop Loss optimisés', desc: 'Protection stricte du capital' },
+              { title: 'IA prédictive', desc: 'Modèles algorithmiques prédictifs XAU/USD' },
+              { title: 'Analyse de sentiments', desc: 'Sondage & flux du marché en temps réel' },
               { title: 'Take Profit intelligents', desc: 'Objectifs graduels TP1/TP2' },
               { title: 'Notifications instantanées', desc: 'Alertes en direct sur terminal' },
               { title: 'Journal statistique', desc: 'Transparence totale des résultats' },
@@ -276,6 +280,8 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
         </div>
       </motion.section>
 
+      {/* Global Estimated Ranking Card */}
+      <GlobalRankingCard />
 
       {/* ==========================================
           2. KPI DASHBOARD BLOCK (5 Cards with Sparkline charts & 20px corners)
@@ -597,6 +603,20 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
               icon: Shield,
               color: 'text-rose-600 dark:text-rose-400',
               bg: 'bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800'
+            },
+            {
+              title: 'IA Prédictive',
+              desc: 'Algorithmes prédictifs avancés anticipant les ruptures de structure et les impulsions majeures.',
+              icon: Brain,
+              color: 'text-cyan-600 dark:text-cyan-400',
+              bg: 'bg-cyan-50 dark:bg-cyan-950/60 border-cyan-200 dark:border-cyan-800'
+            },
+            {
+              title: 'Analyse de Sentiments',
+              desc: 'Sondage en temps réel du sentiment acheteur/vendeur et analyse des volumes institutionnels.',
+              icon: Activity,
+              color: 'text-indigo-600 dark:text-indigo-400',
+              bg: 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-200 dark:border-indigo-800'
             },
             {
               title: 'Take Profit Intelligents',

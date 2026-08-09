@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Bell, BellRing, BellOff, Volume2, VolumeX, ShieldCheck, ExternalLink, Sparkles, X, CheckCircle2, AlertTriangle, Smartphone, Monitor } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { getNotificationPermission, requestWebNotificationPermission, sendWebPushNotification, NotificationPermissionState } from '../lib/notificationService';
@@ -107,11 +108,11 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
       <div
         onClick={onClose}
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto cursor-pointer animate-fade-in font-sans"
+        className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto cursor-pointer animate-fade-in font-sans"
       >
         <motion.div
           onClick={(e) => e.stopPropagation()}
@@ -282,6 +283,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
           </div>
         </motion.div>
       </div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };

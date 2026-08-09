@@ -18,6 +18,7 @@ import { startSignalCron, runSignalAnalysis } from './cron/signalCron.js';
 import { getForexData, getLiveQuote, getQuotaStatus } from './services/forexData.js';
 import { generateSignal } from './services/signalGenerator.js';
 import { fetchLiveMarketNews } from './services/realNewsService.js';
+import { analyzeMacroSentiment } from './services/aiMacroService.js';
 
 dotenv.config();
 
@@ -112,6 +113,19 @@ app.get('/api/news/live', async (req, res) => {
     });
   } catch (err) {
     return res.status(500).json({ success: false, error: 'Erreur lors de la récupération des actualités réelles' });
+  }
+});
+
+// Endpoint IA Prédictive & Analyse de Sentiment Macro (Fed, NFP, Inflation CPI)
+app.all('/api/ai/macro-analysis', async (req, res) => {
+  try {
+    const analysis = await analyzeMacroSentiment();
+    return res.json(analysis);
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: 'Erreur lors de l\'analyse IA macroéconomique: ' + err.message,
+    });
   }
 });
 

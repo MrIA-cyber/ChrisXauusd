@@ -67,6 +67,7 @@ import { InstallPwaModal } from './components/InstallPwaModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { ScalpingEbookPdfModal } from './components/ScalpingEbookPdfModal';
 import { DeviceConflictModal } from './components/DeviceConflictModal';
+import { GlobalRankingCard } from './components/GlobalRankingCard';
 
 import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn, Calendar, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -776,7 +777,10 @@ export default function App() {
         ) : (
           /* Active Subscriber VIP Real-Time Trading Terminal */
           <>
-            {/* 5. Daily Statistics Cards */}
+            {/* 5. Global Ranking & Performance Benchmark */}
+            <GlobalRankingCard />
+
+            {/* 5.1. Daily Statistics Cards */}
             <StatsGrid stats={dailyStats} />
 
             {/* 6. Main Active Setups & Live Chart Grid */}
