@@ -862,14 +862,14 @@ export default function App() {
                 )}
 
                 {/* Render Primary Active Signal Ticket */}
-                <div className="space-y-3">
-                  <div className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-1">
+                <div className="space-y-2.5 sm:space-y-3.5">
+                  <div className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-0.5 sm:px-1">
                     <span className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
                       {activeSetup ? 'SIGNAL ACTIF EN COURS' : 'DERNIER SIGNAL CLÔTURÉ'}
                     </span>
                     {activeSetup && (
-                      <span className="text-amber-600 text-[11px] font-bold animate-pulse">● Suivi du prix en temps réel</span>
+                      <span className="text-amber-600 text-[10px] sm:text-[11px] font-bold animate-pulse">● Suivi prix live</span>
                     )}
                   </div>
 
@@ -884,7 +884,7 @@ export default function App() {
                       index={0}
                     />
                   ) : (
-                    <div className="bg-white border border-slate-200/80 rounded-[20px] p-8 text-center text-slate-500 font-mono shadow-sm">
+                    <div className="bg-white border border-slate-200/80 rounded-[18px] sm:rounded-[20px] p-6 sm:p-8 text-center text-slate-500 font-mono text-xs shadow-sm">
                       Génération du premier ticket de trade en cours...
                     </div>
                   )}
@@ -892,12 +892,12 @@ export default function App() {
 
                 {/* Recent Closed Signals History preview */}
                 {recentClosedTickets.length > 0 && (
-                  <div className="space-y-3 pt-2 border-t border-slate-200">
-                    <div className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-1">
-                      <span>HISTORIQUE DES DERNIERS SIGNALS CLÔTURÉS</span>
-                      <span className="text-[10px] text-slate-400">Ordre Chronologique</span>
+                  <div className="space-y-2.5 sm:space-y-3.5 pt-2 sm:pt-3 border-t border-slate-200">
+                    <div className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-0.5 sm:px-1">
+                      <span>HISTORIQUE DES SIGNALS CLÔTURÉS</span>
+                      <span className="text-[9px] sm:text-[10px] text-slate-400">Chronologique</span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                       {recentClosedTickets.map((setup, idx) => (
                         <TradeTicket
                           key={setup.id}

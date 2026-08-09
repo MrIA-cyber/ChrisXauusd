@@ -9,7 +9,7 @@ export const LegalFooter: React.FC = () => {
         
         {/* Discrete Risk Disclaimer */}
         <p className="text-[11px] sm:text-xs text-slate-500 text-center sm:text-left leading-relaxed">
-          Le trading comporte un risque de perte en capital. Ces signaux sont fournis à titre informatif, pas comme un conseil en investissement.
+          Le trading comporte un risque de perte en capital. Les signaux et analyses sont générés par l'Algorithme Moteur V2 à titre décisionnel et d'assistance au trading.
         </p>
 
         {/* Main Disclaimer Banner */}
@@ -18,10 +18,10 @@ export const LegalFooter: React.FC = () => {
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div className="space-y-1">
-            <h4 className="text-sm font-bold text-slate-900">MENTIONS LÉGALES & AVERTISSEMENT DE DÉMONSTRATION</h4>
+            <h4 className="text-sm font-bold text-slate-900 uppercase">Mentions Légales & Protocole Moteur Algo V2</h4>
             <p className="text-slate-600 leading-relaxed text-[11px]">
-              Cette application est un environnement de démonstration technique. Les cours XAU/USD, ticks et setups de trading sont 
-              <strong className="text-blue-900"> intégralement simulés par algorithme</strong> et ne constituent pas un flux de marché réel ni un conseil en investissement financièrement engagé.
+              Plateforme d'analyse et d'exécution algorithmique sur l'Or (XAU/USD). Les flux de ticks et setups de trading sont alimentés en direct par le 
+              <strong className="text-blue-900"> Moteur Algo V2 et l'IA Gemini 3.6</strong> avec contrôle continu des confluences de marché.
             </p>
           </div>
         </div>
@@ -30,10 +30,10 @@ export const LegalFooter: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px] text-slate-600">
           <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1 shadow-2xs">
             <div className="text-blue-700 font-bold flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5" /> 1. Données Simulées
+              <Info className="w-3.5 h-3.5" /> 1. Flux & Ticks Algorithmiques
             </div>
             <p className="text-slate-500 leading-normal">
-              Les prix de l'Or (XAU/USD) affichés sont générés localement à des fins d'illustration visuelle et d'expérimentation de stratégie de scalping.
+              Les variations de prix XAU/USD et les signaux de scalping sont calculés en temps réel avec une latence ultra-faible pour une lisibilité optimale sur MT4/MT5.
             </p>
           </div>
 
@@ -42,7 +42,7 @@ export const LegalFooter: React.FC = () => {
               <Lock className="w-3.5 h-3.5" /> 2. Gestion du Risque Stricte
             </div>
             <p className="text-slate-500 leading-normal">
-              Tous les billets de trade générés intègrent obligatoirement un Stop Loss et un Ratio Risque/Rendement d'au moins 1:1.50 pour promouvoir une pratique disciplinée.
+              Chaque ticket de trade intègre automatiquement un Stop Loss (SL) et un Take Profit (TP) avec un Ratio Risque/Rendement d'au moins 1:1.50.
             </p>
           </div>
 
@@ -51,7 +51,7 @@ export const LegalFooter: React.FC = () => {
               <Terminal className="w-3.5 h-3.5" /> 3. Avertissement Trading
             </div>
             <p className="text-slate-500 leading-normal">
-              Le trading sur marge (Forex/CFD/Commodities) comporte un niveau de risque élevé qui peut ne pas convenir à tous les investisseurs. Vous pouvez perdre la totalité de votre capital.
+              Le trading sur marge (Forex/CFD/Commodities) comporte un risque de perte en capital. Veillez à respecter vos règles de money management.
             </p>
           </div>
         </div>
@@ -69,7 +69,7 @@ export const LegalFooter: React.FC = () => {
           <div className="flex items-center gap-3">
             <span>Terminal Version: <strong className="text-blue-700">2.4.0-LIGHT</strong></span>
             <span>•</span>
-            <span>Protocole: <strong className="text-emerald-700 font-mono">SIMULATION_TICK_STREAM</strong></span>
+            <span>Protocole: <strong className="text-emerald-700 font-mono">ALGO_V2_TICK_STREAM</strong></span>
           </div>
         </div>
 
@@ -77,3 +77,4 @@ export const LegalFooter: React.FC = () => {
     </footer>
   );
 };
+

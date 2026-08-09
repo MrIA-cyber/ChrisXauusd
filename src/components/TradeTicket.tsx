@@ -133,7 +133,7 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: 'easeOut', delay: index * 0.06 }}
       onClick={handleTicketClick}
-      className={`rounded-[20px] border transition-all duration-300 hover:-translate-y-1 cursor-pointer group relative overflow-hidden backdrop-blur-md shadow-[0_10px_30px_rgba(15,23,42,0.06)] ${
+      className={`rounded-[18px] sm:rounded-[22px] border transition-all duration-300 hover:-translate-y-1 cursor-pointer group relative overflow-hidden backdrop-blur-md shadow-[0_10px_30px_rgba(15,23,42,0.06)] ${
         isActive
           ? 'bg-[var(--bg-card)] border-amber-300/80 dark:border-amber-700/60 hover:border-amber-400'
           : isTpHit
@@ -145,25 +145,25 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
       <div className={`h-1 w-full ${isActive ? 'bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600' : isTpHit ? 'bg-gradient-to-r from-emerald-500 to-teal-600' : 'bg-gradient-to-r from-rose-500 to-red-600'}`} />
 
       {/* Ticket Header */}
-      <div className="bg-[#030B16] px-4 py-2.5 flex items-center justify-between gap-2 border-b border-slate-800">
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono font-bold text-amber-400 tracking-widest uppercase">
+      <div className="bg-[#030B16] px-3 sm:px-4 py-2 sm:py-2.5 flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2 border-b border-slate-800">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="text-[10px] sm:text-[11px] font-mono font-bold text-amber-400 tracking-wider sm:tracking-widest uppercase">
             {setup.ticketNumber}
           </span>
-          <span className="text-[10px] font-mono text-slate-300 bg-[#071426] px-2 py-0.5 rounded-full border border-slate-800 shadow-2xs">
+          <span className="text-[9px] sm:text-[10px] font-mono text-slate-300 bg-[#071426] px-1.5 sm:px-2 py-0.5 rounded-full border border-slate-800 shadow-2xs">
             {setup.timeframe}
           </span>
         </div>
 
         {/* Quality Confidence Badge */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               setShowConfluenceDetails(!showConfluenceDetails);
             }}
-            className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border transition-transform active:scale-95 ${
+            className={`inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-mono font-bold px-2 sm:px-2.5 py-0.5 rounded-full border transition-transform active:scale-95 ${
               grade === 'A+'
                 ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700 hover:bg-amber-100'
                 : grade === 'A'
@@ -185,19 +185,19 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
 
           {/* Status Badge */}
           {isActive && (
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 px-2.5 py-0.5 rounded-full animate-pulse-badge">
+            <span className="inline-flex items-center gap-1 sm:gap-1.5 text-[9px] sm:text-[10px] font-mono font-bold text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 px-2 sm:px-2.5 py-0.5 rounded-full animate-pulse-badge">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
               EN COURS
             </span>
           )}
           {isTpHit && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-900 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 px-2.5 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-mono font-bold text-emerald-900 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 px-2 sm:px-2.5 py-0.5 rounded-full">
               <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
               TP (+{setup.rewardPips}p)
             </span>
           )}
           {isSlHit && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-rose-900 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-700 px-2.5 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-mono font-bold text-rose-900 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-700 px-2 sm:px-2.5 py-0.5 rounded-full">
               <XCircle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
               SL (-{setup.riskPips}p)
             </span>
@@ -206,24 +206,24 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
       </div>
 
       {/* Ticket Body Content */}
-      <div className="p-4 space-y-3.5 font-sans">
+      <div className="p-3 sm:p-4 space-y-2.5 sm:space-y-3.5 font-sans">
         
         {/* Direction, Symbol & Risk:Reward Header */}
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
           {isVisitor ? (
             <div
               onClick={triggerLockedShake}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black font-mono tracking-wider bg-blue-50 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-400/50 shadow-2xs cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-black font-mono tracking-wider bg-blue-50 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-400/50 shadow-2xs cursor-pointer ${
                 isShaking ? 'animate-shake' : ''
               }`}
             >
-              <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
               <span>🔒 SETUP VERROUILLÉ (TRADER VIP)</span>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <div
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black font-mono tracking-wider shadow-sm ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl text-xs sm:text-sm font-black font-mono tracking-wider shadow-sm ${
                   isBuy
                     ? 'bg-emerald-500 text-white border border-emerald-400 shadow-emerald-500/20'
                     : 'bg-rose-600 text-white border border-rose-500 shadow-rose-500/20'
@@ -241,14 +241,14 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
                   </>
                 )}
               </div>
-              <span className="text-xs font-black font-mono text-slate-800 dark:text-slate-100 bg-slate-200/80 dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-slate-300 dark:border-slate-700">
+              <span className="text-[10px] sm:text-xs font-black font-mono text-slate-800 dark:text-slate-100 bg-slate-200/80 dark:bg-slate-800 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-xl border border-slate-300 dark:border-slate-700">
                 XAU/USD
               </span>
             </div>
           )}
 
-          <div className="flex items-center gap-1.5 bg-blue-50 text-blue-900 dark:bg-blue-950/50 border border-blue-300 dark:border-blue-700/80 px-3 py-1.5 rounded-xl text-xs font-mono dark:text-blue-300 font-black">
-            <Award className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+          <div className="flex items-center gap-1 sm:gap-1.5 bg-blue-50 text-blue-900 dark:bg-blue-950/50 border border-blue-300 dark:border-blue-700/80 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-mono dark:text-blue-300 font-black">
+            <Award className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
             <span>R:R 1:{setup.rrRatio}</span>
           </div>
         </div>
@@ -256,45 +256,45 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
         {/* Core Trading Levels Grid (Entry, SL, TP) - High Contrast Readable Blocks */}
         <div
           onClick={triggerLockedShake}
-          className={`grid grid-cols-1 sm:grid-cols-3 gap-2 relative transition-transform ${
+          className={`grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2 relative transition-transform ${
             isShaking ? 'animate-shake' : ''
           }`}
         >
           {/* Entry Price Block */}
-          <div className="bg-slate-100 dark:bg-slate-800/90 p-3 rounded-2xl border border-slate-300 dark:border-slate-700/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
-            <div className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide flex items-center gap-1">
-              <Target className="w-3 h-3 text-blue-500" /> 1. PRIX D'ENTRÉE
+          <div className="bg-slate-100 dark:bg-slate-800/90 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-slate-300 dark:border-slate-700/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
+            <div className="text-[9px] sm:text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide flex items-center gap-1">
+              <Target className="w-3 h-3 text-blue-500 shrink-0" /> 1. PRIX D'ENTRÉE
             </div>
-            <div className={`text-sm sm:text-base font-extrabold font-mono text-slate-900 dark:text-white tracking-tight ${isVisitor ? 'blur-[4px] select-none text-slate-400' : ''}`}>
+            <div className={`text-xs sm:text-sm md:text-base font-extrabold font-mono text-slate-900 dark:text-white tracking-tight ${isVisitor ? 'blur-[4px] select-none text-slate-400' : ''}`}>
               {isVisitor ? '$2,3XX.XX' : `$${setup.entryPrice.toFixed(2)}`}
             </div>
           </div>
 
           {/* Stop Loss Block */}
-          <div className="bg-rose-500/10 dark:bg-rose-950/40 p-3 rounded-2xl border border-rose-300 dark:border-rose-800/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
-            <div className="text-[10px] font-mono font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wide flex items-center gap-1">
-              <ShieldAlert className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" /> 2. STOP LOSS (SL)
+          <div className="bg-rose-500/10 dark:bg-rose-950/40 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-rose-300 dark:border-rose-800/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
+            <div className="text-[9px] sm:text-[10px] font-mono font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wide flex items-center gap-1">
+              <ShieldAlert className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" /> 2. STOP LOSS (SL)
             </div>
             <div className="flex sm:flex-col items-center sm:items-start gap-1">
-              <div className={`text-sm sm:text-base font-extrabold font-mono text-rose-700 dark:text-rose-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
+              <div className={`text-xs sm:text-sm md:text-base font-extrabold font-mono text-rose-700 dark:text-rose-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
                 {isVisitor ? '$2,3XX.XX' : `$${setup.stopLoss.toFixed(2)}`}
               </div>
-              <span className="text-[10px] font-mono font-bold text-rose-800 dark:text-rose-300 bg-rose-200/80 dark:bg-rose-900/60 px-2 py-0.5 rounded-md border border-rose-300 dark:border-rose-700">
+              <span className="text-[9px] sm:text-[10px] font-mono font-bold text-rose-800 dark:text-rose-300 bg-rose-200/80 dark:bg-rose-900/60 px-1.5 sm:px-2 py-0.5 rounded-md border border-rose-300 dark:border-rose-700">
                 {isVisitor ? '-•• pips' : `-${setup.riskPips} pips`}
               </span>
             </div>
           </div>
 
           {/* Take Profit Block */}
-          <div className="bg-emerald-500/10 dark:bg-emerald-950/40 p-3 rounded-2xl border border-emerald-300 dark:border-emerald-800/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
-            <div className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> 3. TAKE PROFIT (TP)
+          <div className="bg-emerald-500/10 dark:bg-emerald-950/40 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-emerald-300 dark:border-emerald-800/80 flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
+            <div className="text-[9px] sm:text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" /> 3. TAKE PROFIT (TP)
             </div>
             <div className="flex sm:flex-col items-center sm:items-start gap-1">
-              <div className={`text-sm sm:text-base font-extrabold font-mono text-emerald-700 dark:text-emerald-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
+              <div className={`text-xs sm:text-sm md:text-base font-extrabold font-mono text-emerald-700 dark:text-emerald-400 tracking-tight ${isVisitor ? 'blur-[4px] select-none' : ''}`}>
                 {isVisitor ? '$2,3XX.XX' : `$${setup.takeProfit.toFixed(2)}`}
               </div>
-              <span className="text-[10px] font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-200/80 dark:bg-emerald-900/60 px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-700">
+              <span className="text-[9px] sm:text-[10px] font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-200/80 dark:bg-emerald-900/60 px-1.5 sm:px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-700">
                 {isVisitor ? '+•• pips' : `+${setup.rewardPips} pips`}
               </span>
             </div>
@@ -303,18 +303,18 @@ Généré par Terminal ChrisXauusd Pro (Format MT4 / MT5)`;
 
         {/* Quick Express Summary Banner */}
         {!isVisitor && (
-          <div className="p-2.5 rounded-xl bg-slate-900 text-slate-100 dark:bg-slate-950 dark:text-slate-200 border border-slate-700/80 font-mono text-[11px] flex items-center justify-between gap-2 shadow-inner">
-            <div className="flex items-center gap-1.5 font-bold overflow-hidden">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900 text-slate-100 dark:bg-slate-950 dark:text-slate-200 border border-slate-700/80 font-mono text-[10px] sm:text-[11px] flex items-center justify-between gap-1.5 sm:gap-2 shadow-inner">
+            <div className="flex items-center gap-1 sm:gap-1.5 font-bold overflow-hidden">
               <span className="text-amber-400 shrink-0">📋</span>
               <span className="truncate">
                 {isBuy ? 'ACHAT' : 'VENTE'} @ <span className="text-white font-black">${setup.entryPrice.toFixed(2)}</span>
-                <span className="text-slate-400 mx-1">|</span>
+                <span className="text-slate-400 mx-0.5 sm:mx-1">|</span>
                 SL: <span className="text-rose-400 font-bold">${setup.stopLoss.toFixed(2)}</span>
-                <span className="text-slate-400 mx-1">|</span>
+                <span className="text-slate-400 mx-0.5 sm:mx-1">|</span>
                 TP: <span className="text-emerald-400 font-bold">${setup.takeProfit.toFixed(2)}</span>
               </span>
             </div>
-            <span className="text-[9px] bg-slate-800 text-amber-300 px-2 py-0.5 rounded font-bold shrink-0">
+            <span className="text-[8px] sm:text-[9px] bg-slate-800 text-amber-300 px-1.5 sm:px-2 py-0.5 rounded font-bold shrink-0">
               Prêt MT4/MT5
             </span>
           </div>
