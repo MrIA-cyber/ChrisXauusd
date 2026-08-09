@@ -81,7 +81,7 @@ export const AIPredictiveSentimentModule: React.FC<AIPredictiveSentimentModulePr
         sentimentLabel: 'BULLISH',
         confidenceLevel: 89,
         predictedPriceBias: '+$18.50 à +$34.00 sur XAU/USD (Modèle Intraday M5/H1)',
-        summaryText: "Analyse macroéconomique Gemini IA en direct : Les anticipations de baisse de taux de la Réserve Fédérale (Fed) associées à une inflation persistante renforcent la dynamique haussière sur l'Or. Le canal d'accumulation institutionnel reste sous contrôle des acheteurs.",
+        summaryText: "Analyse macroéconomique en direct : Les anticipations de baisse de taux de la Réserve Fédérale (Fed) associées à une inflation persistante renforcent la dynamique haussière sur l'Or. Le canal d'accumulation institutionnel reste sous contrôle des acheteurs.",
         macroDrivers: [
           {
             name: 'Politique Monétaire Fed & Taux',
@@ -186,7 +186,7 @@ export const AIPredictiveSentimentModule: React.FC<AIPredictiveSentimentModulePr
                 IA Prédictive & Sentiment Macro
               </h3>
               <span className="px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 flex items-center gap-1 shrink-0">
-                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-400" /> GEMINI 3.6
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-400" /> ANALYSE MACRO
               </span>
             </div>
             <p className="text-[11px] sm:text-xs text-slate-400 flex items-center gap-1 pt-0.5 leading-tight">
@@ -269,7 +269,7 @@ export const AIPredictiveSentimentModule: React.FC<AIPredictiveSentimentModulePr
                     <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" /> Biais Prédictif Intraday XAU/USD
                   </span>
                   <span className="text-[9px] sm:text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                    Source: {data.source || 'Gemini 3.6'}
+                    Source: {data.source || 'Analyse Macro'}
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans bg-slate-900/80 p-2.5 sm:p-3 rounded-lg border border-slate-800/80">

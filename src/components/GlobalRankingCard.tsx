@@ -59,7 +59,7 @@ export const GlobalRankingCard: React.FC = () => {
               ChrisXauusd Gold Scalping Terminal
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Évaluation dynamique calculée en temps réel via les flux du Moteur V2 Algo, la latence serveur et le taux de réussite.
+              Évaluation dynamique calculée en temps réel via la latence serveur, le taux de réussite et les métriques d'exécution.
             </p>
           </div>
         </div>
@@ -84,7 +84,7 @@ export const GlobalRankingCard: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
         <div className="bg-slate-950/70 border border-slate-800 p-3 rounded-xl space-y-1">
           <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Moteur V2 Algo
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Moteur SMC Live
           </div>
           <div className="text-lg sm:text-xl font-mono font-bold text-emerald-400">
             98.4%
@@ -140,7 +140,7 @@ export const GlobalRankingCard: React.FC = () => {
         {/* Bar 1: Algorithmic Precision */}
         <div className="space-y-1">
           <div className="flex justify-between text-xs font-mono">
-            <span className="text-slate-300">Précision des Signaux M1/M5 Order Block (Moteur V2)</span>
+            <span className="text-slate-300">Précision des Signaux M1/M5 Order Block</span>
             <span className="font-bold text-amber-300">99 / 100</span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden p-0.5 border border-slate-700">
@@ -183,19 +183,19 @@ export const GlobalRankingCard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-1.5">
                 <div className="font-mono font-bold text-amber-300 flex items-center gap-1.5">
-                  <Cpu className="w-4 h-4 text-amber-400" /> 1. Précision Moteur Algorithmique V2
+                  <Cpu className="w-4 h-4 text-amber-400" /> 1. Précision Algorithmique SMC
                 </div>
                 <p className="text-slate-300 leading-relaxed text-[11px]">
-                  Le moteur V2 analyse en continu les déséquilibres SMC (Fair Value Gaps, Liquidity Pools) sur M1/M5. Filtrage strict éliminant les faux cassures avant la session de Londres et New York.
+                  Analyse en continu des déséquilibres SMC (Fair Value Gaps, Liquidity Pools) sur M1/M5. Filtrage strict éliminant les faux cassures avant la session de Londres et New York.
                 </p>
               </div>
 
               <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-1.5">
                 <div className="font-mono font-bold text-cyan-300 flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-cyan-400" /> 2. Intelligence IA Gemini 3.6
+                  <Sparkles className="w-4 h-4 text-cyan-400" /> 2. Analyse Macroéconomique
                 </div>
                 <p className="text-slate-300 leading-relaxed text-[11px]">
-                  Analyse fondamentale automatisée des flux Reuters/Bloomberg (Fed, CPI, NFP, tensions géopolitiques) pour pondérer la probabilité de réussite de chaque signal intraday.
+                  Analyse fondamentale des flux d'actualités (Fed, CPI, NFP, tensions géopolitiques) pour pondérer la probabilité de réussite de chaque signal intraday.
                 </p>
               </div>
 

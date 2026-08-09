@@ -847,7 +847,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
               <div className="py-12 text-center space-y-3 font-mono">
                 <Brain className="w-8 h-8 text-cyan-400 animate-spin mx-auto" />
                 <p className="text-xs text-cyan-300 animate-pulse">
-                  Chargement asynchrone du module IA Gemini...
+                  Chargement du module d'analyse macroéconomique...
                 </p>
               </div>
             }>

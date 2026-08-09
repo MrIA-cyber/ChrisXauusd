@@ -9,7 +9,7 @@ export const LegalFooter: React.FC = () => {
         
         {/* Discrete Risk Disclaimer */}
         <p className="text-[11px] sm:text-xs text-slate-500 text-center sm:text-left leading-relaxed">
-          Le trading comporte un risque de perte en capital. Les signaux et analyses sont générés par l'Algorithme Moteur V2 à titre décisionnel et d'assistance au trading.
+          Le trading comporte un risque de perte en capital. Les signaux et analyses sont fournis à titre décisionnel et d'assistance au trading.
         </p>
 
         {/* Main Disclaimer Banner */}
@@ -18,10 +18,9 @@ export const LegalFooter: React.FC = () => {
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div className="space-y-1">
-            <h4 className="text-sm font-bold text-slate-900 uppercase">Mentions Légales & Protocole Moteur Algo V2</h4>
+            <h4 className="text-sm font-bold text-slate-900 uppercase">Mentions Légales & Protocole de Trading</h4>
             <p className="text-slate-600 leading-relaxed text-[11px]">
-              Plateforme d'analyse et d'exécution algorithmique sur l'Or (XAU/USD). Les flux de ticks et setups de trading sont alimentés en direct par le 
-              <strong className="text-blue-900"> Moteur Algo V2 et l'IA Gemini 3.6</strong> avec contrôle continu des confluences de marché.
+              Plateforme d'analyse et d'exécution sur l'Or (XAU/USD). Les flux de cotations et setups de trading sont calculés en temps réel avec contrôle continu des confluences de marché.
             </p>
           </div>
         </div>
@@ -69,7 +68,7 @@ export const LegalFooter: React.FC = () => {
           <div className="flex items-center gap-3">
             <span>Terminal Version: <strong className="text-blue-700">2.4.0-LIGHT</strong></span>
             <span>•</span>
-            <span>Protocole: <strong className="text-emerald-700 font-mono">ALGO_V2_TICK_STREAM</strong></span>
+            <span>Protocole: <strong className="text-emerald-700 font-mono">LIVE_TICK_STREAM</strong></span>
           </div>
         </div>
 
