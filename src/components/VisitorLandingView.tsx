@@ -12,7 +12,6 @@ import {
   Bot,
   BarChart3,
   Bell,
-  Layers,
   Star,
   Quote,
   Users,
@@ -22,10 +21,9 @@ import {
   ChevronRight,
   Award,
   Activity,
-  Globe,
   Lock,
   LogIn,
-  Brain
+  Brain,
 } from 'lucide-react';
 import { GlobalRankingCard } from './GlobalRankingCard';
 
@@ -34,7 +32,6 @@ interface VisitorLandingViewProps {
   onOpenLoginModal: () => void;
 }
 
-// 1. Testimonials Data
 interface Testimonial {
   id: string;
   name: string;
@@ -59,19 +56,19 @@ const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     date: 'Il y a 2 jours',
     badge: 'Avis vérifié',
-    comment: 'La précision des signaux sur XAU/USD est impressionnante. Les Stop Loss sont stricts et le ratio risque/rendement de 1:2.5 est régulièrement atteint. Une plateforme indispensable.'
+    comment: 'La précision des signaux sur XAU/USD est impressionnante. Les Stop Loss sont stricts et le ratio R:R de 1:2.5 est très souvent atteint.',
   },
   {
     id: '2',
     name: 'Yves K.',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-    country: 'Côte d\'Ivoire',
+    country: "Côte d'Ivoire",
     flag: '🇨🇮',
     level: 'Professionnel',
     rating: 5,
     date: 'Il y a 3 jours',
     badge: 'Avis vérifié',
-    comment: 'Les confluences M1 et M5 pendant la session de Londres font toute la différence. Plus de trades pris au hasard, uniquement des setups filtrés par l\'IA.'
+    comment: 'Les confluences M1 et M5 pendant la session de Londres font toute la différence. Plus de prises au hasard, uniquement des setups filtrés.',
   },
   {
     id: '3',
@@ -83,7 +80,7 @@ const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     date: 'Il y a 5 jours',
     badge: 'Avis vérifié',
-    comment: 'En tant que débutante, la clarté des prix d\'entrée et des objectifs TP1/TP2 m\'a permis de gérer mon risque très facilement. Je recommande à 100%.'
+    comment: "La clarté des prix d'entrée et des TP1/TP2 m'a permis de gérer mon risque très facilement dès la première semaine.",
   },
   {
     id: '4',
@@ -95,739 +92,391 @@ const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     date: 'Il y a 1 semaine',
     badge: 'Avis vérifié',
-    comment: 'Excellente discipline de risk management. Chris partage des plans clairs et structurés. C\'est un véritable terminal institutionnel pour l\'Or.'
+    comment: 'Excellente discipline de gestion du risque. Chris partage des plans clairs. C\'est un véritable terminal institutionnel.',
   },
-  {
-    id: '5',
-    name: 'Karim B.',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
-    country: 'Maroc',
-    flag: '🇲🇦',
-    level: 'Professionnel',
-    rating: 5,
-    date: 'Il y a 1 semaine',
-    badge: 'Avis vérifié',
-    comment: 'Interface réactive, zéro bruit inutile. L\'exécution des notifications est instantanée dès que la confluence SMC est validée.'
-  },
-  {
-    id: '6',
-    name: 'Cédric N.',
-    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&q=80',
-    country: 'Gabon',
-    flag: '🇬🇦',
-    level: 'Confirmé',
-    rating: 5,
-    date: 'Il y a 2 semaines',
-    badge: 'Avis vérifié',
-    comment: 'Très bonne expérience. Les niveaux de Take Profit et Stop Loss sont clairement indiqués en pips. Un outil de trading d\'une grande qualité.'
-  }
 ];
 
-// 2. Inspiring Trader Quotes
-interface InspirationalQuote {
-  id: string;
-  author: string;
-  role: string;
-  quote: string;
-  image: string;
-}
-
-const INSPIRATIONAL_QUOTES: InspirationalQuote[] = [
+const INSPIRATIONAL_QUOTES = [
   {
-    id: 'q1',
     author: 'Warren Buffett',
-    role: 'Président de Berkshire Hathaway',
     quote: 'La règle n°1 est de ne jamais perdre d\'argent. La règle n°2 est de ne jamais oublier la règle n°1.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80'
   },
   {
-    id: 'q2',
     author: 'Ray Dalio',
-    role: 'Fondateur de Bridgewater Associates',
-    quote: 'Si vous n\'êtes pas agressif, vous ne ferez pas d\'argent ; et si vous n\'avez pas de gestion du risque, vous ne garderez pas votre argent.',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80'
+    quote: 'Si vous n\'avez pas de gestion du risque, vous ne garderez pas votre argent sur le long terme.',
   },
   {
-    id: 'q3',
-    author: 'Paul Tudor Jones',
-    role: 'Fondateur de Tudor Investment',
-    quote: 'L\'élément le plus important dans le trading est la gestion du risque. Je cherche toujours un ratio Risque/Rendement de 1 à 5.',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&q=80'
-  },
-  {
-    id: 'q4',
-    author: 'Jesse Livermore',
-    role: 'Légende du Trading',
-    quote: 'Les marchés ne se trompent jamais, les opinions si. L\'argent se fait en sachant analyser la tendance et attendre le bon moment.',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80'
-  },
-  {
-    id: 'q5',
     author: 'Mark Douglas',
-    role: 'Auteur de Trading in the Zone',
-    quote: 'Un trader d\'élite n\'essaie pas de prédire le marché. Il exécute un avantage statistique sans hésitation ni émotion.',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80'
+    quote: 'Un trader d\'élite exécute un avantage statistique sans hésitation ni émotion.',
   },
-  {
-    id: 'q6',
-    author: 'Stanley Druckenmiller',
-    role: 'Gérant de Duquesne Capital',
-    quote: 'Ce n\'est pas d\'avoir raison ou tort qui compte, c\'est combien vous gagnez quand vous avez raison et combien vous perdez quand vous avez tort.',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80'
-  }
 ];
 
 export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
   onOpenSubscribeModal,
-  onOpenLoginModal
+  onOpenLoginModal,
 }) => {
   const [activeTestimonialIdx, setActiveTestimonialIdx] = useState(0);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const [activeDemoTab, setActiveDemoTab] = useState<'terminal' | 'signal'>('signal');
 
   useEffect(() => {
     if (isCarouselPaused) return;
     const timer = setInterval(() => {
       setActiveTestimonialIdx((prev) => (prev + 1) % TESTIMONIALS.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, [isCarouselPaused]);
 
   return (
-    <div className="space-y-12 lg:space-y-20 py-4 sm:py-8 relative z-10 font-sans max-w-7xl mx-auto px-3 sm:px-6">
+    <div className="space-y-6 sm:space-y-8 py-2 font-sans max-w-2xl mx-auto px-1 sm:px-0">
       
-      {/* ==========================================
-          1. HERO SECTION (Carte Premium Imposante)
-      ========================================== */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="relative overflow-hidden rounded-[24px] bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 sm:p-10 lg:p-16 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-2xl transition-all"
-      >
-        {/* Subtle Ambient Aura Glow */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-amber-400/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.04)_0%,transparent_70%)] pointer-events-none" />
+      {/* 1. COMPACT ELEGANT HERO HEADER */}
+      <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xs relative overflow-hidden space-y-5 text-center">
+        {/* Glow backdrop */}
+        <div className="absolute -top-20 -left-20 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6 sm:space-y-10">
-          
-          {/* Header Tag / Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-300 font-sans text-[11px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest shadow-xs">
-            <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-            <span>ChrisXauusd Premium</span>
+        <div className="relative z-10 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-mono text-[11px] font-bold uppercase">
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
+            <span>Terminal Institutionnel • XAU/USD</span>
             <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
           </div>
 
-          {/* Imposing Title & Subtitle with max width constraint */}
-          <div className="space-y-3 sm:space-y-4">
-            <h1 className="text-lg sm:text-2xl lg:text-3xl font-extrabold font-sans text-slate-900 dark:text-slate-100 tracking-tight leading-snug break-words">
-              Signaux XAU/USD à Haute Probabilité
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto font-sans leading-relaxed">
-              Des signaux XAU/USD générés par une intelligence artificielle spécialisée, avec validation multi-confluence et gestion avancée du risque.
-            </p>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono tracking-tight leading-snug">
+            Signaux XAU/USD à Haute Probabilité
+          </h1>
 
-          {/* Feature Checklist Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 pt-2 text-left max-w-3xl mx-auto">
-            {[
-              { title: 'Analyse en temps réel', desc: 'M1 & M5 scalping continu' },
-              { title: 'Entrées précises', desc: 'Zones d\'Order Block & SMC' },
-              { title: 'Stop Loss optimisés', desc: 'Protection stricte du capital' },
-              { title: 'IA prédictive', desc: 'Modèles algorithmiques prédictifs XAU/USD' },
-              { title: 'Analyse de sentiments', desc: 'Sondage & flux du marché en temps réel' },
-              { title: 'Take Profit intelligents', desc: 'Objectifs graduels TP1/TP2' },
-              { title: 'Notifications instantanées', desc: 'Alertes en direct sur terminal' },
-              { title: 'Journal statistique', desc: 'Transparence totale des résultats' },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 hover:border-amber-400 dark:hover:border-amber-500 transition-all group"
-              >
-                <div className="w-7 h-7 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5 group-hover:scale-110 transition-transform">
-                  <CheckCircle2 className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 font-sans">{item.title}</h4>
-                  <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-sans mt-0.5">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* CTAs: Primary & Secondary */}
-          <div className="pt-2 sm:pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto">
-            {/* Primary Electric Cyan Button */}
-            <button
-              onClick={onOpenSubscribeModal}
-              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-[#00E5FF] hover:bg-[#00E5FF]/80 text-[#030B16] font-black text-sm sm:text-base px-4 sm:px-6 rounded-2xl shadow-[0_0_20px_rgba(0,229,255,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group relative overflow-hidden cursor-pointer"
-            >
-              <Sparkles className="w-5 h-5 fill-[#030B16] text-[#030B16] group-hover:rotate-12 transition-transform shrink-0" />
-              <span>Devenir Trader VIP</span>
-              <ArrowRight className="w-5 h-5 text-[#030B16] group-hover:translate-x-1 transition-transform shrink-0" />
-            </button>
-
-            {/* Secondary Dark Sapphire Button */}
-            <button
-              onClick={onOpenLoginModal}
-              className="w-full sm:w-1/2 min-h-[52px] sm:h-[58px] py-3 bg-[#071426] hover:bg-[#071426]/80 border border-[#00E5FF]/30 text-slate-200 hover:text-white text-xs sm:text-sm font-bold px-4 sm:px-6 rounded-2xl transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-xs cursor-pointer"
-            >
-              <LogIn className="w-4 h-4 text-[#00E5FF] shrink-0" />
-              <span>Déjà membre ? Se connecter</span>
-            </button>
-          </div>
-
-        </div>
-      </motion.section>
-
-      {/* Global Estimated Ranking Card */}
-      <GlobalRankingCard />
-
-      {/* ==========================================
-          2. KPI DASHBOARD BLOCK (5 Cards with Sparkline charts & 20px corners)
-      ========================================== */}
-      <section className="space-y-6">
-        <div className="text-center space-y-1">
-          <h2 className="text-[11px] font-bold uppercase tracking-widest text-[#00E5FF]">
-            DASHBOARD KPI INSTITUTIONNEL
-          </h2>
-          <p className="text-lg sm:text-xl font-bold text-white">Performance Globale de la Plateforme</p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {[
-            {
-              label: 'Taux de réussite',
-              value: '88.4%',
-              icon: TrendingUp,
-              color: 'text-[#22C55E]',
-              bg: 'bg-[#22C55E]/10 border-[#22C55E]/30',
-              sub: 'Calculé sur +500 trades',
-              sparkline: [45, 50, 62, 58, 70, 75, 88]
-            },
-            {
-              label: 'Signaux aujourd\'hui',
-              value: '3 - 5 / jour',
-              icon: Activity,
-              color: 'text-[#00E5FF]',
-              bg: 'bg-[#00E5FF]/10 border-[#00E5FF]/30',
-              sub: 'Filtrés par haute probabilité',
-              sparkline: [30, 40, 35, 50, 60, 55, 70]
-            },
-            {
-              label: 'Ratio Risque/Rendement',
-              value: '1 : 2.50',
-              icon: Target,
-              color: 'text-blue-400',
-              bg: 'bg-blue-950/60 border-blue-800',
-              sub: 'Minimum garanti R:R 1:1.5',
-              sparkline: [20, 35, 45, 40, 65, 70, 80]
-            },
-            {
-              label: 'Temps de réaction',
-              value: '< 1 sec',
-              icon: Zap,
-              color: 'text-purple-400',
-              bg: 'bg-purple-950/60 border-purple-800',
-              sub: 'Émetteur M1/M5 ultra rapide',
-              sparkline: [80, 75, 60, 40, 25, 15, 10]
-            },
-            {
-              label: 'Membres Premium',
-              value: '1 420+',
-              icon: Users,
-              color: 'text-sky-400',
-              bg: 'bg-sky-950/60 border-sky-800',
-              sub: 'Traders actifs en Afrique & Europe',
-              sparkline: [10, 25, 40, 60, 80, 100, 120]
-            }
-          ].map((stat, idx) => {
-            const IconComponent = stat.icon;
-            // Build sparkline path
-            const sparkPoints = stat.sparkline
-              .map((val, i) => `${(i / (stat.sparkline.length - 1)) * 120},${40 - (val / 120) * 32}`)
-              .join(' ');
-
-            return (
-              <div
-                key={idx}
-                className="bg-[#071426] border border-[#00E5FF]/20 p-5 rounded-[20px] shadow-md hover:border-[#00E5FF]/50 transition-all flex flex-col justify-between group space-y-4 text-slate-100"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-400">{stat.label}</span>
-                  <div className={`p-2 rounded-xl border ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
-                    <IconComponent className="w-4 h-4" />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="text-lg sm:text-xl font-bold font-mono text-white tracking-tight">
-                    {stat.value}
-                  </div>
-                  <div className="text-[11px] text-slate-400 font-sans">{stat.sub}</div>
-                </div>
-
-                {/* KPI Mini Sparkline */}
-                <div className="h-8 w-full pt-1">
-                  <svg className="w-full h-full overflow-visible" viewBox="0 0 120 40">
-                    <polyline
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={`${stat.color} opacity-80`}
-                      points={sparkPoints}
-                    />
-                  </svg>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-
-      {/* ==========================================
-          3. SIMULATION ET TERMINAL LIVE DEMO
-      ========================================== */}
-      <section className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-[24px] p-6 sm:p-10 shadow-[0_10px_35px_rgba(15,23,42,0.06)] space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-5">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
-              <Play className="w-5 h-5 fill-amber-500/20 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div>
-              <h3 className="text-base sm:text-xl font-bold font-sans text-slate-900 dark:text-slate-100">Démonstration du Moteur d'Analyse</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-sans mt-0.5">Simulation en direct de l'exécution algorithmique sur l'Or (XAU/USD)</p>
-            </div>
-          </div>
-          <div>
-            <span className="inline-flex items-center gap-2 text-xs font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 px-3.5 py-1.5 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              TERMINAL LIVE ACTIVE
-            </span>
-          </div>
-        </div>
-
-        {/* Animated Terminal Screen Box */}
-        <div className="relative rounded-2xl bg-slate-900 border border-slate-800 p-5 sm:p-7 font-mono text-xs space-y-4 overflow-hidden shadow-inner text-slate-100">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
-              <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" />
-              <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
-              <span className="text-slate-400 text-xs ml-2 font-mono">chrisxauusd-engine-v4.2.0</span>
-            </div>
-            <span className="text-xs text-amber-400 font-mono font-bold">XAU/USD M5 Scalp Radar</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2 bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
-              <div className="text-xs text-slate-400 font-bold uppercase flex items-center gap-2">
-                <Bot className="w-4 h-4 text-amber-400" /> SCANNER SENSITIVE SMC
-              </div>
-              <div className="space-y-2 text-xs text-slate-300">
-                <div className="flex justify-between text-slate-400">
-                  <span>Instrument :</span> <span className="text-white font-bold">XAU/USD</span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>Session :</span> <span className="text-amber-300 font-bold">New York Open</span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>Score Confluence :</span> <span className="text-emerald-400 font-bold">94% High</span>
-                </div>
-                <div className="flex justify-between text-slate-400">
-                  <span>Order Block M5 :</span> <span className="text-emerald-400 font-bold">2,742.50 Validé</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2 bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
-              <div className="text-xs text-slate-400 font-bold uppercase flex items-center gap-2">
-                <Activity className="w-4 h-4 text-emerald-400" /> FLUX DU PRIX TEMPS RÉEL
-              </div>
-              <div className="space-y-2.5">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-400">Prix Actuel :</span>
-                  <span className="text-emerald-400 font-bold text-base">2 748.20 $</span>
-                </div>
-                <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden relative">
-                  <div className="bg-gradient-to-r from-emerald-500 to-amber-400 h-full w-3/4 rounded-full animate-pulse" />
-                </div>
-                <div className="flex justify-between text-[11px] text-slate-400">
-                  <span>Entrée: 2 742.50</span>
-                  <span className="text-emerald-400 font-bold">+57 Pips</span>
-                  <span>TP1: 2 750.00</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2 bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
-              <div className="text-xs text-slate-400 font-bold uppercase flex items-center gap-2">
-                <Bell className="w-4 h-4 text-blue-400" /> NOTIFICATIONS VIP
-              </div>
-              <div className="bg-emerald-950/60 border border-emerald-500/40 p-3 rounded-xl space-y-1">
-                <div className="flex items-center justify-between text-[11px] text-emerald-300 font-bold">
-                  <span>🟢 SIGNAL VALIDE - BUY</span>
-                  <span>14:32:05</span>
-                </div>
-                <p className="text-xs text-slate-200 font-sans">
-                  Objectif TP1 bientôt atteint. Déplacement du Stop Loss à Break-Even recommandé.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* ==========================================
-          4. APERÇU D'UN SIGNAL PREMIUM
-      ========================================== */}
-      <section className="space-y-6">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 uppercase">
-            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-600 dark:text-amber-400" />
-            EXEMPLE DE STRUCTURE
-          </div>
-          <h2 className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
-            Aperçu d'un Signal Premium
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto font-sans">
-            Exemple illustratif de la clarté et des niveaux précis reçus par les abonnés VIP lors de l'émission d'un trade.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
+            Scalping continu M1 & M5 filtré par intelligence artificielle, confluences SMC et gestion stricte du risque.
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-[0_10px_35px_rgba(15,23,42,0.06)] relative overflow-hidden space-y-5 sm:space-y-6">
-            
-            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 sm:gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                <span className="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl uppercase tracking-wider shrink-0 whitespace-nowrap shadow-xs">
-                  ACHAT / BUY
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-base sm:text-lg font-bold font-sans text-slate-900 dark:text-slate-100 truncate">XAU/USD (Or)</h3>
-                  <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-sans truncate">Exemple d'Exécution Scalping M5</p>
-                </div>
-              </div>
-              <div className="shrink-0">
-                <span className="text-[11px] sm:text-xs text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-3 py-1 rounded-full border border-amber-300 dark:border-amber-700 font-semibold shrink-0 whitespace-nowrap">
-                  Aperçu de démonstration
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-              <div className="bg-slate-50 dark:bg-slate-800/60 p-2.5 sm:p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
-                <span className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-sans font-bold uppercase tracking-tight block truncate">Prix d'Entrée</span>
-                <span className="text-xs sm:text-sm font-extrabold font-mono text-slate-900 dark:text-slate-100 whitespace-nowrap block mt-1">2 742.50 $</span>
-              </div>
-
-              <div className="bg-rose-50/90 dark:bg-rose-950/40 p-2.5 sm:p-3.5 rounded-2xl border border-rose-200 dark:border-rose-900/60">
-                <span className="text-[10px] sm:text-xs text-rose-700 dark:text-rose-300 font-sans font-bold uppercase tracking-tight block truncate">Stop Loss</span>
-                <span className="text-xs sm:text-sm font-extrabold font-mono text-rose-600 dark:text-rose-400 whitespace-nowrap block mt-1">2 737.50 $</span>
-                <span className="text-[10px] font-mono text-rose-600/90 dark:text-rose-400 block whitespace-nowrap mt-0.5">-50 Pips</span>
-              </div>
-
-              <div className="bg-emerald-50/90 dark:bg-emerald-950/40 p-2.5 sm:p-3.5 rounded-2xl border border-emerald-200 dark:border-emerald-900/60">
-                <span className="text-[10px] sm:text-xs text-emerald-800 dark:text-emerald-300 font-sans font-bold uppercase tracking-tight block truncate">Take Profit 1</span>
-                <span className="text-xs sm:text-sm font-extrabold font-mono text-emerald-600 dark:text-emerald-400 whitespace-nowrap block mt-1">2 750.00 $</span>
-                <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 block whitespace-nowrap mt-0.5">+75 Pips (1:1.5)</span>
-              </div>
-
-              <div className="bg-emerald-50/80 dark:bg-emerald-950/30 p-2.5 sm:p-3.5 rounded-2xl border border-emerald-200 dark:border-emerald-900/60">
-                <span className="text-[10px] sm:text-xs text-emerald-800 dark:text-emerald-300 font-sans font-bold uppercase tracking-tight block truncate">Take Profit 2</span>
-                <span className="text-xs sm:text-sm font-extrabold font-mono text-emerald-700 dark:text-emerald-400 whitespace-nowrap block mt-1">2 760.00 $</span>
-                <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 block whitespace-nowrap mt-0.5">+175 Pips (1:3.5)</span>
-              </div>
-            </div>
-
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-              <span className="text-[10px] sm:text-xs font-sans font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
-                Confluences Validées par l'IA :
-              </span>
-              <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-sans font-medium shrink-0 whitespace-nowrap">
-                  ✓ Order Block M5
-                </span>
-                <span className="bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-sans font-medium shrink-0 whitespace-nowrap">
-                  ✓ Liquidity Sweep London
-                </span>
-                <span className="bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-sans font-medium shrink-0 whitespace-nowrap">
-                  ✓ RSI Divergence Bullish
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 p-3 sm:p-3.5 rounded-2xl text-center text-xs text-amber-900 dark:text-amber-300 font-sans">
-              🔒 <strong>Note :</strong> Les signaux actifs en temps réel sont réservés aux abonnés Premium.
-            </div>
-
+        {/* Highlight Pills */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
+          <div className="bg-slate-50 dark:bg-[#060D1E] p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
+            <div className="text-[10px] text-slate-400 font-sans">Taux de Réussite</div>
+            <div className="text-xs font-black text-emerald-500 mt-0.5">88.4% Verified</div>
+          </div>
+          <div className="bg-slate-50 dark:bg-[#060D1E] p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
+            <div className="text-[10px] text-slate-400 font-sans">Ratio Risque/Rend.</div>
+            <div className="text-xs font-black text-amber-500 mt-0.5">1 : 2.50</div>
+          </div>
+          <div className="bg-slate-50 dark:bg-[#060D1E] p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
+            <div className="text-[10px] text-slate-400 font-sans">Fréquence</div>
+            <div className="text-xs font-black text-blue-500 mt-0.5">3 - 5 / jour</div>
+          </div>
+          <div className="bg-slate-50 dark:bg-[#060D1E] p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
+            <div className="text-[10px] text-slate-400 font-sans">Exécution</div>
+            <div className="text-xs font-black text-purple-500 mt-0.5">&lt; 1 sec Instant</div>
           </div>
         </div>
-      </section>
 
+        {/* Primary Call To Actions */}
+        <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+          <button
+            onClick={onOpenSubscribeModal}
+            className="flex-1 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer font-mono active:scale-98"
+          >
+            <Sparkles className="w-4 h-4 text-slate-950" />
+            <span>REJOINDRER L'ESPACE VIP (700K FCFA/MOIS)</span>
+          </button>
+          <button
+            onClick={onOpenLoginModal}
+            className="py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer font-mono"
+          >
+            <LogIn className="w-4 h-4 text-amber-500" />
+            <span>CONNEXION</span>
+          </button>
+        </div>
+      </div>
 
-      {/* ==========================================
-          5. FONCTIONNALITÉS PREMIUM MODERNISÉES
-      ========================================== */}
-      <section className="space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
-            FONCTIONNALITÉS EXCLUSIVES
-          </h2>
-          <p className="text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100">Pourquoi Choisir ChrisXauusd Premium ?</p>
+      {/* 2. GLOBAL RANKING PERFORMANCE CARD */}
+      <GlobalRankingCard />
+
+      {/* 3. DUAL-TAB DEMONSTRATION & SIGNAL SHOWCASE */}
+      <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xs space-y-4">
+        
+        {/* Switcher Header */}
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+          <div className="flex items-center gap-2">
+            <Bot className="w-4 h-4 text-amber-500" />
+            <span className="text-xs font-bold text-slate-900 dark:text-white font-mono uppercase">
+              Aperçu Interactif du Terminal
+            </span>
+          </div>
+
+          <div className="flex bg-slate-100 dark:bg-[#060D1E] p-1 rounded-xl text-[11px] font-mono">
+            <button
+              onClick={() => setActiveDemoTab('signal')}
+              className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                activeDemoTab === 'signal'
+                  ? 'bg-amber-500 text-slate-950 shadow-xs'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Signal Exemple
+            </button>
+            <button
+              onClick={() => setActiveDemoTab('terminal')}
+              className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                activeDemoTab === 'terminal'
+                  ? 'bg-amber-500 text-slate-950 shadow-xs'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Moteur Live
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Tab 1: Signal Exemple */}
+        {activeDemoTab === 'signal' && (
+          <div className="space-y-3 font-mono">
+            <div className="bg-slate-50 dark:bg-[#060D1E] p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="bg-emerald-500 text-white font-black text-[10px] px-2.5 py-0.5 rounded-md">
+                    BUY ACHAT
+                  </span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">XAU/USD (Or)</span>
+                </div>
+                <span className="text-[10px] text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+                  Démonstration VIP
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                <div className="bg-white dark:bg-[#0B132B] p-2 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <div className="text-[10px] text-slate-400 font-sans">Entrée</div>
+                  <div className="font-bold text-slate-900 dark:text-white">2 742.50 $</div>
+                </div>
+                <div className="bg-rose-500/10 p-2 rounded-xl border border-rose-500/30 text-rose-500">
+                  <div className="text-[10px] font-sans">Stop Loss</div>
+                  <div className="font-bold">2 737.50 $</div>
+                </div>
+                <div className="bg-emerald-500/10 p-2 rounded-xl border border-emerald-500/30 text-emerald-500">
+                  <div className="text-[10px] font-sans">Take Profit 1</div>
+                  <div className="font-bold">2 750.00 $</div>
+                </div>
+                <div className="bg-emerald-500/10 p-2 rounded-xl border border-emerald-500/30 text-emerald-500">
+                  <div className="text-[10px] font-sans">Take Profit 2</div>
+                  <div className="font-bold">2 760.00 $</div>
+                </div>
+              </div>
+
+              <div className="text-[10px] text-slate-400 font-sans flex items-center justify-between pt-1">
+                <span>Confluences : Order Block M5 + Liquidity Sweep London + RSI Div</span>
+                <span className="text-emerald-500 font-mono font-bold">+75 Pips Max</span>
+              </div>
+            </div>
+
+            <div className="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl text-center text-[11px] text-amber-600 dark:text-amber-300 font-sans">
+              🔒 <strong>Accès Instantané :</strong> Les signaux actifs en temps réel et les notifications directes sont débloqués pour les membres VIP.
+            </div>
+          </div>
+        )}
+
+        {/* Tab 2: Moteur IA Live */}
+        {activeDemoTab === 'terminal' && (
+          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs space-y-3 text-slate-200">
+            <div className="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800 pb-2">
+              <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                Moteur SMC ChrisXAUUSD v4.2
+              </span>
+              <span>NY Session Open</span>
+            </div>
+
+            <div className="space-y-2 text-[11px]">
+              <div className="flex justify-between">
+                <span className="text-slate-400">Paire / Instrument :</span>
+                <span className="text-amber-400 font-bold">XAU/USD</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Analyse de Confluence :</span>
+                <span className="text-emerald-400 font-bold">94% Valide (High Probability)</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Order Block Actif :</span>
+                <span className="text-white font-bold">2,742.50 USD</span>
+              </div>
+            </div>
+
+            <div className="bg-emerald-950/60 border border-emerald-500/40 p-2.5 rounded-xl space-y-1 text-[11px]">
+              <div className="text-emerald-400 font-bold flex justify-between">
+                <span>🟢 SIGNAL VIP GÉNÉRÉ</span>
+                <span>En direct</span>
+              </div>
+              <p className="text-[10px] text-slate-300 font-sans">
+                Alerte push diffusée sur les terminaux abonnés.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 4. KEY ADVANTAGES (COMPACT GRID) */}
+      <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xs space-y-3">
+        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+          Avantages de la Suite ChrisXAUUSD
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-sans">
           {[
             {
-              title: 'Analyse en temps réel',
-              desc: 'Scan continu M1 & M5 identifiant la structure du marché de l\'Or avec une latence ultra-faible.',
+              title: 'Analyse M1 & M5 Continue',
+              desc: 'Detection chirurgicale des cassures de structure.',
               icon: Clock,
-              color: 'text-amber-600 dark:text-amber-400',
-              bg: 'bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800'
+              color: 'text-amber-500',
             },
             {
-              title: 'Entrées Précises',
-              desc: 'Niveaux d\'entrée chirurgicaux basés sur les zones d\'Order Block et la liquidité institutionnelle.',
-              icon: Target,
-              color: 'text-emerald-600 dark:text-emerald-400',
-              bg: 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800'
-            },
-            {
-              title: 'Stop Loss Optimisés',
-              desc: 'Définition automatique et stricte du Stop Loss pour protéger rigoureusement votre capital.',
+              title: 'Stop Loss Strict & Calculé',
+              desc: 'Protection absolue du capital à chaque trade.',
               icon: Shield,
-              color: 'text-rose-600 dark:text-rose-400',
-              bg: 'bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800'
+              color: 'text-rose-500',
             },
             {
-              title: 'IA Prédictive',
-              desc: 'Algorithmes prédictifs avancés anticipant les ruptures de structure et les impulsions majeures.',
-              icon: Brain,
-              color: 'text-cyan-600 dark:text-cyan-400',
-              bg: 'bg-cyan-50 dark:bg-cyan-950/60 border-cyan-200 dark:border-cyan-800'
+              title: 'Ratio Risque/Rendement &ge; 1:1.5',
+              desc: 'Seuls les setups à haut rendement sont retenus.',
+              icon: Target,
+              color: 'text-emerald-500',
             },
             {
-              title: 'Analyse de Sentiments',
-              desc: 'Sondage en temps réel du sentiment acheteur/vendeur et analyse des volumes institutionnels.',
-              icon: Activity,
-              color: 'text-indigo-600 dark:text-indigo-400',
-              bg: 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-200 dark:border-indigo-800'
-            },
-            {
-              title: 'Take Profit Intelligents',
-              desc: 'Objectifs de gains graduels TP1/TP2 calibrés pour maximiser le ratio Risque/Rendement.',
-              icon: TrendingUp,
-              color: 'text-sky-600 dark:text-sky-400',
-              bg: 'bg-sky-50 dark:bg-sky-950/60 border-sky-200 dark:border-sky-800'
-            },
-            {
-              title: 'Notifications Instantanées',
-              desc: 'Diffusion immédiate des signaux et alertes sonores directement sur votre terminal.',
+              title: 'Notifications Directes Terminal',
+              desc: 'Diffusion instantanee sonore et visuelle.',
               icon: Bell,
-              color: 'text-purple-600 dark:text-purple-400',
-              bg: 'bg-purple-50 dark:bg-purple-950/60 border-purple-200 dark:border-purple-800'
+              color: 'text-purple-500',
             },
-            {
-              title: 'Journal Statistique',
-              desc: 'Suivi transparent des performances quotidiennes et historique archivé sans aucune altération.',
-              icon: BarChart3,
-              color: 'text-blue-600 dark:text-blue-400',
-              bg: 'bg-blue-50 dark:bg-blue-950/60 border-blue-200 dark:border-blue-800'
-            }
-          ].map((feature, idx) => {
-            const IconComp = feature.icon;
+          ].map((item, idx) => {
+            const IconComp = item.icon;
             return (
               <div
                 key={idx}
-                className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 sm:p-7 rounded-[20px] shadow-[0_10px_30px_rgba(15,23,42,0.05)] hover:border-amber-400 hover:-translate-y-1 transition-all group space-y-4 h-full flex flex-col justify-between"
+                className="p-3 bg-slate-50 dark:bg-[#060D1E] border border-slate-200/80 dark:border-slate-800 rounded-2xl flex items-start gap-3"
               >
-                <div className="space-y-3">
-                  <div className={`w-12 h-12 rounded-2xl border ${feature.bg} flex items-center justify-center ${feature.color} group-hover:scale-110 group-hover:rotate-3 transition-transform`}>
-                    <IconComp className="w-6 h-6" />
+                <div className={`p-2 rounded-xl bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 ${item.color} shrink-0`}>
+                  <IconComp className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">
+                    {item.title}
                   </div>
-                  <h3 className="text-lg font-bold font-mono text-slate-900 dark:text-slate-100">{feature.title}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-sans leading-relaxed">{feature.desc}</p>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    {item.desc}
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
-      </section>
+      </div>
 
-
-      {/* ==========================================
-          6. TÉMOIGNAGES UTILISATEURS
-      ========================================== */}
-      <section
-        className="space-y-6 pt-4"
+      {/* 5. STREAMLINED TESTIMONIALS CAROUSEL */}
+      <div
+        className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xs space-y-3"
         onMouseEnter={() => setIsCarouselPaused(true)}
         onMouseLeave={() => setIsCarouselPaused(false)}
       >
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 uppercase">
-              <Award className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              COMMUNAUTÉ DE TRADERS
-            </div>
-            <h2 className="text-lg sm:text-xl font-bold font-sans text-slate-900 dark:text-slate-100 mt-1">
-              Ils Utilisent ChrisXauusd
-            </h2>
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+          <div className="flex items-center gap-2">
+            <Award className="w-4 h-4 text-amber-500" />
+            <span className="text-xs font-bold text-slate-900 dark:text-white font-mono uppercase">
+              Avis Membres Vérifiés
+            </span>
           </div>
 
-          <div className="flex items-center gap-2 font-mono">
+          <div className="flex items-center gap-1.5 font-mono text-xs">
             <button
               onClick={() => setActiveTestimonialIdx((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
-              className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:border-amber-400 transition-all active:scale-95 shadow-xs cursor-pointer"
+              className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-amber-500 hover:text-slate-950 transition-all cursor-pointer"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-xs text-slate-500 dark:text-slate-400">
-              {activeTestimonialIdx + 1} / {TESTIMONIALS.length}
+            <span className="text-[11px] text-slate-400 px-1">
+              {activeTestimonialIdx + 1}/{TESTIMONIALS.length}
             </span>
             <button
               onClick={() => setActiveTestimonialIdx((prev) => (prev + 1) % TESTIMONIALS.length)}
-              className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:border-amber-400 transition-all active:scale-95 shadow-xs cursor-pointer"
+              className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-amber-500 hover:text-slate-950 transition-all cursor-pointer"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t, idx) => {
-            const isHighlighted = idx === activeTestimonialIdx;
-            return (
-              <div
-                key={t.id}
-                className={`bg-white dark:bg-slate-900 border p-6 rounded-[20px] shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all space-y-4 flex flex-col justify-between ${
-                  isHighlighted ? 'border-amber-400 ring-2 ring-amber-400/20' : 'border-slate-200/80 dark:border-slate-800'
-                }`}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={t.avatar}
-                        alt={t.name}
-                        className="w-12 h-12 rounded-full object-cover border border-amber-300 shrink-0"
-                      />
-                      <div>
-                        <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 font-mono flex items-center gap-1.5">
-                          {t.name} <span>{t.flag}</span>
-                        </h4>
-                        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-sans">
-                          <span>{t.country}</span>
-                          <span>•</span>
-                          <span className="text-amber-700 dark:text-amber-400 font-semibold">{t.level}</span>
-                        </div>
-                      </div>
+        {/* Current Active Testimonial Card */}
+        {(() => {
+          const t = TESTIMONIALS[activeTestimonialIdx];
+          return (
+            <div className="bg-slate-50 dark:bg-[#060D1E] p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-2.5 font-sans">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    className="w-10 h-10 rounded-xl object-cover border border-amber-500/40"
+                  />
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
+                      <span>{t.name}</span>
+                      <span>{t.flag}</span>
                     </div>
-                    <span className="text-[10px] font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-300 dark:border-emerald-800">
-                      ✓ {t.badge}
-                    </span>
+                    <div className="text-[10px] text-slate-400">
+                      {t.country} • <span className="text-amber-500 font-semibold">{t.level}</span>
+                    </div>
                   </div>
-
-                  <div className="flex items-center gap-1 text-amber-500">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                    ))}
-                    <span className="text-xs text-slate-400 font-mono ml-2">{t.date}</span>
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-sans leading-relaxed italic">
-                    "{t.comment}"
-                  </p>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
 
-
-      {/* ==========================================
-          7. CITATIONS INSPIRANTES
-      ========================================== */}
-      <section className="space-y-6 pt-4">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-800 uppercase">
-            <Quote className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            SOURCES D'INSPIRATION ET DISCIPLINE
-          </div>
-          <h2 className="text-lg sm:text-xl font-bold font-sans text-slate-900 dark:text-slate-100">
-            Les Plus Grands Traders Nous Inspirent
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto font-sans">
-            La philosophie de gestion du risque de ChrisXauusd s'appuie sur les principes fondamentaux établis par les légendes des marchés.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {INSPIRATIONAL_QUOTES.map((q) => (
-            <div
-              key={q.id}
-              className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 sm:p-7 rounded-[20px] shadow-[0_10px_30px_rgba(15,23,42,0.05)] space-y-4 hover:border-blue-400 transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <Quote className="w-8 h-8 text-amber-500/40" />
-                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-sans italic leading-relaxed">
-                  "{q.quote}"
-                </p>
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                  ✓ {t.badge}
+                </span>
               </div>
 
-              <div className="flex items-center gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                <img
-                  src={q.image}
-                  alt={q.author}
-                  className="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-slate-700 shrink-0"
-                />
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 font-mono">{q.author}</h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-sans">{q.role}</p>
-                </div>
+              <div className="flex items-center gap-1 text-amber-500">
+                {[...Array(t.rating)].map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                ))}
+                <span className="text-[10px] text-slate-400 font-mono ml-2">{t.date}</span>
               </div>
+
+              <p className="text-xs text-slate-700 dark:text-slate-300 italic leading-relaxed">
+                "{t.comment}"
+              </p>
             </div>
-          ))}
+          );
+        })()}
+      </div>
+
+      {/* 6. INSPIRATIONAL QUOTES BAR */}
+      <div className="bg-slate-900 text-white border border-slate-800 rounded-3xl p-4 shadow-xs space-y-2 font-mono text-xs">
+        <div className="flex items-center gap-2 text-amber-400 font-bold text-[11px] uppercase">
+          <Quote className="w-3.5 h-3.5" />
+          <span>Discipline & Philosophie de Risque</span>
         </div>
-      </section>
-
-
-      {/* ==========================================
-          8. CALL TO ACTION FINAL
-      ========================================== */}
-      <section className="relative overflow-hidden rounded-[24px] bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700/80 p-6 sm:p-12 text-center space-y-5 sm:space-y-6 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
-        
-        <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6 relative z-10">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700 flex items-center justify-center text-amber-600 dark:text-amber-400 mx-auto shadow-md">
-            <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 fill-amber-500/20 text-amber-600 dark:text-amber-400" />
-          </div>
-
-          <h2 className="text-lg sm:text-2xl lg:text-3xl font-extrabold font-sans text-slate-900 dark:text-slate-100 tracking-tight leading-snug">
-            Prêt à Passer au Niveau Institutionnel ?
-          </h2>
-
-          <p className="text-xs sm:text-base text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
-            Rejoignez plus de 1 420 traders VIP et débloquez immédiatement les signaux en temps réel, les prix d'entrée exacts, Stop Loss et Take Profit sur XAU/USD.
-          </p>
-
-          <div className="pt-2 flex justify-center">
-            <button
-              onClick={onOpenSubscribeModal}
-              className="w-full sm:w-auto min-h-[52px] sm:min-h-[58px] py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-sans font-bold text-sm sm:text-base px-5 sm:px-8 rounded-2xl shadow-[0_8px_25px_rgba(245,158,11,0.25)] hover:shadow-[0_12px_35px_rgba(245,158,11,0.35)] active:scale-[0.98] transition-all inline-flex items-center justify-center gap-2 text-center cursor-pointer"
-            >
-              <Sparkles className="w-5 h-5 fill-slate-950 text-slate-950 shrink-0" />
-              <span className="leading-snug">Découvrir ChrisXauusd Premium</span>
-              <ArrowRight className="w-5 h-5 text-slate-950 shrink-0" />
-            </button>
-          </div>
+        <p className="text-slate-300 italic font-sans text-xs leading-relaxed">
+          "{INSPIRATIONAL_QUOTES[0].quote}"
+        </p>
+        <div className="text-right text-[10px] text-slate-400">
+          — {INSPIRATIONAL_QUOTES[0].author}
         </div>
-      </section>
+      </div>
+
+      {/* 7. FINAL CONVERSION BANNER */}
+      <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 text-slate-950 rounded-3xl p-5 shadow-lg text-center space-y-3 font-sans">
+        <h3 className="text-base font-extrabold font-mono uppercase tracking-tight">
+          Prêt à Débloquer Tous les Signaux En Temps Réel ?
+        </h3>
+        <p className="text-xs text-slate-900 font-medium max-w-md mx-auto leading-relaxed">
+          Rejoignez la communauté VIP ChrisXAUUSD dès aujourd'hui. Accès immédiat aux ordres d'achat/vente, SL, TP et analyses live.
+        </p>
+        <button
+          onClick={onOpenSubscribeModal}
+          className="w-full py-3 bg-slate-950 hover:bg-slate-900 text-amber-400 font-extrabold text-xs rounded-xl shadow-md transition-all cursor-pointer font-mono active:scale-98"
+        >
+          S'ABONNER MAINTENANT — 700 000 FCFA / MOIS
+        </button>
+      </div>
 
     </div>
   );

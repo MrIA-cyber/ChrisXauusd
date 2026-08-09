@@ -67,6 +67,13 @@ import { UserProfileModal } from './components/UserProfileModal';
 import { ScalpingEbookPdfModal } from './components/ScalpingEbookPdfModal';
 import { DeviceConflictModal } from './components/DeviceConflictModal';
 import { GlobalRankingCard } from './components/GlobalRankingCard';
+import { MobileBottomNav, ActiveTabType } from './components/MobileBottomNav';
+import { HomeView } from './components/views/HomeView';
+import { SetupsView } from './components/views/SetupsView';
+import { MarketView } from './components/views/MarketView';
+import { HistoryView } from './components/views/HistoryView';
+import { ProfileView } from './components/views/ProfileView';
+import { SetupDetailModal } from './components/SetupDetailModal';
 
 import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn, Calendar, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -98,6 +105,16 @@ export default function App() {
   const [autoSignalActive, setAutoSignalActive] = useState<boolean>(true);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState<boolean>(false);
   const [selectedTicket, setSelectedTicket] = useState<TradeSetup | null>(null);
+
+  // 5-Section Mobile Navigation State & Progressive Setup Detail Modal
+  const [activeTab, setActiveTab] = useState<ActiveTabType>('home');
+  const [detailModalSetup, setDetailModalSetup] = useState<TradeSetup | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false);
+
+  const handleOpenSetupDetail = (setup: TradeSetup) => {
+    setDetailModalSetup(setup);
+    setIsDetailModalOpen(true);
+  };
 
   // Sequential Signal Engine State
   const [isAnalyzingNextSignal, setIsAnalyzingNextSignal] = useState<boolean>(false);
@@ -791,7 +808,7 @@ export default function App() {
       <LivePriceBanner currentTick={currentTick} recentCandles={candles} />
 
       {/* Main Content Dashboard */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-4 sm:space-y-6 relative z-10">
+      <main className="flex-1 max-w-2xl w-full mx-auto px-3 sm:px-6 py-3 sm:py-6 relative z-10 pb-24">
         
         {isVisitor ? (
           /* Institutional Visitor Landing Presentation Page */
@@ -800,186 +817,92 @@ export default function App() {
             onOpenLoginModal={() => setIsLoginModalOpen(true)}
           />
         ) : (
-          /* Active Subscriber VIP Real-Time Trading Terminal */
+          /* Active VIP Subscriber 5-Section Uncluttered Mobile Architecture */
           <>
-            {/* 5. Global Ranking & Performance Benchmark */}
-            <GlobalRankingCard />
+            {activeTab === 'home' && (
+              <HomeView
+                activeSetup={activeSetup || null}
+                latestSetup={trades[0] || null}
+                currentTick={currentTick}
+                marketSessions={marketSessions}
+                dailyStats={dailyStats}
+                isAnalyzingNextSignal={isAnalyzingNextSignal}
+                nextSignalCountdown={nextSignalCountdown}
+                onOpenSetupDetail={handleOpenSetupDetail}
+                onGenerateNewSignal={handleGenerateNewSignal}
+                isVisitor={isVisitor}
+                onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+              />
+            )}
 
-            {/* 5.1. Daily Statistics Cards */}
-            <StatsGrid stats={dailyStats} />
+            {activeTab === 'setups' && (
+              <SetupsView
+                trades={trades}
+                currentTick={currentTick}
+                onOpenSetupDetail={handleOpenSetupDetail}
+                isVisitor={isVisitor}
+                onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+              />
+            )}
 
-            {/* 6. Main Active Setups & Live Chart Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              
-              {/* Left Column (7 cols): Active Sequential Trade Setup Ticket */}
-              <div className="lg:col-span-7 space-y-4">
-                
-                {/* Section Header Card */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white p-4.5 rounded-[20px] border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.05)] backdrop-blur-md gap-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
-                    <div>
-                      <h2 className="text-xs sm:text-sm font-bold text-[#0F172A] flex items-center gap-2 font-mono">
-                        <Ticket className="w-4 h-4 text-amber-500" />
-                        <span>SIGNAL SÉQUENTIEL EN TEMPS RÉEL</span>
-                      </h2>
-                      <div className="text-[11px] font-mono font-semibold text-slate-500 mt-0.5">
-                        Flux de publication : <strong className="text-amber-600">{trades.length} setups publiés aujourd'hui</strong>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-xs font-mono shrink-0">
-                    <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" /> VIP
-                    </span>
-                    <button
-                      onClick={() => handleGenerateNewSignal('BUY')}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-700 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
-                    >
-                      + ACHAT
-                    </button>
-                    <button
-                      onClick={() => handleGenerateNewSignal('SELL')}
-                      className="bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
-                    >
-                      + VENTE
-                    </button>
-                  </div>
-                </div>
+            {activeTab === 'market' && (
+              <MarketView
+                currentTick={currentTick}
+                candles={candles}
+                activeSetup={activeSetup || null}
+                marketSessions={marketSessions}
+              />
+            )}
 
-                {/* Analysis Transition State Banner when generating next signal */}
-                {isAnalyzingNextSignal && (
-                  <div className="bg-amber-50/90 border border-amber-300 rounded-[20px] p-4.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[0_10px_25px_rgba(245,158,11,0.1)] font-mono animate-pulse">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-600 shrink-0">
-                        <Sparkles className="w-5 h-5 animate-spin" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-2">
-                          <span>ANALYSE DU MARCHÉ & PRÉPARATION DU PROCHAIN SIGNAL</span>
-                          <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-                        </div>
-                        <p className="text-[11px] text-slate-700 mt-0.5 font-sans">
-                          Balayage des zones d'Order Block M1/M5 et validation des confluences (R:R ≥ 1:1.5)...
-                        </p>
-                      </div>
-                    </div>
-                    <div className="bg-white px-3 py-1 rounded-xl border border-amber-300 text-amber-800 font-bold text-xs whitespace-nowrap shadow-xs">
-                      Signal imminent ({nextSignalCountdown > 0 ? `${nextSignalCountdown}s` : '1s'})
-                    </div>
-                  </div>
-                )}
+            {activeTab === 'history' && (
+              <HistoryView
+                trades={trades}
+                dailyStats={dailyStats}
+                onOpenSetupDetail={handleOpenSetupDetail}
+                isVisitor={isVisitor}
+                onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+              />
+            )}
 
-                {/* Render Primary Active Signal Ticket */}
-                <div className="space-y-2.5 sm:space-y-3.5">
-                  <div className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-0.5 sm:px-1">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                      {activeSetup ? 'SIGNAL ACTIF EN COURS' : 'DERNIER SIGNAL CLÔTURÉ'}
-                    </span>
-                    {activeSetup && (
-                      <span className="text-amber-600 text-[10px] sm:text-[11px] font-bold animate-pulse">● Suivi prix live</span>
-                    )}
-                  </div>
-
-                  {displayedTicket ? (
-                    <TradeTicket
-                      key={displayedTicket.id}
-                      setup={displayedTicket}
-                      currentTick={currentTick}
-                      onSelectSetup={(s) => setSelectedTicket(s)}
-                      isVisitor={isVisitor}
-                      onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-                      index={0}
-                    />
-                  ) : (
-                    <div className="bg-white border border-slate-200/80 rounded-[18px] sm:rounded-[20px] p-6 sm:p-8 text-center text-slate-500 font-mono text-xs shadow-sm">
-                      Génération du premier ticket de trade en cours...
-                    </div>
-                  )}
-                </div>
-
-                {/* Recent Closed Signals History preview */}
-                {recentClosedTickets.length > 0 && (
-                  <div className="space-y-2.5 sm:space-y-3.5 pt-2 sm:pt-3 border-t border-slate-200">
-                    <div className="text-[10px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between px-0.5 sm:px-1">
-                      <span>HISTORIQUE DES SIGNALS CLÔTURÉS</span>
-                      <span className="text-[9px] sm:text-[10px] text-slate-400">Chronologique</span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                      {recentClosedTickets.map((setup, idx) => (
-                        <TradeTicket
-                          key={setup.id}
-                          setup={setup}
-                          currentTick={currentTick}
-                          onSelectSetup={(s) => setSelectedTicket(s)}
-                          isVisitor={isVisitor}
-                          onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-                          index={idx + 1}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-              </div>
-
-              {/* Right Column (5 cols): Interactive Chart & Signal Details */}
-              <div className="lg:col-span-5 space-y-4">
-                <LiveChartWidget
-                  candles={candles}
-                  currentTick={currentTick}
-                  activeSetup={selectedTicket || activeSetup || null}
-                />
-
-                {/* Quick Risk Rules Card */}
-                <div className="bg-white border border-slate-200/80 rounded-[20px] p-4.5 text-xs font-mono space-y-3 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
-                  <div className="flex items-center justify-between text-[#0F172A] font-bold border-b border-slate-100 pb-2.5">
-                    <span className="flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-amber-500" /> RÈGLES DE SCALPING STRICTES
-                    </span>
-                    <span className="text-[10px] text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 font-bold">
-                      VERIFIED
-                    </span>
-                  </div>
-                  <ul className="space-y-2 text-slate-600 text-[11px] list-disc list-inside font-sans">
-                    <li><strong className="text-rose-600 font-mono font-bold">Stop Loss Obligatoire :</strong> Aucun trade ne peut être émis sans SL défini.</li>
-                    <li><strong className="text-amber-700 font-mono font-bold">Ratio Risque/Rendement :</strong> Tous les tickets exigent au minimum R:R 1:1.50.</li>
-                    <li><strong className="text-emerald-700 font-mono font-bold">Prise de Profits Scalp :</strong> Objectifs de 20 à 60 pips sur l'Or.</li>
-                  </ul>
-                </div>
-              </div>
-
-            </div>
-
-            {/* 6.5. Live Signals from Railway Backend API */}
-            <RailwayLiveSignals />
-
-            {/* 7. Trade Journal Table (Full Session History) */}
-            <TradeJournalTable
-              trades={trades}
-              isVisitor={isVisitor}
-              onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-            />
-
-            {/* 8. News & Education Section */}
-            <NewsAndEducationSection
-              isVisitor={isVisitor}
-              onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-              onOpenEbookModal={() => setIsEbookModalOpen(true)}
-            />
-
-            {/* 9. Premium User Reviews Section */}
-            <UserReviewsSection
-              isVisitor={isVisitor}
-              onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
-              onOpenLoginModal={() => setIsLoginModalOpen(true)}
-            />
+            {activeTab === 'profile' && (
+              <ProfileView
+                userSession={userSession}
+                subscription={subscription}
+                soundEnabled={soundEnabled}
+                onToggleSound={() => setSoundEnabled(!soundEnabled)}
+                theme={theme}
+                onToggleTheme={handleToggleTheme}
+                onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+                onOpenLoginModal={() => setIsLoginModalOpen(true)}
+                onOpenProfileModal={handleOpenProfile}
+                onOpenCalculator={() => setIsCalculatorOpen(true)}
+                onOpenEbookModal={() => setIsEbookModalOpen(true)}
+                onLogout={handleLogout}
+              />
+            )}
           </>
         )}
 
       </main>
+
+      {/* Fixed 5-Section Mobile Bottom Navigation Bar */}
+      {!isVisitor && (
+        <MobileBottomNav
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          activeSetupCount={activeSetup ? 1 : 0}
+        />
+      )}
+
+      {/* Setup Detail Modal with Progressive Disclosure Accordions */}
+      <SetupDetailModal
+        setup={detailModalSetup}
+        currentTick={currentTick}
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        isVisitor={isVisitor}
+        onOpenSubscribeModal={() => setIsSubscribeModalOpen(true)}
+      />
 
       {/* Subscription Payment Simulation Modal */}
       <SubscriptionModal
