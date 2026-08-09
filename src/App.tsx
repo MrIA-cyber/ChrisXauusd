@@ -150,11 +150,27 @@ export default function App() {
       setIsDeviceConflictModalOpen(true);
     }
 
-    // Subscribe to Firestore for live multi-device session updates
+    // Subscribe to Firestore for live subscription status & multi-device session updates
     if (userSession.id) {
-      const unsub = subscribeToUserSubscriptionFromFirestore(userSession.id, (_sub, remoteDeviceId) => {
+      const unsub = subscribeToUserSubscriptionFromFirestore(userSession.id, (remoteSub, remoteDeviceId) => {
         if (remoteDeviceId && remoteDeviceId !== currentDeviceId) {
           setIsDeviceConflictModalOpen(true);
+        }
+
+        if (remoteSub && remoteSub.status) {
+          setSubscription((prev) => {
+            if (prev.status !== remoteSub.status || prev.daysRemaining !== remoteSub.daysRemaining) {
+              saveSubscription(remoteSub);
+              setUserSession((uPrev) => {
+                if (!uPrev) return uPrev;
+                const updated = { ...uPrev, subscription: remoteSub };
+                saveUserSession(updated);
+                return updated;
+              });
+              return remoteSub;
+            }
+            return prev;
+          });
         }
       });
       return () => unsub();

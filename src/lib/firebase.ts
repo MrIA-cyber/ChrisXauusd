@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   setDoc,
+  deleteDoc,
   getDocs,
   onSnapshot,
   query,
@@ -208,5 +209,128 @@ export async function fetchUserSubscriptionFromFirestore(
   } catch (error) {
     console.error('Error fetching user subscription from Firestore:', error);
     return null;
+  }
+}
+
+export interface FirestoreSubscriptionRecord {
+  userId: string;
+  status: 'VISITOR' | 'ACTIVE' | 'EXPIRING_SOON' | 'EXPIRED' | 'PENDING_VERIFICATION';
+  startDate: string | null;
+  expirationDate: string | null;
+  daysRemaining: number;
+  paymentMethod?: string;
+  amountFcfa: number;
+  userDetails?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    country?: string;
+    flag?: string;
+    avatarUrl?: string;
+  };
+  activeDeviceId?: string | null;
+  updatedAt?: string;
+  approvedAt?: string;
+}
+
+/**
+ * Real-time listener for ALL subscriptions in Firestore (For Admin Portal live feed)
+ */
+export function subscribeToAllSubscriptionsFromFirestore(
+  onUpdate: (records: FirestoreSubscriptionRecord[]) => void
+): () => void {
+  try {
+    const subsRef = collection(db, SUBSCRIPTIONS_COLLECTION);
+    const unsubscribe = onSnapshot(
+      subsRef,
+      (snapshot) => {
+        const list: FirestoreSubscriptionRecord[] = [];
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          list.push({
+            userId: docSnap.id,
+            status: data.status || 'VISITOR',
+            startDate: data.startDate || null,
+            expirationDate: data.expirationDate || null,
+            daysRemaining: typeof data.daysRemaining === 'number' ? data.daysRemaining : 0,
+            paymentMethod: data.paymentMethod || 'Mobile Money',
+            amountFcfa: data.amountFcfa || 700000,
+            userDetails: data.userDetails || {},
+            activeDeviceId: data.activeDeviceId || null,
+            updatedAt: data.updatedAt,
+            approvedAt: data.approvedAt,
+          });
+        });
+        onUpdate(list);
+      },
+      (error) => {
+        console.error('Firestore all subscriptions snapshot error:', error);
+      }
+    );
+    return unsubscribe;
+  } catch (error) {
+    console.error('Failed to subscribe to all Firestore subscriptions:', error);
+    return () => {};
+  }
+}
+
+/**
+ * Admin Action: Approve / Authorize User Subscription in Firestore
+ */
+export async function approveUserSubscriptionInFirestore(
+  userId: string,
+  daysCount = 30
+): Promise<void> {
+  try {
+    const subRef = doc(db, SUBSCRIPTIONS_COLLECTION, userId);
+    const now = new Date();
+    const expDate = new Date(now.getTime() + daysCount * 24 * 3600 * 1000);
+
+    await setDoc(
+      subRef,
+      {
+        status: 'ACTIVE',
+        startDate: now.toISOString(),
+        expirationDate: expDate.toISOString(),
+        daysRemaining: daysCount,
+        updatedAt: now.toISOString(),
+        approvedAt: now.toISOString(),
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error('Error approving user subscription in Firestore:', error);
+  }
+}
+
+/**
+ * Admin Action: Reject / Revoke User Subscription in Firestore
+ */
+export async function rejectUserSubscriptionInFirestore(userId: string): Promise<void> {
+  try {
+    const subRef = doc(db, SUBSCRIPTIONS_COLLECTION, userId);
+    await setDoc(
+      subRef,
+      {
+        status: 'EXPIRED',
+        daysRemaining: 0,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error('Error rejecting user subscription in Firestore:', error);
+  }
+}
+
+/**
+ * Admin Action: Delete User Subscription Record from Firestore
+ */
+export async function deleteUserSubscriptionFromFirestore(userId: string): Promise<void> {
+  try {
+    const subRef = doc(db, SUBSCRIPTIONS_COLLECTION, userId);
+    await deleteDoc(subRef);
+  } catch (error) {
+    console.error('Error deleting user subscription from Firestore:', error);
   }
 }

@@ -93,6 +93,52 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         return;
       }
 
+      // Check created users saved in localStorage by Admin
+      try {
+        const savedAdminUsersJson = localStorage.getItem('chris_admin_users_db_v2');
+        if (savedAdminUsersJson) {
+          const savedUsers: any[] = JSON.parse(savedAdminUsersJson);
+          const matchedAdminUser = savedUsers.find((acc) => {
+            const accEmail = (acc.email || '').trim().toLowerCase();
+            const accPhone = (acc.phone || '').replaceAll(' ', '').replaceAll('+', '').toLowerCase();
+            const inputClean = cleanId.replaceAll(' ', '').replaceAll('+', '');
+            const matchesId = accEmail === cleanId || accPhone === inputClean || (accPhone.length > 5 && inputClean.includes(accPhone));
+            const accPass = acc.password || 'Gold2026!';
+            const matchesPass = accPass === password || accPass.toLowerCase() === cleanPass;
+            return matchesId && matchesPass;
+          });
+
+          if (matchedAdminUser) {
+            const dates = createDatesForDaysLeft(30);
+            const subDetails: UserSubscription = matchedAdminUser.startDate && matchedAdminUser.expirationDate
+              ? calculateSubscriptionDetails(matchedAdminUser.startDate, matchedAdminUser.expirationDate)
+              : calculateSubscriptionDetails(dates.startDate, dates.expirationDate);
+
+            if (subDetails.status === 'EXPIRED') {
+              const expFormatted = formatDateFr(subDetails.expirationDate);
+              setExpiredSubWarning(
+                `Votre abonnement a expiré le ${expFormatted}. Veuillez le renouveler auprès de l'administrateur.`
+              );
+              return;
+            }
+
+            const loggedUser: AuthUser = {
+              id: matchedAdminUser.id || 'user-' + Date.now(),
+              email: matchedAdminUser.email,
+              phone: matchedAdminUser.phone,
+              name: matchedAdminUser.name,
+              subscription: subDetails,
+            };
+
+            onLoginSuccess(loggedUser);
+            onClose();
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Error matching created admin user login:', e);
+      }
+
       // Find matching demo account or match any custom input with password "Gold2026!"
       const matchedAccount = DEMO_ACCOUNTS.find(
         (acc) =>

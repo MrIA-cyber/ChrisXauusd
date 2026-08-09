@@ -52,22 +52,30 @@ import {
   Award
 } from 'lucide-react';
 import { formatFcfa, SUBSCRIPTION_PRICE_FCFA, formatDateFr } from '../../lib/subscriptionService';
+import {
+  subscribeToAllSubscriptionsFromFirestore,
+  approveUserSubscriptionInFirestore,
+  rejectUserSubscriptionInFirestore,
+  deleteUserSubscriptionFromFirestore,
+  FirestoreSubscriptionRecord,
+} from '../../lib/firebase';
 
 export interface AdminUserRecord {
   id: string;
   name: string;
   email: string;
   phone: string;
+  password?: string;
   country: string;
   flag: string;
   registeredAt: string;
   planType: 'Mensuel (700k FCFA)' | 'Trimestriel VIP' | 'Annuel Premium' | 'Lifetime VIP';
-  status: 'ACTIVE' | 'EXPIRING_SOON' | 'EXPIRED' | 'SUSPENDED';
+  status: 'ACTIVE' | 'EXPIRING_SOON' | 'EXPIRED' | 'SUSPENDED' | 'PENDING_VERIFICATION' | 'VISITOR';
   startDate: string; // ISO string
   expirationDate: string; // ISO string
   lastLogin: string;
   totalPaidFcfa: number;
-  paymentMethod: 'Orange Money' | 'MTN Mobile Money' | 'Wave' | 'Carte Bancaire' | 'Crypto USDT' | 'Airtel Money';
+  paymentMethod: 'Orange Money' | 'MTN Mobile Money' | 'Wave' | 'Carte Bancaire' | 'Crypto USDT' | 'Airtel Money' | string;
   traderLevel?: 'DEBUTANT' | 'INTERMEDIAIRE' | 'SCALPER_PRO' | 'MASTER_TRADER';
   customBadge?: string;
 }
@@ -363,6 +371,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
   // Modals & Active Edit Objects
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<AdminUserRecord | null>(null);
   const [selectedUserForDelete, setSelectedUserForDelete] = useState<AdminUserRecord | null>(null);
+  const [selectedUserForCredentials, setSelectedUserForCredentials] = useState<AdminUserRecord | null>(null);
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
   const [customExtendDays, setCustomExtendDays] = useState<number>(30);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'info' | 'warning' } | null>(null);
@@ -371,14 +380,121 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newUserPhone, setNewUserPhone] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('Gold2026!');
   const [newUserCountry, setNewUserCountry] = useState('🇨🇲 Cameroun');
   const [newUserPlan, setNewUserPlan] = useState<'Mensuel (700k FCFA)' | 'Trimestriel VIP' | 'Annuel Premium' | 'Lifetime VIP'>('Mensuel (700k FCFA)');
   const [newUserMethod, setNewUserMethod] = useState<'Orange Money' | 'MTN Mobile Money' | 'Wave' | 'Carte Bancaire' | 'Crypto USDT'>('Orange Money');
+
+  // Credential Modal State
+  const [showPasswordInModal, setShowPasswordInModal] = useState(false);
+  const [isEditingPasswordInModal, setIsEditingPasswordInModal] = useState(false);
+  const [editingPasswordValue, setEditingPasswordValue] = useState('');
+  const [copySuccessToast, setCopySuccessToast] = useState(false);
+
+  // Helper to generate a random password
+  const generateRandomPassword = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let pass = 'Xau';
+    for (let i = 0; i < 4; i++) {
+      pass += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    pass += '!';
+    setNewUserPassword(pass);
+  };
 
   // Sync with LocalStorage
   useEffect(() => {
     localStorage.setItem('chris_admin_users_db_v2', JSON.stringify(users));
   }, [users]);
+
+  // Real-time Firestore Sync for ALL subscriptions
+  useEffect(() => {
+    const unsubscribe = subscribeToAllSubscriptionsFromFirestore((remoteRecords) => {
+      if (!remoteRecords) return;
+
+      setUsers((prevUsers) => {
+        const userMap = new Map<string, AdminUserRecord>();
+        prevUsers.forEach((u) => userMap.set(u.id, u));
+
+        remoteRecords.forEach((rec) => {
+          const existing = userMap.get(rec.userId);
+          const mapped: AdminUserRecord = {
+            id: rec.userId,
+            name: rec.userDetails?.name || existing?.name || `Abonné ${rec.userId.slice(-4)}`,
+            email: rec.userDetails?.email || existing?.email || 'trader@xau-scalp.com',
+            phone: rec.userDetails?.phone || existing?.phone || '+237 600000000',
+            country: rec.userDetails?.country || existing?.country || 'Cameroun',
+            flag: rec.userDetails?.flag || existing?.flag || '🇨🇲',
+            registeredAt: rec.updatedAt ? rec.updatedAt.slice(0, 10) : existing?.registeredAt || new Date().toISOString().slice(0, 10),
+            planType: 'Mensuel (700k FCFA)',
+            status: rec.status,
+            startDate: rec.startDate || existing?.startDate || new Date().toISOString(),
+            expirationDate: rec.expirationDate || existing?.expirationDate || new Date().toISOString(),
+            lastLogin: rec.updatedAt ? new Date(rec.updatedAt).toLocaleDateString('fr-FR') : existing?.lastLogin || 'Aujourd\'hui',
+            totalPaidFcfa: rec.amountFcfa || 700000,
+            paymentMethod: rec.paymentMethod || existing?.paymentMethod || 'Orange Money',
+            traderLevel: existing?.traderLevel || 'SCALPER_PRO',
+            customBadge: existing?.customBadge,
+          };
+          userMap.set(rec.userId, mapped);
+        });
+
+        return Array.from(userMap.values());
+      });
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleApproveSubscription = async (user: AdminUserRecord) => {
+    await approveUserSubscriptionInFirestore(user.id, 30);
+    const now = new Date();
+    const exp = new Date(now.getTime() + 30 * 24 * 3600 * 1000);
+
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === user.id
+          ? {
+              ...u,
+              status: 'ACTIVE',
+              startDate: now.toISOString(),
+              expirationDate: exp.toISOString(),
+            }
+          : u
+      )
+    );
+
+    // Record payment transaction
+    const newTx: PaymentTransactionRecord = {
+      id: `tx-${Date.now().toString().slice(-4)}`,
+      txRef: `SUB-${Date.now().toString().slice(-6)}`,
+      userName: user.name,
+      userPhone: user.phone,
+      amountFcfa: user.totalPaidFcfa || SUBSCRIPTION_PRICE_FCFA,
+      method: user.paymentMethod || 'Mobile Money',
+      status: 'SUCCESS',
+      date: new Date().toLocaleDateString('fr-FR'),
+    };
+    setTransactions((prev) => [newTx, ...prev]);
+
+    setToastMessage({
+      text: `✅ Autorisation VIP accordée à ${user.name} ! Accès actif pour 30 jours.`,
+      type: 'success',
+    });
+    logAudit('PROLONG_SUB', user.name, `Autorisation accordée par l'administrateur (Accès VIP 30 jours)`);
+  };
+
+  const handleRejectSubscription = async (user: AdminUserRecord) => {
+    await rejectUserSubscriptionInFirestore(user.id);
+    setUsers((prev) =>
+      prev.map((u) => (u.id === user.id ? { ...u, status: 'EXPIRED' } : u))
+    );
+    setToastMessage({
+      text: `Demande d'abonnement refusée pour ${user.name}.`,
+      type: 'warning',
+    });
+    logAudit('SUSPEND_USER', user.name, `Demande d'abonnement rejetée par l'administrateur`);
+  };
 
   useEffect(() => {
     localStorage.setItem('chris_admin_tx_db_v2', JSON.stringify(transactions));
@@ -569,12 +685,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
     const now = new Date();
     const exp = new Date(now.getTime() + 30 * 24 * 3600 * 1000);
+    const assignedPassword = newUserPassword.trim() || 'Gold2026!';
 
     const created: AdminUserRecord = {
       id: `usr-${Date.now().toString().slice(-4)}`,
       name: newUserName.trim(),
       email: newUserEmail.trim(),
       phone: newUserPhone.trim() || '+237 600 00 00 00',
+      password: assignedPassword,
       country: countryName || 'Cameroun',
       flag: flag || '🇨🇲',
       registeredAt: now.toISOString().split('T')[0],
@@ -600,14 +718,33 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
     setUsers([created, ...users]);
     setTransactions([newTx, ...transactions]);
-    showToast(`Compte pour ${created.name} créé avec abonnement de 30 jours.`, 'success');
-    logAudit('CREATE_USER', `${created.name} (${created.id})`, `Création manuelle avec plan ${newUserPlan}`);
+    showToast(`Compte pour ${created.name} créé ! Fiche d'accès générée.`, 'success');
+    logAudit('CREATE_USER', `${created.name} (${created.id})`, `Création manuelle avec MDP ${assignedPassword}`);
 
-    // Reset Form & Close Modal
+    // Reset Form & Close Create Modal
     setNewUserName('');
     setNewUserEmail('');
     setNewUserPhone('');
+    setNewUserPassword('Gold2026!');
     setIsCreateUserModalOpen(false);
+
+    // Open Credentials Modal for immediate copy
+    setSelectedUserForCredentials(created);
+    setIsEditingPasswordInModal(false);
+  };
+
+  // Update password for an existing user
+  const handleSaveUserPassword = (userId: string, newPass: string) => {
+    if (!newPass.trim()) return;
+    const cleanPass = newPass.trim();
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, password: cleanPass } : u))
+    );
+    if (selectedUserForCredentials && selectedUserForCredentials.id === userId) {
+      setSelectedUserForCredentials({ ...selectedUserForCredentials, password: cleanPass });
+    }
+    setIsEditingPasswordInModal(false);
+    showToast('Mot de passe mis à jour avec succès.', 'success');
   };
 
   // Sorting & Filtering Logic
@@ -621,6 +758,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
           u.phone.includes(query) ||
           u.country.toLowerCase().includes(query);
 
+        if (statusFilter === 'PENDING_VERIFICATION') return matchesSearch && u.status === 'PENDING_VERIFICATION';
         if (statusFilter === 'ACTIVE') return matchesSearch && u.status === 'ACTIVE';
         if (statusFilter === 'EXPIRING_SOON') return matchesSearch && u.status === 'EXPIRING_SOON';
         if (statusFilter === 'EXPIRED') return matchesSearch && u.status === 'EXPIRED';
@@ -658,6 +796,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
   // High-level Metrics
   const totalSubscribers = users.length;
+  const pendingSubscribers = users.filter((u) => u.status === 'PENDING_VERIFICATION');
+  const pendingCount = pendingSubscribers.length;
   const activeSubscribers = users.filter((u) => u.status === 'ACTIVE' || u.status === 'EXPIRING_SOON').length;
   const expiringSoonCount = users.filter((u) => u.status === 'EXPIRING_SOON').length;
   const expiredCount = users.filter((u) => u.status === 'EXPIRED').length;
@@ -845,14 +985,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
             
             <button
               onClick={() => setActiveTab('DASHBOARD')}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-all ${
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-bold transition-all ${
                 activeTab === 'DASHBOARD'
                   ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
               }`}
             >
-              <LayoutDashboard className="w-4 h-4 shrink-0" />
-              {!isSidebarCollapsed && <span>Tableau de bord</span>}
+              <div className="flex items-center gap-3">
+                <LayoutDashboard className="w-4 h-4 shrink-0" />
+                {!isSidebarCollapsed && <span>Tableau de bord</span>}
+              </div>
+              {!isSidebarCollapsed && pendingCount > 0 && (
+                <span className="text-[10px] bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded-full font-black animate-pulse">
+                  {pendingCount}
+                </span>
+              )}
             </button>
 
             <button
@@ -878,14 +1025,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
             <button
               onClick={() => setActiveTab('SUBSCRIPTIONS')}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-all ${
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-bold transition-all ${
                 activeTab === 'SUBSCRIPTIONS'
                   ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
               }`}
             >
-              <CreditCard className="w-4 h-4 shrink-0" />
-              {!isSidebarCollapsed && <span>Abonnements VIP</span>}
+              <div className="flex items-center gap-3">
+                <CreditCard className="w-4 h-4 shrink-0" />
+                {!isSidebarCollapsed && <span>Abonnements VIP</span>}
+              </div>
+              {!isSidebarCollapsed && pendingCount > 0 && (
+                <span className="text-[10px] bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded-full font-black animate-pulse">
+                  {pendingCount}
+                </span>
+              )}
             </button>
 
             <button
@@ -1040,6 +1194,77 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
             {/* 1. DASHBOARD VIEW */}
             {activeTab === 'DASHBOARD' && (
               <div className="space-y-6">
+
+                {/* Pending Authorizations Notification Banner */}
+                {pendingCount > 0 ? (
+                  <div className="bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/90 border-2 border-amber-500/80 rounded-2xl p-5 shadow-2xl shadow-amber-500/10 space-y-4">
+                    <div className="flex items-center justify-between border-b border-amber-500/30 pb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 animate-pulse">
+                          <Clock className="w-5 h-5 text-amber-400" />
+                        </div>
+                        <div>
+                          <h2 className="font-mono font-black text-amber-300 text-sm sm:text-base flex items-center gap-2">
+                            <span>{pendingCount} DEMANDE{pendingCount > 1 ? 'S' : ''} D'AUTORISATION D'ABONNEMENT EN ATTENTE</span>
+                            <span className="bg-amber-500 text-slate-950 text-[10px] px-2 py-0.5 rounded-full font-bold animate-bounce">
+                              Action requise
+                            </span>
+                          </h2>
+                          <p className="text-xs text-slate-300 font-sans">
+                            Cliquez sur "Autoriser" pour valider l'abonnement et débloquer le terminal VIP du client en temps réel.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      {pendingSubscribers.map((user) => (
+                        <div
+                          key={user.id}
+                          className="bg-slate-950/90 border border-amber-500/40 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-amber-400 transition-all"
+                        >
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg">{user.flag}</span>
+                              <strong className="font-mono text-white text-sm">{user.name}</strong>
+                              <span className="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono px-2 py-0.5 rounded-full font-bold">
+                                {user.paymentMethod}
+                              </span>
+                            </div>
+                            <p className="text-xs text-slate-400 font-mono flex flex-wrap items-center gap-x-3 gap-y-1">
+                              <span>📞 {user.phone}</span>
+                              <span>✉️ {user.email}</span>
+                              <span className="text-amber-400 font-bold">Montant: {formatFcfa(user.totalPaidFcfa || 700000)}</span>
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-2 w-full sm:w-auto">
+                            <button
+                              onClick={() => handleApproveSubscription(user)}
+                              className="flex-1 sm:flex-none bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-black px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+                            >
+                              <CheckCircle2 className="w-4 h-4" /> Autoriser (30j VIP)
+                            </button>
+                            <button
+                              onClick={() => handleRejectSubscription(user)}
+                              className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 font-mono font-bold px-3 py-2 rounded-xl text-xs transition-all cursor-pointer"
+                            >
+                              Refuser
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex items-center justify-between text-xs text-slate-400 font-mono">
+                    <span className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      Aucune demande d'autorisation en attente. Tous les abonnements soumis sont traités.
+                    </span>
+                    <span className="text-[10px] text-slate-500">Live Sync Firestore ⚡</span>
+                  </div>
+                )}
                 
                 {/* Modern KPI Cards Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1300,6 +1525,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                     >
                       Tous ({users.length})
                     </button>
+                    {pendingCount > 0 && (
+                      <button
+                        onClick={() => setStatusFilter('PENDING_VERIFICATION')}
+                        className={`px-3 py-1.5 rounded-xl font-black shrink-0 transition-all flex items-center gap-1.5 ${
+                          statusFilter === 'PENDING_VERIFICATION'
+                            ? 'bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/20'
+                            : 'bg-amber-950/60 text-amber-300 border border-amber-500/50 hover:bg-amber-900/60 animate-pulse'
+                        }`}
+                      >
+                        <Clock className="w-3.5 h-3.5" /> En Attente ({pendingCount})
+                      </button>
+                    )}
                     <button
                       onClick={() => setStatusFilter('ACTIVE')}
                       className={`px-3 py-1.5 rounded-xl font-bold shrink-0 transition-all ${
@@ -1421,6 +1658,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
                                 {/* Status */}
                                 <td className="p-3.5 font-mono">
+                                  {u.status === 'PENDING_VERIFICATION' && (
+                                    <span className="bg-amber-500/20 text-amber-300 border border-amber-400 px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1 animate-pulse">
+                                      <Clock className="w-3 h-3 text-amber-400" /> EN ATTENTE
+                                    </span>
+                                  )}
                                   {u.status === 'ACTIVE' && (
                                     <span className="bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold text-[10px] inline-flex items-center gap-1">
                                       <CheckCircle2 className="w-3 h-3" /> ACTIF ({daysLeft}j)
@@ -1456,34 +1698,65 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                                 {/* Actions */}
                                 <td className="p-3.5 text-right font-mono">
                                   <div className="flex items-center justify-end gap-1.5">
-                                    
-                                    <button
-                                      onClick={() => handleExtendSubscription(u, 30)}
-                                      className="bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/40 px-2 py-1 rounded text-[11px] font-bold transition-all"
-                                      title="Prolonger l'accès de +30 jours"
-                                    >
-                                      +30j
-                                    </button>
+                                    {u.status === 'PENDING_VERIFICATION' ? (
+                                      <>
+                                        <button
+                                          onClick={() => handleApproveSubscription(u)}
+                                          className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-2.5 py-1 rounded text-[11px] transition-all flex items-center gap-1 shadow-md shadow-emerald-500/20 cursor-pointer"
+                                          title="Accorder l'autorisation VIP 30 jours"
+                                        >
+                                          <CheckCircle2 className="w-3.5 h-3.5" /> Autoriser (30j)
+                                        </button>
+                                        <button
+                                          onClick={() => handleRejectSubscription(u)}
+                                          className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer"
+                                          title="Refuser la demande"
+                                        >
+                                          Refuser
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <button
+                                          onClick={() => handleExtendSubscription(u, 30)}
+                                          className="bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/40 px-2 py-1 rounded text-[11px] font-bold transition-all"
+                                          title="Prolonger l'accès de +30 jours"
+                                        >
+                                          +30j
+                                        </button>
 
-                                    <button
-                                      onClick={() => setSelectedUserForEdit(u)}
-                                      className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-1.5 rounded transition-all"
-                                      title="Éditer les paramètres d'abonnement"
-                                    >
-                                      <Edit2 className="w-3.5 h-3.5" />
-                                    </button>
+                                        <button
+                                          onClick={() => {
+                                            setSelectedUserForCredentials(u);
+                                            setIsEditingPasswordInModal(false);
+                                          }}
+                                          className="bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-500/40 p-1.5 rounded transition-all cursor-pointer"
+                                          title="Voir/Copier les identifiants de connexion (Numéro & Mot de passe)"
+                                        >
+                                          <Key className="w-3.5 h-3.5" />
+                                        </button>
 
-                                    <button
-                                      onClick={() => handleToggleSuspend(u)}
-                                      className={`p-1.5 rounded border transition-all ${
-                                        u.status === 'SUSPENDED'
-                                          ? 'bg-emerald-950 text-emerald-300 border-emerald-500/40'
-                                          : 'bg-amber-950 text-amber-300 border-amber-500/40'
-                                      }`}
-                                      title={u.status === 'SUSPENDED' ? 'Débloquer le compte' : 'Suspendre le compte'}
-                                    >
-                                      {u.status === 'SUSPENDED' ? <Check className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
-                                    </button>
+                                        <button
+                                          onClick={() => setSelectedUserForEdit(u)}
+                                          className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-1.5 rounded transition-all"
+                                          title="Éditer les paramètres d'abonnement"
+                                        >
+                                          <Edit2 className="w-3.5 h-3.5" />
+                                        </button>
+
+                                        <button
+                                          onClick={() => handleToggleSuspend(u)}
+                                          className={`p-1.5 rounded border transition-all ${
+                                            u.status === 'SUSPENDED'
+                                              ? 'bg-emerald-950 text-emerald-300 border-emerald-500/40'
+                                              : 'bg-amber-950 text-amber-300 border-amber-500/40'
+                                          }`}
+                                          title={u.status === 'SUSPENDED' ? 'Débloquer le compte' : 'Suspendre le compte'}
+                                        >
+                                          {u.status === 'SUSPENDED' ? <Check className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
+                                        </button>
+                                      </>
+                                    )}
 
                                     <button
                                       onClick={() => setSelectedUserForDelete(u)}
@@ -1562,7 +1835,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                     return (
                       <div
                         key={u.id}
-                        className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-md hover:border-amber-500/40 transition-all font-sans"
+                        className={`rounded-2xl p-5 space-y-4 shadow-md transition-all font-sans ${
+                          u.status === 'PENDING_VERIFICATION'
+                            ? 'bg-gradient-to-b from-amber-950/50 via-slate-900 to-slate-900 border-2 border-amber-500/80 shadow-xl shadow-amber-500/10'
+                            : 'bg-slate-900/90 border border-slate-800 hover:border-amber-500/40'
+                        }`}
                       >
                         <div className="flex items-start justify-between">
                           <div>
@@ -1575,14 +1852,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
                           <span
                             className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
-                              u.status === 'ACTIVE'
+                              u.status === 'PENDING_VERIFICATION'
+                                ? 'bg-amber-500/20 text-amber-300 border border-amber-400 animate-pulse'
+                                : u.status === 'ACTIVE'
                                 ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
                                 : u.status === 'EXPIRING_SOON'
                                 ? 'bg-amber-950 text-amber-300 border border-amber-500/40'
                                 : 'bg-rose-950 text-rose-300 border border-rose-500/40'
                             }`}
                           >
-                            {u.status}
+                            {u.status === 'PENDING_VERIFICATION' ? 'EN ATTENTE' : u.status}
                           </span>
                         </div>
 
@@ -1590,42 +1869,71 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                         <div className="space-y-1 font-mono">
                           <div className="flex items-center justify-between text-[11px] text-slate-300">
                             <span>Jours restants :</span>
-                            <strong className="text-amber-400 font-bold">{daysLeft > 0 ? `${daysLeft} jours` : 'Expiré'}</strong>
+                            <strong className="text-amber-400 font-bold">{u.status === 'PENDING_VERIFICATION' ? 'En attente de validation' : daysLeft > 0 ? `${daysLeft} jours` : 'Expiré'}</strong>
                           </div>
                           <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
                             <div
                               className={`h-full rounded-full transition-all ${
-                                daysLeft > 7 ? 'bg-emerald-400' : daysLeft > 0 ? 'bg-amber-400' : 'bg-rose-500'
+                                u.status === 'PENDING_VERIFICATION' ? 'bg-amber-400 animate-pulse' : daysLeft > 7 ? 'bg-emerald-400' : daysLeft > 0 ? 'bg-amber-400' : 'bg-rose-500'
                               }`}
-                              style={{ width: `${progressPercent}%` }}
+                              style={{ width: `${u.status === 'PENDING_VERIFICATION' ? 100 : progressPercent}%` }}
                             />
                           </div>
                           <p className="text-[10px] text-slate-500">
-                            Expire le : {formatDateFr(u.expirationDate)}
+                            Méthode: <strong className="text-slate-300">{u.paymentMethod}</strong>
                           </p>
                         </div>
 
-                        {/* Quick Action Extensions */}
-                        <div className="pt-2 border-t border-slate-800/80 grid grid-cols-3 gap-1.5 font-mono text-[11px]">
-                          <button
-                            onClick={() => handleExtendSubscription(u, 7)}
-                            className="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1.5 rounded-lg font-bold transition-all text-center border border-slate-700"
-                          >
-                            +7j
-                          </button>
-                          <button
-                            onClick={() => handleExtendSubscription(u, 30)}
-                            className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 py-1.5 rounded-lg font-bold transition-all text-center"
-                          >
-                            +30j (1M)
-                          </button>
-                          <button
-                            onClick={() => handleExtendSubscription(u, 90)}
-                            className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 py-1.5 rounded-lg font-bold transition-all text-center"
-                          >
-                            +90j (3M)
-                          </button>
-                        </div>
+                        {/* Quick Action Extensions or Authorization */}
+                        {u.status === 'PENDING_VERIFICATION' ? (
+                          <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2">
+                            <button
+                              onClick={() => handleApproveSubscription(u)}
+                              className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+                            >
+                              <CheckCircle2 className="w-4 h-4" /> Autoriser (30j VIP)
+                            </button>
+                            <button
+                              onClick={() => handleRejectSubscription(u)}
+                              className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                            >
+                              Refuser
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="pt-2 border-t border-slate-800/80 space-y-2">
+                            <div className="grid grid-cols-3 gap-1.5 font-mono text-[11px]">
+                              <button
+                                onClick={() => handleExtendSubscription(u, 7)}
+                                className="bg-slate-800 hover:bg-slate-700 text-slate-200 py-1.5 rounded-lg font-bold transition-all text-center border border-slate-700"
+                              >
+                                +7j
+                              </button>
+                              <button
+                                onClick={() => handleExtendSubscription(u, 30)}
+                                className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 py-1.5 rounded-lg font-bold transition-all text-center"
+                              >
+                                +30j (1M)
+                              </button>
+                              <button
+                                onClick={() => handleExtendSubscription(u, 90)}
+                                className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 py-1.5 rounded-lg font-bold transition-all text-center"
+                              >
+                                +90j (3M)
+                              </button>
+                            </div>
+                            <button
+                              onClick={() => {
+                                setSelectedUserForCredentials(u);
+                                setIsEditingPasswordInModal(false);
+                              }}
+                              className="w-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 py-1.5 rounded-lg font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-xs"
+                            >
+                              <Key className="w-3.5 h-3.5 text-amber-400" />
+                              <span>Fiche & Identifiants WhatsApp</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -2237,6 +2545,33 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                   />
                 </div>
 
+                {/* Password field for the subscriber */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-amber-400 font-bold flex items-center gap-1">
+                      <Key className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Mot de passe d'accès client :</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={generateRandomPassword}
+                      className="text-[10px] text-amber-300 bg-amber-500/20 border border-amber-500/40 hover:bg-amber-500/30 px-2 py-0.5 rounded-lg font-bold flex items-center gap-1 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-3 h-3 text-amber-400" /> Générer
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={newUserPassword}
+                    onChange={(e) => setNewUserPassword(e.target.value)}
+                    className="w-full bg-slate-950 border border-amber-500/40 rounded-xl px-3 py-2 text-amber-300 font-mono font-bold"
+                  />
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    🔑 Ce mot de passe permettra au client de se connecter via son numéro de téléphone ou son e-mail.
+                  </p>
+                </div>
+
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="block text-slate-300 font-bold mb-1">Téléphone Mobile Money :</label>
@@ -2297,12 +2632,222 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg shadow-amber-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 mt-2"
+                  className="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg shadow-amber-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 mt-2 cursor-pointer"
                 >
                   <UserPlus className="w-4 h-4 text-slate-950" />
-                  <span>Activer l'Abonnement (30 jours)</span>
+                  <span>Activer & Générer Identifiants (30 jours)</span>
                 </button>
               </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* MODAL 4: USER CREDENTIALS & ACCESS CARD MODAL */}
+      <AnimatePresence>
+        {selectedUserForCredentials && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5 font-mono text-xs text-slate-100"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-amber-500/30 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-400">
+                    <Key className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white text-sm">Fiche de Connexion Abonné VIP</h3>
+                    <p className="text-[10px] text-amber-300/80">Identifiants pour remise au client</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedUserForCredentials(null)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Copy Success Alert */}
+              {copySuccessToast && (
+                <div className="bg-emerald-950/90 border border-emerald-500/60 text-emerald-300 p-3 rounded-2xl flex items-center gap-2 text-xs font-bold animate-pulse">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Fiche de connexion copiée ! Prête à être envoyée sur WhatsApp.</span>
+                </div>
+              )}
+
+              {/* Subscriber Credentials Summary Box */}
+              <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
+                {/* User Name & Flag */}
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{selectedUserForCredentials.flag || '🇨🇲'}</span>
+                    <div>
+                      <strong className="text-white text-sm block font-sans">{selectedUserForCredentials.name}</strong>
+                      <span className="text-[10px] text-emerald-400 font-bold uppercase">
+                        Abonnement {selectedUserForCredentials.status === 'PENDING_VERIFICATION' ? 'En Attente' : 'Actif (30 Jours)'}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                    {selectedUserForCredentials.planType}
+                  </span>
+                </div>
+
+                {/* Field 1: Phone */}
+                <div className="space-y-1">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold">📱 Téléphone / Identifiant :</span>
+                  <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
+                    <span className="font-mono text-amber-300 font-bold text-xs">{selectedUserForCredentials.phone}</span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(selectedUserForCredentials.phone);
+                        showToast('Numéro de téléphone copié !', 'info');
+                      }}
+                      className="text-slate-400 hover:text-white flex items-center gap-1 text-[10px] font-bold cursor-pointer"
+                    >
+                      <Copy className="w-3.5 h-3.5" /> Copier
+                    </button>
+                  </div>
+                </div>
+
+                {/* Field 2: Email */}
+                <div className="space-y-1">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold">✉️ Adresse E-mail :</span>
+                  <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
+                    <span className="font-mono text-slate-200 text-xs truncate max-w-[200px]">{selectedUserForCredentials.email}</span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(selectedUserForCredentials.email);
+                        showToast('E-mail copié !', 'info');
+                      }}
+                      className="text-slate-400 hover:text-white flex items-center gap-1 text-[10px] font-bold cursor-pointer"
+                    >
+                      <Copy className="w-3.5 h-3.5" /> Copier
+                    </button>
+                  </div>
+                </div>
+
+                {/* Field 3: Password */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-amber-400 uppercase font-bold">🔑 Mot de passe d'accès :</span>
+                    {!isEditingPasswordInModal && (
+                      <button
+                        onClick={() => {
+                          setIsEditingPasswordInModal(true);
+                          setEditingPasswordValue(selectedUserForCredentials.password || 'Gold2026!');
+                        }}
+                        className="text-[10px] text-slate-400 hover:text-amber-300 underline"
+                      >
+                        Modifier
+                      </button>
+                    )}
+                  </div>
+
+                  {isEditingPasswordInModal ? (
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        type="text"
+                        value={editingPasswordValue}
+                        onChange={(e) => setEditingPasswordValue(e.target.value)}
+                        className="flex-1 bg-slate-900 border border-amber-500/80 rounded-xl px-3 py-1.5 text-amber-300 font-bold"
+                      />
+                      <button
+                        onClick={() => handleSaveUserPassword(selectedUserForCredentials.id, editingPasswordValue)}
+                        className="bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-xl text-xs"
+                      >
+                        Enregistrer
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between bg-slate-900 border border-amber-500/50 rounded-xl px-3 py-2">
+                      <span className="font-mono text-amber-300 font-bold text-sm">
+                        {showPasswordInModal ? (selectedUserForCredentials.password || 'Gold2026!') : '••••••••'}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setShowPasswordInModal(!showPasswordInModal)}
+                          className="text-slate-400 hover:text-white"
+                          title="Afficher/Masquer le mot de passe"
+                        >
+                          {showPasswordInModal ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(selectedUserForCredentials.password || 'Gold2026!');
+                            showToast('Mot de passe copié !', 'info');
+                          }}
+                          className="text-amber-400 hover:text-amber-300 flex items-center gap-1 text-[10px] font-bold cursor-pointer"
+                        >
+                          <Copy className="w-3.5 h-3.5" /> Copier
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Field 4: App Link */}
+                <div className="space-y-1">
+                  <span className="text-[10px] text-slate-400 uppercase font-bold">🌐 Lien du Terminal ChrisXauusd :</span>
+                  <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
+                    <span className="font-mono text-slate-300 text-[10px] truncate max-w-[200px]">{window.location.origin}</span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(window.location.origin);
+                        showToast('Lien du terminal copié !', 'info');
+                      }}
+                      className="text-slate-400 hover:text-white flex items-center gap-1 text-[10px] font-bold cursor-pointer"
+                    >
+                      <Copy className="w-3.5 h-3.5" /> Copier
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Big Action Button: Copy WhatsApp Invitation Text */}
+              <button
+                onClick={() => {
+                  const pass = selectedUserForCredentials.password || 'Gold2026!';
+                  const textToCopy = `📱 *ACCÈS VIP TERMINAL CHRISXAUUSD*
+
+Bonjour *${selectedUserForCredentials.name}*, votre compte abonné VIP est prêt et actif !
+
+Voici vos accès sécurisés pour vous connecter :
+
+🌐 *Lien du Terminal* : ${window.location.origin}
+📞 *Téléphone / Identifiant* : ${selectedUserForCredentials.phone}
+✉️ *E-mail* : ${selectedUserForCredentials.email}
+🔑 *Mot de Passe* : ${pass}
+📅 *Plan* : ${selectedUserForCredentials.planType}
+⏰ *Date d'Expiration* : ${formatDateFr(selectedUserForCredentials.expirationDate)}
+
+⚠️ *Note de sécurité* : Conservez bien ces accès. Pour vous connecter, rendez-vous sur le lien ci-dessus et entrez votre numéro de téléphone et votre mot de passe.
+
+Bon trading et bienvenue dans la communauté VIP ! 📈⚡`;
+                  navigator.clipboard.writeText(textToCopy);
+                  setCopySuccessToast(true);
+                  showToast('Fiche de connexion WhatsApp copiée !', 'success');
+                  setTimeout(() => setCopySuccessToast(false), 4000);
+                }}
+                className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-emerald-500/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer font-sans text-xs"
+              >
+                <Copy className="w-4 h-4 text-slate-950" />
+                <span>Copier la Fiche WhatsApp Complète</span>
+              </button>
+
+              <div className="text-center pt-1">
+                <button
+                  onClick={() => setSelectedUserForCredentials(null)}
+                  className="text-slate-400 hover:text-white text-[11px] underline"
+                >
+                  Fermer la fenêtre
+                </button>
+              </div>
             </motion.div>
           </div>
         )}
