@@ -103,10 +103,15 @@ export function calculateConvictionRate(score: number, rrRatio: number, grade: S
   return Math.min(98, base + Math.max(0, rrBonus));
 }
 
+export function validateSetupConditions(factors: ConfluenceFactor[], score: number): boolean {
+  // Validation stricte : Un setup ne peut être publié que si le score de confluence est suffisant (>= 4/5) et que les facteurs requis sont validés
+  return score >= 4 && factors.every((f) => f.met);
+}
+
 export function createNewTradeSetup(
   currentPrice: number,
   forceType?: TradeType
-): TradeSetup {
+): TradeSetup | null {
   ticketCounter += 1;
   const isBuy = forceType ? forceType === 'BUY' : true;
   
@@ -137,6 +142,12 @@ export function createNewTradeSetup(
 
   // Generate Confluence Factors and Setup Quality Grade
   const { factors, score, grade, confluenceStrings } = buildConfluenceSet(isBuy, entryPrice);
+  
+  // RÈGLE ABSOLUE : Si les conditions ne sont pas validées, AUCUN setup n'est généré ni publié
+  if (!validateSetupConditions(factors, score)) {
+    return null;
+  }
+
   const convictionRate = calculateConvictionRate(score, rrRatio, grade);
 
   const now = new Date();

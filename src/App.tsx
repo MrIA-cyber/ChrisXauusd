@@ -506,6 +506,10 @@ export default function App() {
     }
 
     const newSetup = createNewTradeSetup(currentPriceRef.current, forceType);
+    if (!newSetup) {
+      setIsAnalyzingNextSignal(false);
+      return;
+    }
     soundService.playNewSignalSound(soundEnabledRef.current);
     sendNewSignalWebNotification(newSetup.type, newSetup.entryPrice, newSetup.takeProfit, newSetup.stopLoss);
     saveSetupToFirestore(newSetup);
