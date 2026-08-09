@@ -33,18 +33,17 @@ export const GlobalRankingCard: React.FC = () => {
 
   return (
     <div className="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-amber-500/30 rounded-[22px] p-4 sm:p-6 shadow-2xl text-slate-100 relative overflow-hidden font-sans my-4">
-      {/* Decorative Glow Effects */}
-      <div className="absolute -top-20 -right-20 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Decorative Glow Effects (GPU-friendly blur-xl) */}
+      <div className="absolute -top-12 -right-12 w-48 h-48 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
+      <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-cyan-500/10 rounded-full blur-xl pointer-events-none" />
 
       {/* Header Badge & Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800 relative z-10">
         <div className="flex items-start sm:items-center gap-3">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/30 border border-amber-400/40 text-amber-400 shadow-inner shrink-0 relative">
-            <Award className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 animate-pulse" />
-            <span className="absolute -top-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          <div className="p-3 rounded-2xl bg-slate-800/80 border border-amber-400/40 text-amber-400 shrink-0 relative">
+            <Award className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400" />
+            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 animate-pulse"></span>
             </span>
           </div>
           <div>
@@ -66,16 +65,16 @@ export const GlobalRankingCard: React.FC = () => {
         </div>
 
         {/* Global Rank Badge Display */}
-        <div className="bg-slate-900/90 border border-amber-500/40 rounded-xl p-3 flex items-center gap-3 shrink-0 self-start md:self-auto shadow-md relative">
+        <div className="bg-slate-900 border border-amber-500/40 rounded-xl p-3 flex items-center gap-3 shrink-0 self-start md:self-auto shadow-md relative">
           <div className="text-right">
             <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Rang Global Spécialisé Gold
             </div>
-            <div className="text-lg sm:text-2xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-400">
+            <div className="text-sm sm:text-lg font-mono font-black text-amber-300">
               TOP #1 AFRIQUE / TOP #3 MONDIAL
             </div>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/15 border border-amber-400/40 flex items-center justify-center font-mono font-black text-amber-300 text-lg sm:text-xl shadow-inner shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center font-mono font-black text-amber-300 text-lg sm:text-xl shrink-0">
             #1
           </div>
         </div>

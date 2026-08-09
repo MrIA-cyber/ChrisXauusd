@@ -133,14 +133,14 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
       {/* 1. COMPACT ELEGANT HERO HEADER */}
       <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xs relative overflow-hidden space-y-5 text-center">
         {/* Glow backdrop */}
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-12 -left-12 w-48 h-48 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
+        <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-cyan-500/10 rounded-full blur-xl pointer-events-none" />
 
         <div className="relative z-10 space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-mono text-[11px] font-bold uppercase">
             <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
             <span>Terminal Institutionnel • XAU/USD</span>
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
           </div>
 
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono tracking-tight leading-snug">
