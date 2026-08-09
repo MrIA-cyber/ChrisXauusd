@@ -44,7 +44,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#060D1E]/95 border-t border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-[0_-8px_30px_rgba(0,0,0,0.1)] px-2 py-1.5 transition-all">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#060D1E]/95 border-t border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-[0_-8px_30px_rgba(0,0,0,0.1)] px-2 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))] transition-all">
       <div className="max-w-md mx-auto flex items-center justify-around">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -54,7 +54,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`relative flex flex-col items-center justify-center py-1 px-2.5 min-w-[58px] rounded-xl transition-all cursor-pointer select-none active:scale-95 ${
+              className={`relative flex flex-col items-center justify-center py-1.5 px-2 min-w-[56px] min-h-[44px] rounded-xl transition-all cursor-pointer select-none active:scale-95 ${
                 isActive
                   ? 'text-amber-500 font-bold dark:text-amber-400'
                   : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'

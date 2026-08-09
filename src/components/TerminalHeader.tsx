@@ -488,7 +488,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
 
             {/* Compact & Discrete Notification Popover */}
             {isNotifPopoverOpen && (
-              <div className="absolute right-0 mt-2 w-80 sm:w-88 bg-[var(--dropdown-bg)] border border-[var(--border-card)] rounded-2xl shadow-2xl z-50 overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150 font-sans">
+              <div className="absolute right-0 mt-2 w-80 sm:w-88 max-w-[calc(100vw-1rem)] bg-[var(--dropdown-bg)] border border-[var(--border-card)] rounded-2xl shadow-2xl z-50 overflow-hidden backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150 font-sans">
                 
                 {/* Popover Header */}
                 <div className="px-3.5 py-2.5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
