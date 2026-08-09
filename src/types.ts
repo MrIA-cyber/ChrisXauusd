@@ -122,6 +122,10 @@ export interface AuthUser {
   name: string;
   avatarUrl?: string;
   subscription: UserSubscription;
+  // Single Device Licensing (1 abonnement = 1 compte = 1 appareil autorise)
+  activeDeviceId?: string;
+  deviceSessionToken?: string;
+  lastDeviceLogin?: string;
   // VIP Trader Preferences & Customizations
   traderLevel?: 'DEBUTANT' | 'INTERMEDIAIRE' | 'SCALPER_PRO' | 'MASTER_TRADER';
   tradingAccountBalance?: number;

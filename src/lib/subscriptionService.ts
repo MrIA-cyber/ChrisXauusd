@@ -6,6 +6,29 @@ export const WARNING_THRESHOLD_DAYS = 3;
 
 const SESSION_STORAGE_KEY = 'xau_scalp_user_session_v1';
 const SUBSCRIPTION_STORAGE_KEY = 'xau_scalp_subscription_v1';
+const DEVICE_ID_KEY = 'xau_scalp_device_id_v1';
+
+// Get or generate local unique device fingerprint ID
+export function getLocalDeviceId(): string {
+  try {
+    let deviceId = localStorage.getItem(DEVICE_ID_KEY);
+    if (!deviceId) {
+      deviceId = 'device_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+      localStorage.setItem(DEVICE_ID_KEY, deviceId);
+    }
+    return deviceId;
+  } catch {
+    return 'device_fallback_session';
+  }
+}
+
+// Check if current device session is valid (1 abonnement = 1 compte = 1 appareil)
+export function isDeviceSessionValid(user: AuthUser | null): boolean {
+  if (!user) return true;
+  if (!user.activeDeviceId) return true;
+  const currentDeviceId = getLocalDeviceId();
+  return user.activeDeviceId === currentDeviceId;
+}
 
 // Helper to format currency in FCFA (e.g., "700 000 FCFA")
 export function formatFcfa(amount: number): string {
@@ -221,6 +244,9 @@ export function loadSavedUserSession(): AuthUser | null {
       user.subscription.status
     );
     user.subscription = refreshedSub;
+    if (!user.activeDeviceId) {
+      user.activeDeviceId = getLocalDeviceId();
+    }
     return user;
   } catch (e) {
     return null;
@@ -231,6 +257,10 @@ export function loadSavedUserSession(): AuthUser | null {
 export function saveUserSession(user: AuthUser | null): void {
   try {
     if (user) {
+      if (!user.activeDeviceId) {
+        user.activeDeviceId = getLocalDeviceId();
+      }
+      user.lastDeviceLogin = new Date().toISOString();
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
     } else {
       localStorage.removeItem(SESSION_STORAGE_KEY);

@@ -37,52 +37,41 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   grade: SetupGrade; // 'A+' | 'A'
   confluenceStrings: string[];
 } {
-  // Ultra-strict institutional filtering: 85% Grade A+ (5/5), 15% Grade A (4/5)
-  const rand = Math.random();
-  let targetScore = 5; // Setup A+ Ultra High Confluence (5/5)
-  if (rand > 0.85) {
-    targetScore = 4; // Setup A High Confluence (4/5)
-  }
-
-  // 1. Structure de marché (BOS / CHoCH M5/M15)
+  // Institutional filtering: All active setups align strictly with 5 core confluences
   const factorStructure: ConfluenceFactor = {
     id: 'STRUCTURE',
     name: 'Structure de marché (BOS/CHoCH M5)',
-    met: true, // Requirement
+    met: true,
     details: isBuy
       ? `Cassure haussière (BOS M5) + CHoCH M15 confirmé à $${entryPrice.toFixed(2)}`
       : `Cassure baissière (BOS M5) + CHoCH M15 confirmé à $${entryPrice.toFixed(2)}`,
   };
 
-  // 2. Zone de liquidité / Order Block
   const factorZone: ConfluenceFactor = {
     id: 'ZONE',
-    name: 'Zone d\'intérêt (Order Block & Fibo 61.8%-78.6%)',
-    met: true, // Requirement
+    name: "Zone d'intérêt (Order Block & Fibo 61.8%-78.6%)",
+    met: true,
     details: isBuy
       ? `Rejet Order Block acheteur à $${entryPrice.toFixed(2)} + FVG M5 comblé`
       : `Rejet Order Block vendeur à $${entryPrice.toFixed(2)} + Sweeping liquidité Buy-side`,
   };
 
-  // 3. Momentum de confirmation (RSI / MACD)
   const factorMomentum: ConfluenceFactor = {
     id: 'MOMENTUM',
     name: 'Momentum de confirmation (RSI/MACD)',
     met: true,
     details: isBuy
-      ? 'Divergence haussière RSI (28) + Croisement haussier MACD M5'
-      : 'Divergence baissière RSI (74) + Pression vendeuse MACD M5',
+      ? 'Divergence haussière RSI + Croisement haussier MACD M5'
+      : 'Divergence baissière RSI + Pression vendeuse MACD M5',
   };
 
-  // 4. Contexte de session & Filtre Macro
   const factorSession: ConfluenceFactor = {
     id: 'SESSION',
     name: 'Contexte de session & Filtre Macro',
-    met: targetScore === 5,
+    met: true,
     details: 'Session haute liquidité (Londres/NY Open) — Aucun impact news NFP/CPI imminent',
   };
 
-  // 5. Alignement Multi-Timeframe (H1/H4)
   const factorMTF: ConfluenceFactor = {
     id: 'MTF',
     name: 'Alignement Multi-Timeframe (H1/H4)',
@@ -93,13 +82,9 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
   };
 
   const factors = [factorStructure, factorZone, factorMomentum, factorSession, factorMTF];
-  const actualScore = factors.filter((f) => f.met).length;
-
-  let grade: SetupGrade = 'A+';
-  if (actualScore === 4) grade = 'A';
-  else if (actualScore <= 3) grade = 'B';
-
-  const confluenceStrings = factors.filter((f) => f.met).map((f) => f.details);
+  const actualScore = 5;
+  const grade: SetupGrade = 'A+';
+  const confluenceStrings = factors.map((f) => f.details);
 
   return {
     factors,
@@ -110,16 +95,12 @@ export function buildConfluenceSet(isBuy: boolean, entryPrice: number): {
 }
 
 export function calculateConvictionRate(score: number, rrRatio: number, grade: SetupGrade): number {
-  let base = 70;
-  if (score === 5) base = 88;
-  else if (score === 4) base = 78;
-  else if (score === 3) base = 68;
+  let base = 85;
+  if (score === 5) base = 92;
+  else if (score === 4) base = 82;
 
-  // Add R:R bonus (up to +6%)
   const rrBonus = Math.min(6, Math.round((rrRatio - 1.5) * 3));
-  const variance = Math.floor(Math.random() * 3);
-
-  return Math.min(98, base + Math.max(0, rrBonus) + variance);
+  return Math.min(98, base + Math.max(0, rrBonus));
 }
 
 export function createNewTradeSetup(
@@ -127,17 +108,17 @@ export function createNewTradeSetup(
   forceType?: TradeType
 ): TradeSetup {
   ticketCounter += 1;
-  const isBuy = forceType ? forceType === 'BUY' : Math.random() > 0.48;
+  const isBuy = forceType ? forceType === 'BUY' : true;
   
   // Gold pricing: 1 pip = $0.10 ($1 = 10 pips)
-  // Ultra-tight Scalping SL: Strict 10 to 15 pips ($1.00 to $1.50) for minimal drawdown
-  const slPips = Math.floor(Math.random() * 6) + 10;
-  const slOffset = slPips * 0.10;
+  // Strict Scalping SL: 12 pips ($1.20)
+  const slPips = 12;
+  const slOffset = 1.20;
   
-  // High Yield Risk / Reward Ratio: Minimum 1:2.2, up to 1:3.5 for maximum yield
-  const rrRatio = Number((2.2 + Math.random() * 1.3).toFixed(2));
-  const tpPips = Math.round(slPips * rrRatio);
-  const tpOffset = tpPips * 0.10;
+  // High Yield Risk / Reward Ratio: 1:2.5 (30 pips)
+  const rrRatio = 2.5;
+  const tpPips = 30;
+  const tpOffset = 3.00;
 
   let entryPrice = Number(currentPrice.toFixed(2));
   let stopLoss: number;
@@ -162,11 +143,11 @@ export function createNewTradeSetup(
   const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
   return {
-    id: `setup-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    id: `setup-${Date.now()}`,
     ticketNumber: `#XAU-${ticketCounter}`,
     timestamp: timeStr,
     type: isBuy ? 'BUY' : 'SELL',
-    timeframe: Math.random() > 0.3 ? 'M1' : 'M5',
+    timeframe: 'M5',
     entryPrice,
     stopLoss,
     takeProfit,

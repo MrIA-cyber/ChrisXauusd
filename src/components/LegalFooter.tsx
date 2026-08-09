@@ -64,7 +64,7 @@ export const LegalFooter: React.FC = () => {
             <span className="hidden sm:inline">© {new Date().getFullYear()} ChrisXauusd — Signaux de trading Or. Tous droits réservés.</span>
           </div>
           <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400 text-center">
-            Fondateur : Chris Pokam • Trader certifié : Osher Nikos
+            Fondateur : Chris Pokam
           </div>
           <div className="flex items-center gap-3">
             <span>Terminal Version: <strong className="text-blue-700">2.4.0-LIGHT</strong></span>

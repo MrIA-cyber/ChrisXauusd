@@ -15,7 +15,7 @@ import User from './models/User.js';
 import Subscription from './models/Subscription.js';
 import { connectToDatabase, getDbStatus } from './services/db.js';
 import { startSignalCron, runSignalAnalysis } from './cron/signalCron.js';
-import { getForexData, getLiveQuote } from './services/forexData.js';
+import { getForexData, getLiveQuote, getQuotaStatus } from './services/forexData.js';
 import { generateSignal } from './services/signalGenerator.js';
 import { fetchLiveMarketNews } from './services/realNewsService.js';
 
@@ -43,6 +43,7 @@ connectToDatabase()
 // 2. Endpoint de vérification de santé du serveur
 app.get('/health', (req, res) => {
   const mongoStatus = getDbStatus();
+  const quota = getQuotaStatus();
   res.json({
     status: 'OK',
     app: 'ChrisXauusd Signal Engine',
@@ -51,6 +52,7 @@ app.get('/health', (req, res) => {
       type: 'MongoDB',
       status: mongoStatus,
     },
+    twelveDataQuota: quota,
     twelveDataApiKeyConfigured: true,
   });
 });
@@ -63,6 +65,20 @@ app.get('/api/price/xauusd', async (req, res) => {
     return res.json(quoteResult);
   } catch (err) {
     return res.status(500).json({ success: false, error: 'Erreur lors de la récupération du prix' });
+  }
+});
+
+// Endpoint Admin Status Twelve Data Quota
+app.get('/api/admin/twelve-data-status', (req, res) => {
+  try {
+    const quotaStatus = getQuotaStatus();
+    return res.json({
+      success: true,
+      timestamp: new Date().toISOString(),
+      quotaStatus,
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
   }
 });
 

@@ -711,7 +711,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
             {/* Dropdown Menu Overlay */}
             {isMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-60 sm:w-64 min-w-[220px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-2 z-50 space-y-1 font-mono text-[10px] sm:text-[10.5px] backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150"
+                className="absolute right-0 mt-2 w-60 sm:w-64 max-w-[calc(100vw-1.5rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-2 z-50 space-y-1 font-mono text-[10px] sm:text-[10.5px] backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <div className="px-2 py-1 mb-1 border-b border-slate-200 dark:border-slate-800 text-[9px] text-slate-700 dark:text-slate-300 uppercase tracking-wider font-extrabold flex items-center justify-between">

@@ -30,12 +30,15 @@ import {
   calculateSubscriptionDetails,
   createDatesForDaysLeft,
   generateActiveSubscription,
+  getLocalDeviceId,
 } from './lib/subscriptionService';
 import {
   saveSetupToFirestore,
   saveMultipleSetupsToFirestore,
   subscribeToSetupsFromFirestore,
   saveUserSubscriptionToFirestore,
+  registerDeviceSessionInFirestore,
+  subscribeToUserSubscriptionFromFirestore,
 } from './lib/firebase';
 import { fetchLiveXauUsdQuote } from './lib/twelveDataService';
 
@@ -63,6 +66,7 @@ import { ChrisBioBubble } from './components/ChrisBioBubble';
 import { InstallPwaModal } from './components/InstallPwaModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { ScalpingEbookPdfModal } from './components/ScalpingEbookPdfModal';
+import { DeviceConflictModal } from './components/DeviceConflictModal';
 
 import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn, Calendar, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -128,6 +132,47 @@ export default function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [profileModalTab, setProfileModalTab] = useState<'PHOTO' | 'INFO' | 'TRADING' | 'PREF' | 'CALENDAR'>('PHOTO');
   const [isEbookModalOpen, setIsEbookModalOpen] = useState<boolean>(false);
+
+  // Single Device Licensing Enforcement State (1 abonnement = 1 compte = 1 appareil)
+  const [isDeviceConflictModalOpen, setIsDeviceConflictModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!userSession || userSession.subscription?.status === 'VISITOR') {
+      setIsDeviceConflictModalOpen(false);
+      return;
+    }
+
+    const currentDeviceId = getLocalDeviceId();
+
+    // Verify local device ID alignment
+    if (userSession.activeDeviceId && userSession.activeDeviceId !== currentDeviceId) {
+      setIsDeviceConflictModalOpen(true);
+    }
+
+    // Subscribe to Firestore for live multi-device session updates
+    if (userSession.id) {
+      const unsub = subscribeToUserSubscriptionFromFirestore(userSession.id, (_sub, remoteDeviceId) => {
+        if (remoteDeviceId && remoteDeviceId !== currentDeviceId) {
+          setIsDeviceConflictModalOpen(true);
+        }
+      });
+      return () => unsub();
+    }
+  }, [userSession]);
+
+  const handleTransferToThisDevice = () => {
+    if (!userSession) return;
+    const currentDeviceId = getLocalDeviceId();
+    const updatedUser: AuthUser = {
+      ...userSession,
+      activeDeviceId: currentDeviceId,
+      lastDeviceLogin: new Date().toISOString(),
+    };
+    setUserSession(updatedUser);
+    saveUserSession(updatedUser);
+    registerDeviceSessionInFirestore(updatedUser.id, currentDeviceId);
+    setIsDeviceConflictModalOpen(false);
+  };
 
   const handleOpenCalendar = () => {
     setProfileModalTab('CALENDAR');
@@ -265,7 +310,7 @@ export default function App() {
     };
 
     fetchQuote();
-    const interval = setInterval(fetchQuote, 10000); // Refresh live baseline every 10 seconds
+    const interval = setInterval(fetchQuote, 30000); // Refresh live baseline every 30 seconds (optimized for API quota)
 
     return () => {
       isMounted = false;
@@ -675,9 +720,9 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] flex flex-col font-sans selection:bg-amber-500 selection:text-white relative overflow-x-hidden transition-colors duration-300">
       {/* Background Subtle Ambient Glows in Light Palette */}
-      <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none z-0" />
-      <div className="fixed top-1/3 right-10 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-3xl pointer-events-none z-0" />
-      <div className="fixed bottom-10 left-10 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="fixed top-0 left-1/4 w-[min(50vw,500px)] h-[min(50vw,500px)] bg-amber-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="fixed top-1/3 right-10 w-[min(50vw,500px)] h-[min(50vw,500px)] bg-blue-600/5 rounded-full blur-3xl pointer-events-none z-0" />
+      <div className="fixed bottom-10 left-10 w-[min(50vw,500px)] h-[min(50vw,500px)] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none z-0" />
 
       <ChrisBioBubble
         isVisible={showBioBubble}
@@ -988,6 +1033,14 @@ export default function App() {
       <ScalpingEbookPdfModal
         isOpen={isEbookModalOpen}
         onClose={() => setIsEbookModalOpen(false)}
+      />
+
+      {/* Single Device Policy Modal (1 abonnement = 1 compte = 1 appareil) */}
+      <DeviceConflictModal
+        isOpen={isDeviceConflictModalOpen}
+        user={userSession}
+        onTransferToThisDevice={handleTransferToThisDevice}
+        onLogout={handleLogout}
       />
 
       {/* 9. Legal Footer */}

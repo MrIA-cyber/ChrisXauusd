@@ -100,7 +100,7 @@ export function subscribeToSetupsFromFirestore(
 }
 
 /**
- * Save User Subscription & Auth Profile in Firestore
+ * Save User Subscription & Auth Profile in Firestore with Device ID binding
  */
 export async function saveUserSubscriptionToFirestore(
   userId: string,
@@ -115,12 +115,71 @@ export async function saveUserSubscriptionToFirestore(
         userId,
         ...subscription,
         ...(userData ? { userDetails: userData } : {}),
+        activeDeviceId: userData?.activeDeviceId || null,
         updatedAt: new Date().toISOString(),
       },
       { merge: true }
     );
   } catch (error) {
     console.error('Error saving subscription to Firestore:', error);
+  }
+}
+
+/**
+ * Register active device ID session in Firestore (1 abonnement = 1 compte = 1 appareil)
+ */
+export async function registerDeviceSessionInFirestore(
+  userId: string,
+  deviceId: string
+): Promise<void> {
+  try {
+    const subRef = doc(db, SUBSCRIPTIONS_COLLECTION, userId);
+    await setDoc(
+      subRef,
+      {
+        activeDeviceId: deviceId,
+        lastDeviceLogin: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error('Error registering device session in Firestore:', error);
+  }
+}
+
+/**
+ * Real-time listener for user subscription & device session changes
+ */
+export function subscribeToUserSubscriptionFromFirestore(
+  userId: string,
+  onUpdate: (subscription: UserSubscription, activeDeviceId?: string) => void
+): () => void {
+  try {
+    const subRef = doc(db, SUBSCRIPTIONS_COLLECTION, userId);
+    const unsubscribe = onSnapshot(
+      subRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const sub: UserSubscription = {
+            status: data.status,
+            startDate: data.startDate,
+            expirationDate: data.expirationDate,
+            daysRemaining: data.daysRemaining,
+            paymentMethod: data.paymentMethod,
+            amountFcfa: data.amountFcfa,
+          };
+          onUpdate(sub, data.activeDeviceId);
+        }
+      },
+      (error) => {
+        console.error('Firestore user subscription snapshot error:', error);
+      }
+    );
+    return unsubscribe;
+  } catch (error) {
+    console.error('Failed to subscribe to user subscription:', error);
+    return () => {};
   }
 }
 

@@ -44,12 +44,12 @@ export const ChrisBioBubble: React.FC<ChrisBioBubbleProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="pointer-events-auto bg-white border border-blue-200 rounded-2xl p-3.5 sm:p-4 shadow-xl shadow-blue-950/15 flex items-start gap-3 relative text-slate-900 font-sans backdrop-blur-sm"
+            className="pointer-events-auto bg-[#071426] border border-[#00E5FF]/30 rounded-2xl p-3.5 sm:p-4 shadow-2xl flex items-start gap-3 relative text-slate-100 font-sans backdrop-blur-md"
           >
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute top-2.5 right-2.5 p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              className="absolute top-2.5 right-2.5 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label="Fermer la bulle"
             >
               <X className="w-4 h-4" />
@@ -61,11 +61,11 @@ export const ChrisBioBubble: React.FC<ChrisBioBubbleProps> = ({
               className="relative shrink-0 mt-0.5 cursor-pointer select-none group"
               title="Trader Lead Profile"
             >
-              <div className="w-11 h-11 rounded-full bg-blue-900 text-white border-2 border-blue-200 font-mono font-black text-lg flex items-center justify-center shadow-md shadow-blue-900/20">
+              <div className="w-11 h-11 rounded-full bg-[#030B16] text-[#00E5FF] border-2 border-[#00E5FF]/40 font-mono font-black text-lg flex items-center justify-center shadow-md">
                 C
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center">
-                <CheckCircle2 className="w-2.5 h-2.5 text-white" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#22C55E] border-2 border-[#071426] flex items-center justify-center">
+                <CheckCircle2 className="w-2.5 h-2.5 text-[#030B16]" />
               </div>
 
               {isPressing && (
@@ -75,7 +75,7 @@ export const ChrisBioBubble: React.FC<ChrisBioBubbleProps> = ({
                     cy="26"
                     r="23"
                     fill="none"
-                    stroke="#F59E0B"
+                    stroke="#00E5FF"
                     strokeWidth="3"
                     strokeDasharray="145"
                     strokeDashoffset={145 - (145 * progress) / 100}
@@ -88,18 +88,18 @@ export const ChrisBioBubble: React.FC<ChrisBioBubbleProps> = ({
             {/* Bio Content */}
             <div className="pr-6 space-y-1">
               <div className="flex items-center gap-2">
-                <span className="font-bold font-mono text-sm text-slate-900">
+                <span className="font-bold font-mono text-sm text-white">
                   Chris Pokam
                 </span>
-                <span className="px-2 py-0.2 rounded-full text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 inline-flex items-center gap-1">
-                  <Award className="w-3 h-3 text-amber-600" />
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 inline-flex items-center gap-1">
+                  <Award className="w-3 h-3 text-amber-400" />
                   <span>Fondateur</span>
                 </span>
               </div>
 
-              <p className="text-xs text-slate-600 leading-snug font-sans">
+              <p className="text-xs text-slate-300 leading-snug font-sans">
                 Fondateur Chris Pokam, génie des temps modernes.{' '}
-                <span className="text-blue-700 font-medium">
+                <span className="text-[#00E5FF] font-medium">
                   {profileType === 'TRADER'
                     ? 'Ravi de vous compter parmi nos Traders !'
                     : 'Bienvenue sur ChrisXauusd !'}

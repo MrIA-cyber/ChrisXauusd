@@ -221,25 +221,25 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
 
   return (
     <section className="relative my-8 max-w-7xl mx-auto px-4 font-sans">
-      {/* Container Box with Light Theme Glassmorphism */}
-      <div className="bg-white border border-slate-200/80 rounded-[20px] p-6 sm:p-8 shadow-[0_10px_30px_rgba(15,23,42,0.05)] relative overflow-hidden">
+      {/* Container Box with Dark Sapphire Glassmorphism */}
+      <div className="bg-[#071426] border border-[#00E5FF]/20 rounded-[24px] p-6 sm:p-8 shadow-2xl relative overflow-hidden">
         
         {/* Background Ambient Glows */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-3xl pointer-events-none" />
 
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200/80 pb-6 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-800 pb-6 relative z-10">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-700 font-mono text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 fill-current text-amber-500" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 fill-current text-amber-400" />
               <span>COMMUNAUTÉ CHRISXAUUSD</span>
             </div>
-            <h2 className="text-lg sm:text-2xl font-black font-mono text-[#0F172A] tracking-tight flex items-center gap-2">
+            <h2 className="text-lg sm:text-2xl font-black font-mono text-white tracking-tight flex items-center gap-2">
               <span>⭐ Ce que pensent nos abonnés</span>
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl font-sans leading-relaxed">
-              Plus de traders nous font confiance chaque jour grâce à nos signaux en temps réel sur l'Or (XAUUSD). Découvez leurs retours d'expérience authentiques.
+            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl font-sans leading-relaxed">
+              Plus de traders nous font confiance chaque jour grâce à nos signaux en temps réel sur l'Or (XAUUSD). Découvrez leurs retours d'expérience authentiques.
             </p>
           </div>
 
@@ -253,9 +253,9 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                   setIsSubmitModalOpen(true);
                 }
               }}
-              className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-mono text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 group transform active:scale-95"
+              className="bg-amber-400 hover:bg-amber-300 text-[#030B16] font-mono text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 group transform active:scale-95 cursor-pointer"
             >
-              <MessageSquarePlus className="w-4 h-4 text-slate-950 group-hover:rotate-12 transition-transform" />
+              <MessageSquarePlus className="w-4 h-4 text-[#030B16] group-hover:rotate-12 transition-transform" />
               <span>Donner mon avis</span>
             </button>
           </div>
@@ -265,72 +265,72 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 my-6 relative z-10">
           
           {/* Rating Big Card */}
-          <div className="col-span-2 sm:col-span-1 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/80 rounded-[16px] p-4 flex flex-col items-center justify-center text-center shadow-xs">
+          <div className="col-span-2 sm:col-span-1 bg-amber-500/10 border border-amber-500/30 rounded-[16px] p-4 flex flex-col items-center justify-center text-center shadow-xs">
             <div className="flex items-center gap-1 mb-1">
-              <span className="text-xl sm:text-2xl font-black font-mono text-amber-600">4.9</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-amber-400">4.9</span>
               <span className="text-sm font-bold font-mono text-slate-400">/ 5</span>
             </div>
-            <div className="flex items-center gap-1 text-amber-500 mb-1">
+            <div className="flex items-center gap-1 text-amber-400 mb-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
               ))}
             </div>
-            <span className="text-[10px] font-mono text-slate-500">
+            <span className="text-[10px] font-mono text-slate-400">
               Basé sur retours abonnés
             </span>
           </div>
 
           {/* Metric 1: Active Subscribers */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-[16px] p-3.5 flex flex-col justify-between">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="bg-[#030B16] border border-slate-800 rounded-[16px] p-3.5 flex flex-col justify-between">
+            <div className="flex items-center justify-between text-slate-400">
               <span className="text-[11px] font-mono uppercase font-semibold">Abonnés VIP</span>
-              <Users className="w-4 h-4 text-blue-600" />
+              <Users className="w-4 h-4 text-[#00E5FF]" />
             </div>
             <div className="mt-2">
-              <span className="text-base sm:text-lg font-bold font-mono text-[#0F172A]">1 450+</span>
-              <p className="text-[10px] text-emerald-600 font-mono font-medium flex items-center gap-1 mt-0.5">
+              <span className="text-base sm:text-lg font-bold font-mono text-white">1 450+</span>
+              <p className="text-[10px] text-[#22C55E] font-mono font-medium flex items-center gap-1 mt-0.5">
                 <TrendingUp className="w-3 h-3" /> +12% ce mois
               </p>
             </div>
           </div>
 
           {/* Metric 2: Satisfaction Rate */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-[16px] p-3.5 flex flex-col justify-between">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="bg-[#030B16] border border-slate-800 rounded-[16px] p-3.5 flex flex-col justify-between">
+            <div className="flex items-center justify-between text-slate-400">
               <span className="text-[11px] font-mono uppercase font-semibold">Satisfaction</span>
-              <Award className="w-4 h-4 text-emerald-600" />
+              <Award className="w-4 h-4 text-[#22C55E]" />
             </div>
             <div className="mt-2">
-              <span className="text-base sm:text-lg font-bold font-mono text-emerald-600">98.4%</span>
-              <p className="text-[10px] text-slate-500 font-mono mt-0.5">
+              <span className="text-base sm:text-lg font-bold font-mono text-[#22C55E]">98.4%</span>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">
                 Taux de réabonnement
               </p>
             </div>
           </div>
 
           {/* Metric 3: Success Rate */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-[16px] p-3.5 flex flex-col justify-between">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="bg-[#030B16] border border-slate-800 rounded-[16px] p-3.5 flex flex-col justify-between">
+            <div className="flex items-center justify-between text-slate-400">
               <span className="text-[11px] font-mono uppercase font-semibold">Taux de TP</span>
-              <Zap className="w-4 h-4 text-amber-500" />
+              <Zap className="w-4 h-4 text-amber-400" />
             </div>
             <div className="mt-2">
-              <span className="text-base sm:text-lg font-bold font-mono text-amber-600">84.5%</span>
-              <p className="text-[10px] text-slate-500 font-mono mt-0.5">
+              <span className="text-base sm:text-lg font-bold font-mono text-amber-400">84.5%</span>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">
                 Audité en temps réel
               </p>
             </div>
           </div>
 
           {/* Metric 4: Signals Published */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-[16px] p-3.5 flex flex-col justify-between col-span-2 sm:col-span-1">
-            <div className="flex items-center justify-between text-slate-500">
+          <div className="bg-[#030B16] border border-slate-800 rounded-[16px] p-3.5 flex flex-col justify-between col-span-2 sm:col-span-1">
+            <div className="flex items-center justify-between text-slate-400">
               <span className="text-[11px] font-mono uppercase font-semibold">Signaux Émis</span>
-              <ShieldCheck className="w-4 h-4 text-purple-600" />
+              <ShieldCheck className="w-4 h-4 text-[#00E5FF]" />
             </div>
             <div className="mt-2">
-              <span className="text-base sm:text-lg font-bold font-mono text-[#0F172A]">3 200+</span>
-              <p className="text-[10px] text-slate-500 font-mono mt-0.5">
+              <span className="text-base sm:text-lg font-bold font-mono text-white">3 200+</span>
+              <p className="text-[10px] text-slate-400 font-mono mt-0.5">
                 Historique transparent
               </p>
             </div>
@@ -343,17 +343,17 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
           
           {/* Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 font-mono text-xs scrollbar-none">
-            <div className="flex items-center gap-1 text-slate-500 mr-2 shrink-0">
+            <div className="flex items-center gap-1 text-slate-400 mr-2 shrink-0">
               <Filter className="w-3.5 h-3.5" />
               <span className="text-[11px]">Filtrer :</span>
             </div>
 
             <button
               onClick={() => setActiveFilter('Tous')}
-              className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 ${
+              className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 cursor-pointer ${
                 activeFilter === 'Tous'
-                  ? 'bg-[#0F172A] text-white shadow-md font-bold'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
+                  ? 'bg-[#00E5FF] text-[#030B16] shadow-md font-bold'
+                  : 'bg-[#030B16] hover:bg-slate-900 text-slate-300 border border-slate-800'
               }`}
             >
               Tous ({reviews.length})
@@ -361,10 +361,10 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
 
             <button
               onClick={() => setActiveFilter('5_STARS')}
-              className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
                 activeFilter === '5_STARS'
-                  ? 'bg-[#0F172A] text-white shadow-md font-bold'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
+                  ? 'bg-[#00E5FF] text-[#030B16] shadow-md font-bold'
+                  : 'bg-[#030B16] hover:bg-slate-900 text-slate-300 border border-slate-800'
               }`}
             >
               <span>5 Étoiles</span>
@@ -373,10 +373,10 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
 
             <button
               onClick={() => setActiveFilter('4_STARS')}
-              className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1 ${
+              className={`px-3 py-1.5 rounded-xl transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
                 activeFilter === '4_STARS'
-                  ? 'bg-[#0F172A] text-white shadow-md font-bold'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
+                  ? 'bg-[#00E5FF] text-[#030B16] shadow-md font-bold'
+                  : 'bg-[#030B16] hover:bg-slate-900 text-slate-300 border border-slate-800'
               }`}
             >
               <span>4 Étoiles</span>
@@ -384,10 +384,10 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
 
             <button
               onClick={() => setActiveFilter('HELPFUL')}
-              className={`px-3 py-1.5 rounded-xl transition-all shrink-0 ${
+              className={`px-3 py-1.5 rounded-xl transition-all shrink-0 cursor-pointer ${
                 activeFilter === 'HELPFUL'
-                  ? 'bg-[#0F172A] text-white shadow-md font-bold'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
+                  ? 'bg-[#00E5FF] text-[#030B16] shadow-md font-bold'
+                  : 'bg-[#030B16] hover:bg-slate-900 text-slate-300 border border-slate-800'
               }`}
             >
               Les plus utiles
@@ -396,19 +396,19 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
 
           {/* Carousel Controls */}
           <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto font-mono text-xs">
-            <span className="text-slate-500 mr-2 text-[11px]">
+            <span className="text-slate-400 mr-2 text-[11px]">
               {currentIndex + 1} / {filteredReviews.length}
             </span>
             <button
               onClick={handlePrev}
-              className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-slate-900 transition-all active:scale-95"
+              className="w-9 h-9 rounded-xl bg-[#030B16] hover:bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white transition-all active:scale-95 cursor-pointer"
               title="Avis précédent"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
-              className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-slate-900 transition-all active:scale-95"
+              className="w-9 h-9 rounded-xl bg-[#030B16] hover:bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white transition-all active:scale-95 cursor-pointer"
               title="Avis suivant"
             >
               <ChevronRight className="w-4 h-4" />
@@ -437,27 +437,27 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                     initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3 }}
-                    className={`bg-white border rounded-[20px] p-5 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 group ${
-                      offset === 0 ? 'border-amber-400' : 'border-slate-200/80 hover:border-slate-300'
+                    className={`bg-[#030B16] border rounded-[20px] p-5 flex flex-col justify-between shadow-lg transition-all duration-300 group ${
+                      offset === 0 ? 'border-amber-400/80 shadow-[0_0_15px_rgba(245,158,11,0.15)]' : 'border-slate-800 hover:border-[#00E5FF]/40'
                     }`}
                   >
                     <div>
                       {/* Top Row: User Avatar, Name, Flag, Badge */}
                       <div className="flex items-start justify-between gap-2 mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 font-mono font-bold text-sm shadow-xs group-hover:border-amber-400 transition-colors">
+                          <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-300 font-mono font-bold text-sm shadow-xs group-hover:border-amber-400 transition-colors">
                             {review.name.charAt(0)}
                           </div>
                           <div>
                             <div className="flex items-center gap-1.5">
-                              <h3 className="font-mono font-bold text-[#0F172A] text-sm">
+                              <h3 className="font-mono font-bold text-white text-sm">
                                 {review.name}
                               </h3>
                               <span className="text-base" title={review.country}>
                                 {review.flag}
                               </span>
                             </div>
-                            <span className="text-[11px] font-mono text-slate-500 block">
+                            <span className="text-[11px] font-mono text-slate-400 block">
                               {review.tenure}
                             </span>
                           </div>
@@ -467,12 +467,12 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                         <span
                           className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 shrink-0 ${
                             review.badge === 'Top contributeur' 
-                              ? 'bg-amber-50 text-amber-800 border-amber-200'
+                              ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
                               : review.badge === 'Abonné vérifié'
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                              ? 'bg-[#22C55E]/10 text-[#22C55E] border-[#22C55E]/30'
                               : review.badge === 'Trader actif'
-                              ? 'bg-blue-50 text-blue-800 border-blue-200'
-                              : 'bg-purple-50 text-purple-800 border-purple-200'
+                              ? 'bg-[#00E5FF]/10 text-[#00E5FF] border-[#00E5FF]/30'
+                              : 'bg-purple-500/10 text-purple-300 border-purple-500/30'
                           }`}
                         >
                           <CheckCircle2 className="w-3 h-3" />
@@ -488,7 +488,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                             className={`w-3.5 h-3.5 ${
                               i < review.rating
                                 ? 'fill-amber-400 text-amber-400'
-                                : 'text-slate-200'
+                                : 'text-slate-700'
                             }`}
                           />
                         ))}
@@ -498,24 +498,24 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                       </div>
 
                       {/* Review Comment Text */}
-                      <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed line-clamp-4 italic mb-4">
+                      <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed line-clamp-4 italic mb-4">
                         "{review.comment}"
                       </p>
                     </div>
 
                     {/* Bottom Footer: Date & Helpful Count */}
-                    <div className="flex items-center justify-between border-t border-slate-100 pt-3 text-[11px] font-mono text-slate-500">
+                    <div className="flex items-center justify-between border-t border-slate-800/80 pt-3 text-[11px] font-mono text-slate-400">
                       <span>{review.date}</span>
 
                       <button
                         onClick={() => handleToggleLike(review.id)}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-mono transition-all ${
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-mono transition-all cursor-pointer ${
                           likedReviews[review.id]
-                            ? 'bg-amber-50 text-amber-800 border-amber-300'
-                            : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                            ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                            : 'bg-[#071426] hover:bg-slate-800 text-slate-300 border-slate-800'
                         }`}
                       >
-                        <ThumbsUp className={`w-3 h-3 ${likedReviews[review.id] ? 'fill-current text-amber-600' : ''}`} />
+                        <ThumbsUp className={`w-3 h-3 ${likedReviews[review.id] ? 'fill-current text-amber-400' : ''}`} />
                         <span>Utile ({review.helpfulCount})</span>
                       </button>
                     </div>
@@ -524,7 +524,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
               })}
             </div>
           ) : (
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 text-center text-slate-500 font-mono text-xs">
+            <div className="bg-[#030B16] border border-slate-800 rounded-2xl p-8 text-center text-slate-400 font-mono text-xs">
               Aucun avis correspondant aux critères de recherche.
             </div>
           )}
@@ -536,10 +536,10 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}
-              className={`h-2 rounded-full transition-all ${
+              className={`h-2 rounded-full transition-all cursor-pointer ${
                 currentIndex === idx
-                  ? 'w-6 bg-amber-500'
-                  : 'w-2 bg-slate-200 hover:bg-slate-300'
+                  ? 'w-6 bg-amber-400'
+                  : 'w-2 bg-slate-800 hover:bg-slate-700'
               }`}
               title={`Avis page ${idx + 1}`}
             />
@@ -547,21 +547,21 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
         </div>
 
         {/* Trust Badges Footer Bar */}
-        <div className="mt-8 pt-6 border-t border-slate-200/80 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs font-mono text-slate-600 relative z-10">
-          <div className="flex items-center justify-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+        <div className="mt-8 pt-6 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs font-mono text-slate-300 relative z-10">
+          <div className="flex items-center justify-center gap-2 bg-[#030B16] p-2.5 rounded-xl border border-slate-800">
+            <ShieldCheck className="w-4 h-4 text-[#22C55E]" />
             <span>100% Avis Vérifiés</span>
           </div>
-          <div className="flex items-center justify-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-            <Zap className="w-4 h-4 text-amber-600" />
+          <div className="flex items-center justify-center gap-2 bg-[#030B16] p-2.5 rounded-xl border border-slate-800">
+            <Zap className="w-4 h-4 text-amber-400" />
             <span>Mises à jour quotidiennes</span>
           </div>
-          <div className="flex items-center justify-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-            <Globe className="w-4 h-4 text-blue-600" />
+          <div className="flex items-center justify-center gap-2 bg-[#030B16] p-2.5 rounded-xl border border-slate-800">
+            <Globe className="w-4 h-4 text-[#00E5FF]" />
             <span>Traders d'Afrique & Europe</span>
           </div>
-          <div className="flex items-center justify-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
-            <Award className="w-4 h-4 text-purple-600" />
+          <div className="flex items-center justify-center gap-2 bg-[#030B16] p-2.5 rounded-xl border border-slate-800">
+            <Award className="w-4 h-4 text-amber-400" />
             <span>Modération anti-spam</span>
           </div>
         </div>
@@ -571,22 +571,22 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
       {/* Modal: Submit New Review */}
       <AnimatePresence>
         {isSubmitModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white border border-slate-200 rounded-[20px] p-6 sm:p-8 max-w-lg w-full shadow-2xl relative overflow-hidden font-sans text-slate-900"
+              className="bg-[#071426] border border-[#00E5FF]/30 rounded-[24px] p-6 sm:p-8 max-w-lg w-full shadow-2xl relative overflow-hidden font-sans text-slate-100"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-4">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-amber-500" />
-                  <h3 className="text-lg font-bold font-mono text-[#0F172A]">Partager votre expérience</h3>
+                  <Sparkles className="w-5 h-5 text-amber-400" />
+                  <h3 className="text-lg font-bold font-mono text-white">Partager votre expérience</h3>
                 </div>
                 <button
                   onClick={() => setIsSubmitModalOpen(false)}
-                  className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                  className="p-1 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -594,11 +594,11 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
 
               {submitSuccess ? (
                 <div className="py-8 text-center space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center justify-center mx-auto">
+                  <div className="w-12 h-12 rounded-full bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/30 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
-                  <h4 className="text-base font-bold font-mono text-[#0F172A]">Avis transmis avec succès !</h4>
-                  <p className="text-xs text-slate-600 font-sans max-w-sm mx-auto">
+                  <h4 className="text-base font-bold font-mono text-white">Avis transmis avec succès !</h4>
+                  <p className="text-xs text-slate-300 font-sans max-w-sm mx-auto">
                     Merci pour votre retour. Votre avis apparaîtra sous peu dans la communauté après modération.
                   </p>
                 </div>
@@ -607,31 +607,31 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                   
                   {/* Rating selector */}
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1.5">Note globale :</label>
+                    <label className="block text-slate-300 font-bold mb-1.5">Note globale :</label>
                     <div className="flex items-center gap-2">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
                           type="button"
                           key={star}
                           onClick={() => setNewRating(star)}
-                          className="p-1.5 rounded-xl hover:bg-slate-100 transition-colors"
+                          className="p-1.5 rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
                         >
                           <Star
                             className={`w-6 h-6 ${
                               star <= newRating
                                 ? 'fill-amber-400 text-amber-400'
-                                : 'text-slate-200'
+                                : 'text-slate-700'
                             }`}
                           />
                         </button>
                       ))}
-                      <span className="text-amber-600 font-bold text-sm ml-2">{newRating} / 5</span>
+                      <span className="text-amber-400 font-bold text-sm ml-2">{newRating} / 5</span>
                     </div>
                   </div>
 
                   {/* Name Input */}
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1">
+                    <label className="block text-slate-300 font-bold mb-1">
                       Votre prénom ou pseudonyme :
                     </label>
                     <input
@@ -640,17 +640,17 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                       placeholder="Ex: Samuel M."
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 font-sans"
+                      className="w-full bg-[#030B16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-[#00E5FF] font-sans"
                     />
                   </div>
 
                   {/* Country Selection */}
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1">Votre pays :</label>
+                    <label className="block text-slate-300 font-bold mb-1">Votre pays :</label>
                     <select
                       value={newCountry}
                       onChange={(e) => setNewCountry(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:border-amber-500 font-sans"
+                      className="w-full bg-[#030B16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-[#00E5FF] font-sans"
                     >
                       <option value="🇨🇲 Cameroun">🇨🇲 Cameroun</option>
                       <option value="🇨🇮 Côte d'Ivoire">🇨🇮 Côte d'Ivoire</option>
@@ -667,7 +667,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
 
                   {/* Comment Text Area */}
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1">
+                    <label className="block text-slate-300 font-bold mb-1">
                       Votre commentaire :
                     </label>
                     <textarea
@@ -676,12 +676,12 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                       placeholder="Partagez vos impressions sur la précision des signaux, les Stop Loss et le service..."
                       value={newComment}
                       onChange={(e) => setNewComment(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 font-sans text-xs leading-relaxed resize-none"
+                      className="w-full bg-[#030B16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-[#00E5FF] font-sans text-xs leading-relaxed resize-none"
                     />
                   </div>
 
                   {/* Note info */}
-                  <p className="text-[10px] text-slate-500 font-sans">
+                  <p className="text-[10px] text-slate-400 font-sans">
                     * Votre avis sera associé à votre statut d'abonné vérifié. Tous les retours sont modérés dans le respect des règles de notre communauté.
                   </p>
 
@@ -689,9 +689,9 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-mono font-bold py-3 px-4 rounded-xl text-xs shadow-md active:scale-98 transition-all flex items-center justify-center gap-2"
+                      className="w-full bg-amber-400 hover:bg-amber-300 text-[#030B16] font-mono font-bold py-3 px-4 rounded-xl text-xs shadow-md active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <Send className="w-4 h-4 text-slate-950" />
+                      <Send className="w-4 h-4 text-[#030B16]" />
                       <span>Publier mon avis</span>
                     </button>
                   </div>

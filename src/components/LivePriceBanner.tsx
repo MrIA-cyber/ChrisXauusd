@@ -156,7 +156,7 @@ export const LivePriceBanner: React.FC<LivePriceBannerProps> = ({ currentTick, r
               </div>
             </div>
 
-            <div className="w-[180px] h-[36px] overflow-hidden">
+            <div className="w-36 lg:w-44 h-9 overflow-hidden">
               <svg className="w-full h-full" viewBox="0 0 200 40">
                 <defs>
                   <linearGradient id="sparklineGrad" x1="0" y1="0" x2="0" y2="1">

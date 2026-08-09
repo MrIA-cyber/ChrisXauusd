@@ -640,21 +640,21 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="bg-white/95 border border-slate-200/80 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative text-slate-900 font-sans my-auto cursor-default"
+        className="bg-[#071426] border border-[#00E5FF]/30 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative text-slate-100 font-sans my-auto cursor-default"
       >
         {/* Top Premium Header */}
-        <div className="relative bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white p-6 sm:p-8 text-center overflow-hidden border-b border-blue-900/50">
+        <div className="relative bg-gradient-to-r from-[#030B16] via-[#071426] to-amber-950/80 text-white p-6 sm:p-8 text-center overflow-hidden border-b border-slate-800">
           
           {/* Subtle Background Glow Spheres */}
-          <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#00E5FF]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Close Cross Button */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Fermer"
-            className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 shadow-lg backdrop-blur-md transition-all active:scale-95 cursor-pointer flex items-center justify-center"
+            className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-white border border-slate-700 shadow-lg backdrop-blur-md transition-all active:scale-95 cursor-pointer flex items-center justify-center"
           >
             <X className="w-5 h-5 text-white" />
           </button>
@@ -664,39 +664,44 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
             <ChrisXauusdLogoIcon className="w-14 h-14 sm:w-16 sm:h-16 drop-shadow-xl" />
 
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-gradient-to-r from-amber-500/20 via-blue-500/20 to-purple-500/20 border border-amber-400/40 text-amber-300 shadow-2xs">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold bg-amber-500/10 border border-amber-400/40 text-amber-300 shadow-2xs">
                 <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                 <span>CHRISXAUUSD VIP PREMIUM</span>
               </div>
               <h2 className="text-base sm:text-lg font-bold font-sans tracking-tight text-white uppercase">
                 ACTIVER VOTRE ABONNEMENT
               </h2>
+              <div className="pt-1">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                  1 abonnement actif = 1 compte = 1 appareil autorisé
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Animated Progress Steps Bar */}
-        <div className="bg-slate-900/95 px-6 py-3 border-b border-slate-800 text-xs font-mono text-slate-300 flex items-center justify-around gap-2">
-          <div className={`flex items-center gap-1.5 transition-colors ${currentStep >= 1 ? 'text-blue-400 font-bold' : 'text-slate-500'}`}>
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-500'}`}>
+        <div className="bg-[#030B16] px-6 py-3 border-b border-slate-800 text-xs font-mono text-slate-300 flex items-center justify-around gap-2">
+          <div className={`flex items-center gap-1.5 transition-colors ${currentStep >= 1 ? 'text-[#00E5FF] font-bold' : 'text-slate-500'}`}>
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${currentStep >= 1 ? 'bg-[#00E5FF] text-[#030B16] font-bold' : 'bg-slate-800 text-slate-500'}`}>
               1
             </div>
             <span className="hidden sm:inline">Infos Client</span>
           </div>
 
-          <div className={`h-0.5 flex-1 max-w-[40px] rounded ${currentStep >= 2 ? 'bg-blue-500' : 'bg-slate-800'}`} />
+          <div className={`h-0.5 flex-1 max-w-[40px] rounded ${currentStep >= 2 ? 'bg-[#00E5FF]' : 'bg-slate-800'}`} />
 
-          <div className={`flex items-center gap-1.5 transition-colors ${currentStep >= 2 ? 'text-blue-400 font-bold' : 'text-slate-500'}`}>
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-500'}`}>
+          <div className={`flex items-center gap-1.5 transition-colors ${currentStep >= 2 ? 'text-[#00E5FF] font-bold' : 'text-slate-500'}`}>
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${currentStep >= 2 ? 'bg-[#00E5FF] text-[#030B16] font-bold' : 'bg-slate-800 text-slate-500'}`}>
               2
             </div>
             <span className="hidden sm:inline">Paiement</span>
           </div>
 
-          <div className={`h-0.5 flex-1 max-w-[40px] rounded ${currentStep >= 3 ? 'bg-emerald-500' : 'bg-slate-800'}`} />
+          <div className={`h-0.5 flex-1 max-w-[40px] rounded ${currentStep >= 3 ? 'bg-[#22C55E]' : 'bg-slate-800'}`} />
 
-          <div className={`flex items-center gap-1.5 transition-colors ${currentStep >= 3 ? 'text-emerald-400 font-bold' : 'text-slate-500'}`}>
-            <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${currentStep >= 3 ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-500'}`}>
+          <div className={`flex items-center gap-1.5 transition-colors ${currentStep >= 3 ? 'text-[#22C55E] font-bold' : 'text-slate-500'}`}>
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${currentStep >= 3 ? 'bg-[#22C55E] text-[#030B16] font-bold' : 'bg-slate-800 text-slate-500'}`}>
               3
             </div>
             <span className="hidden sm:inline">Validation</span>
@@ -992,10 +997,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 <form onSubmit={handlePaymentSubmit} className="space-y-5">
                   
                   {/* Step 1: Client Details */}
-                  <div className="space-y-3 bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs">
+                  <div className="space-y-3 bg-[#030B16] p-4 sm:p-5 rounded-2xl border border-slate-800">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-mono font-bold text-slate-900 flex items-center gap-2">
-                        <User className="w-4 h-4 text-blue-600" />
+                      <label className="text-xs font-mono font-bold text-white flex items-center gap-2">
+                        <User className="w-4 h-4 text-[#00E5FF]" />
                         <span>1. VOS INFORMATIONS PERSONNELLES</span>
                       </label>
                     </div>
@@ -1004,11 +1009,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                       
                       {/* Name Input */}
                       <div>
-                        <label className="text-[11px] font-mono text-slate-700 block mb-1">
+                        <label className="text-[11px] font-mono text-slate-300 block mb-1">
                           Nom Complet *
                         </label>
                         <div className="relative">
-                          <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                          <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
                           <input
                             type="text"
                             required
@@ -1019,24 +1024,24 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                               setTouched((prev) => ({ ...prev, fullName: true }));
                             }}
                             onBlur={() => setTouched((prev) => ({ ...prev, fullName: true }))}
-                            className={`w-full bg-white border rounded-xl pl-10 pr-9 py-2.5 text-xs text-slate-900 font-sans outline-none transition-all shadow-2xs ${
+                            className={`w-full bg-[#071426] border rounded-xl pl-10 pr-9 py-2.5 text-xs text-white placeholder-slate-500 font-sans outline-none transition-all ${
                               touched.fullName
                                 ? isNameValid
-                                  ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                  : 'border-rose-500 bg-rose-50/30'
-                                : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                                  ? 'border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]'
+                                  : 'border-rose-500 bg-rose-950/20'
+                                : 'border-slate-800 focus:border-[#00E5FF]'
                             }`}
                           />
                           {touched.fullName && (
                             isNameValid ? (
-                              <CheckCircle className="w-4 h-4 text-emerald-600 absolute right-3 top-3" />
+                              <CheckCircle className="w-4 h-4 text-[#22C55E] absolute right-3 top-3" />
                             ) : (
-                              <AlertCircle className="w-4 h-4 text-rose-600 absolute right-3 top-3" />
+                              <AlertCircle className="w-4 h-4 text-rose-500 absolute right-3 top-3" />
                             )
                           )}
                         </div>
                         {touched.fullName && !isNameValid && (
-                          <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                          <p className="text-[10px] text-rose-400 mt-1 font-sans">
                             Saisissez votre nom complet (min 3 caractères).
                           </p>
                         )}
@@ -1044,11 +1049,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
                       {/* Email Input */}
                       <div>
-                        <label className="text-[11px] font-mono text-slate-700 block mb-1">
+                        <label className="text-[11px] font-mono text-slate-300 block mb-1">
                           Adresse E-mail *
                         </label>
                         <div className="relative">
-                          <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                          <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
                           <input
                             type="email"
                             required
@@ -1059,24 +1064,24 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                               setTouched((prev) => ({ ...prev, email: true }));
                             }}
                             onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
-                            className={`w-full bg-white border rounded-xl pl-10 pr-9 py-2.5 text-xs text-slate-900 font-sans outline-none transition-all shadow-2xs ${
+                            className={`w-full bg-[#071426] border rounded-xl pl-10 pr-9 py-2.5 text-xs text-white placeholder-slate-500 font-sans outline-none transition-all ${
                               touched.email
                                 ? isEmailValid
-                                  ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                  : 'border-rose-500 bg-rose-50/30'
-                                : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                                  ? 'border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]'
+                                  : 'border-rose-500 bg-rose-950/20'
+                                : 'border-slate-800 focus:border-[#00E5FF]'
                             }`}
                           />
                           {touched.email && (
                             isEmailValid ? (
-                              <CheckCircle className="w-4 h-4 text-emerald-600 absolute right-3 top-3" />
+                              <CheckCircle className="w-4 h-4 text-[#22C55E] absolute right-3 top-3" />
                             ) : (
-                              <AlertCircle className="w-4 h-4 text-rose-600 absolute right-3 top-3" />
+                              <AlertCircle className="w-4 h-4 text-rose-500 absolute right-3 top-3" />
                             )
                           )}
                         </div>
                         {touched.email && !isEmailValid && (
-                          <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                          <p className="text-[10px] text-rose-400 mt-1 font-sans">
                             Saisissez une adresse e-mail valide.
                           </p>
                         )}
@@ -1086,10 +1091,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                   </div>
 
                   {/* Step 2: Payment Method & Country & Operator */}
-                  <div className="space-y-4 bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs">
+                  <div className="space-y-4 bg-[#030B16] p-4 sm:p-5 rounded-2xl border border-slate-800">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-mono font-bold text-slate-900 flex items-center gap-2">
-                        <CreditCard className="w-4 h-4 text-blue-600" />
+                      <label className="text-xs font-mono font-bold text-white flex items-center gap-2">
+                        <CreditCard className="w-4 h-4 text-[#00E5FF]" />
                         <span>2. CHOIX DU MOYEN DE PAIEMENT & PAYS</span>
                       </label>
                     </div>
@@ -1099,10 +1104,10 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('MOBILE_MONEY')}
-                        className={`p-3.5 rounded-2xl border flex items-center justify-between gap-2 text-xs font-mono transition-all transform active:scale-98 ${
+                        className={`p-3.5 rounded-2xl border flex items-center justify-between gap-2 text-xs font-mono transition-all transform active:scale-98 cursor-pointer ${
                           paymentMethod === 'MOBILE_MONEY'
-                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-blue-700 shadow-md ring-2 ring-blue-400/50'
-                            : 'bg-white border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-slate-100/60'
+                            ? 'bg-[#00E5FF] text-[#030B16] font-bold border-[#00E5FF] shadow-md'
+                            : 'bg-[#071426] border-slate-800 text-slate-300 hover:border-slate-700'
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
@@ -1110,17 +1115,17 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                           <span className="font-bold">Mobile Money</span>
                         </div>
                         {paymentMethod === 'MOBILE_MONEY' && (
-                          <CheckCircle className="w-4 h-4 fill-current text-white shrink-0" />
+                          <CheckCircle className="w-4 h-4 fill-current text-[#030B16] shrink-0" />
                         )}
                       </button>
 
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('CARD')}
-                        className={`p-3.5 rounded-2xl border flex items-center justify-between gap-2 text-xs font-mono transition-all transform active:scale-98 ${
+                        className={`p-3.5 rounded-2xl border flex items-center justify-between gap-2 text-xs font-mono transition-all transform active:scale-98 cursor-pointer ${
                           paymentMethod === 'CARD'
-                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-blue-700 shadow-md ring-2 ring-blue-400/50'
-                            : 'bg-white border-slate-200 text-slate-700 hover:border-blue-300 hover:bg-slate-100/60'
+                            ? 'bg-[#00E5FF] text-[#030B16] font-bold border-[#00E5FF] shadow-md'
+                            : 'bg-[#071426] border-slate-800 text-slate-300 hover:border-slate-700'
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
@@ -1128,7 +1133,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                           <span className="font-bold">Carte Bancaire</span>
                         </div>
                         {paymentMethod === 'CARD' && (
-                          <CheckCircle className="w-4 h-4 fill-current text-white shrink-0" />
+                          <CheckCircle className="w-4 h-4 fill-current text-[#030B16] shrink-0" />
                         )}
                       </button>
                     </div>
@@ -1138,27 +1143,27 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                         
                         {/* Country Selector with Search */}
                         <div className="space-y-1.5 relative">
-                          <label className="text-[11px] font-mono text-slate-700 flex items-center justify-between">
+                          <label className="text-[11px] font-mono text-slate-300 flex items-center justify-between">
                             <span className="font-bold">Sélectionnez le pays :</span>
                           </label>
 
                           <button
                             type="button"
                             onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                            className="w-full bg-white border border-slate-300 hover:border-blue-500 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-sans flex items-center justify-between outline-none shadow-2xs transition-all"
+                            className="w-full bg-[#071426] border border-slate-800 hover:border-[#00E5FF] rounded-xl px-3.5 py-2.5 text-xs text-white font-sans flex items-center justify-between outline-none transition-all cursor-pointer"
                           >
                             <div className="flex items-center gap-2.5">
                               <span className="text-xl leading-none">{selectedCountry.flag}</span>
                               <span className="font-bold">{selectedCountry.name}</span>
-                              <span className="text-slate-500 font-mono">({selectedCountry.dialCode})</span>
+                              <span className="text-slate-400 font-mono">({selectedCountry.dialCode})</span>
                             </div>
-                            <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} />
                           </button>
 
                           {/* Country Dropdown list */}
                           {isCountryDropdownOpen && (
-                            <div className="absolute top-full left-0 right-0 mt-1 z-30 bg-white border border-slate-300 rounded-2xl shadow-2xl overflow-hidden max-h-60 flex flex-col animate-fade-in">
-                              <div className="p-2 border-b border-slate-200 bg-slate-50 flex items-center gap-2">
+                            <div className="absolute top-full left-0 right-0 mt-1 z-30 bg-[#071426] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden max-h-60 flex flex-col animate-fade-in">
+                              <div className="p-2 border-b border-slate-800 bg-[#030B16] flex items-center gap-2">
                                 <Search className="w-4 h-4 text-slate-400 shrink-0" />
                                 <input
                                   type="text"
@@ -1166,27 +1171,27 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                   placeholder="Rechercher un pays d'Afrique (ex: Cameroun, Côte d'Ivoire...)"
                                   value={countrySearchQuery}
                                   onChange={(e) => setCountrySearchQuery(e.target.value)}
-                                  className="w-full text-xs font-sans bg-transparent outline-none text-slate-900"
+                                  className="w-full text-xs font-sans bg-transparent outline-none text-white placeholder-slate-500"
                                 />
                                 {countrySearchQuery && (
                                   <button
                                     type="button"
                                     onClick={() => setCountrySearchQuery('')}
-                                    className="text-slate-400 hover:text-slate-600 p-1"
+                                    className="text-slate-400 hover:text-white p-1 cursor-pointer"
                                   >
                                     <X className="w-3.5 h-3.5" />
                                   </button>
                                 )}
                               </div>
 
-                              <div className="overflow-y-auto flex-1 divide-y divide-slate-100">
+                              <div className="overflow-y-auto flex-1 divide-y divide-slate-800/60">
                                 {filteredCountries.map((c) => (
                                   <button
                                     key={c.code}
                                     type="button"
                                     onClick={() => handleSelectCountry(c)}
-                                    className={`w-full px-3.5 py-2.5 text-xs text-left flex items-center justify-between hover:bg-blue-50 transition-colors ${
-                                      selectedCountry.code === c.code ? 'bg-blue-50/80 font-bold text-blue-900' : 'text-slate-800'
+                                    className={`w-full px-3.5 py-2.5 text-xs text-left flex items-center justify-between hover:bg-slate-800 transition-colors cursor-pointer ${
+                                      selectedCountry.code === c.code ? 'bg-[#00E5FF]/10 font-bold text-[#00E5FF]' : 'text-slate-200'
                                     }`}
                                   >
                                     <div className="flex items-center gap-2.5">
@@ -1195,7 +1200,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                       <span className="text-slate-400 font-mono text-[11px]">{c.dialCode}</span>
                                     </div>
                                     {selectedCountry.code === c.code && (
-                                      <Check className="w-4 h-4 text-blue-600 shrink-0" />
+                                      <Check className="w-4 h-4 text-[#00E5FF] shrink-0" />
                                     )}
                                   </button>
                                 ))}
@@ -1206,7 +1211,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
                         {/* Dynamic Operators Badges */}
                         <div className="space-y-1.5">
-                          <label className="text-[11px] font-mono font-bold text-slate-700 block">
+                          <label className="text-[11px] font-mono font-bold text-slate-300 block">
                             Opérateur Mobile Money disponible ({selectedCountry.flag} {selectedCountry.name}) :
                           </label>
 
@@ -1218,14 +1223,14 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                   key={op.id}
                                   type="button"
                                   onClick={() => setSelectedOperatorId(op.id)}
-                                  className={`py-2.5 px-3 rounded-xl text-xs font-mono font-bold border transition-all flex items-center justify-between gap-1.5 ${
+                                  className={`py-2.5 px-3 rounded-xl text-xs font-mono font-bold border transition-all flex items-center justify-between gap-1.5 cursor-pointer ${
                                     isSelected
-                                      ? 'bg-blue-600 text-white border-blue-700 shadow-sm'
-                                      : 'bg-white border-slate-200 text-slate-800 hover:border-blue-300 hover:bg-blue-50'
+                                      ? 'bg-amber-400 text-[#030B16] border-amber-400 shadow-sm'
+                                      : 'bg-[#071426] border-slate-800 text-slate-300 hover:border-slate-700'
                                   }`}
                                 >
                                   <span className="truncate">{op.name}</span>
-                                  {isSelected && <Check className="w-3.5 h-3.5 shrink-0" />}
+                                  {isSelected && <Check className="w-3.5 h-3.5 shrink-0 text-[#030B16]" />}
                                 </button>
                               );
                             })}
@@ -1234,18 +1239,18 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
                         {/* Phone Number Field */}
                         <div className="space-y-1">
-                          <label className="text-[11px] font-mono text-slate-700 block">
+                          <label className="text-[11px] font-mono text-slate-300 block">
                             Numéro de Téléphone Mobile Money *
                           </label>
 
                           <div className="flex gap-2">
-                            <div className="bg-slate-100 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-800 font-mono text-xs font-bold flex items-center gap-1 shrink-0 shadow-2xs">
+                            <div className="bg-[#071426] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs font-bold flex items-center gap-1 shrink-0">
                               <span>{selectedCountry.flag}</span>
                               <span>{selectedCountry.dialCode}</span>
                             </div>
 
                             <div className="relative flex-1">
-                              <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                              <Phone className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
                               <input
                                 type="tel"
                                 required
@@ -1256,26 +1261,26 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                   setTouched((prev) => ({ ...prev, phone: true }));
                                 }}
                                 onBlur={() => setTouched((prev) => ({ ...prev, phone: true }))}
-                                className={`w-full bg-white border rounded-xl pl-10 pr-9 py-2.5 text-xs text-slate-900 font-mono outline-none transition-all shadow-2xs ${
+                                className={`w-full bg-[#071426] border rounded-xl pl-10 pr-9 py-2.5 text-xs text-white placeholder-slate-500 font-mono outline-none transition-all ${
                                   touched.phone
                                     ? isPhoneValid
-                                      ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                      : 'border-rose-500 bg-rose-50/30'
-                                    : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                                      ? 'border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]'
+                                      : 'border-rose-500 bg-rose-950/20'
+                                    : 'border-slate-800 focus:border-[#00E5FF]'
                                 }`}
                               />
                               {touched.phone && (
                                 isPhoneValid ? (
-                                  <CheckCircle className="w-4 h-4 text-emerald-600 absolute right-3 top-3" />
+                                  <CheckCircle className="w-4 h-4 text-[#22C55E] absolute right-3 top-3" />
                                 ) : (
-                                  <AlertCircle className="w-4 h-4 text-rose-600 absolute right-3 top-3" />
+                                  <AlertCircle className="w-4 h-4 text-rose-500 absolute right-3 top-3" />
                                 )
                               )}
                             </div>
                           </div>
 
                           {touched.phone && !isPhoneValid && (
-                            <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                            <p className="text-[10px] text-rose-400 mt-1 font-sans">
                               Numéro invalide pour {selectedCountry.name}. Exemple : {selectedCountry.placeholder}
                             </p>
                           )}
@@ -1286,11 +1291,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                       /* Card Payment Fields */
                       <div className="space-y-3 pt-1">
                         <div>
-                          <label className="text-[11px] font-mono text-slate-700 block mb-1 font-bold">
+                          <label className="text-[11px] font-mono text-slate-300 block mb-1 font-bold">
                             Numéro de carte bancaire *
                           </label>
                           <div className="relative">
-                            <CardIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                            <CardIcon className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
                             <input
                               type="text"
                               required
@@ -1301,24 +1306,24 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                 setTouched((prev) => ({ ...prev, cardNumber: true }));
                               }}
                               onBlur={() => setTouched((prev) => ({ ...prev, cardNumber: true }))}
-                              className={`w-full bg-white border rounded-xl pl-10 pr-9 py-2.5 text-xs text-slate-900 font-mono outline-none transition-all shadow-2xs ${
+                              className={`w-full bg-[#071426] border rounded-xl pl-10 pr-9 py-2.5 text-xs text-white placeholder-slate-500 font-mono outline-none transition-all ${
                                 touched.cardNumber
                                   ? isCardNumberValid
-                                    ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                    : 'border-rose-500 bg-rose-50/30'
-                                  : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                                    ? 'border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]'
+                                    : 'border-rose-500 bg-rose-950/20'
+                                  : 'border-slate-800 focus:border-[#00E5FF]'
                               }`}
                             />
                             {touched.cardNumber && (
                               isCardNumberValid ? (
-                                <CheckCircle className="w-4 h-4 text-emerald-600 absolute right-3 top-3" />
+                                <CheckCircle className="w-4 h-4 text-[#22C55E] absolute right-3 top-3" />
                               ) : (
-                                <AlertCircle className="w-4 h-4 text-rose-600 absolute right-3 top-3" />
+                                <AlertCircle className="w-4 h-4 text-rose-500 absolute right-3 top-3" />
                               )
                             )}
                           </div>
                           {touched.cardNumber && !isCardNumberValid && (
-                            <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                            <p className="text-[10px] text-rose-400 mt-1 font-sans">
                               Ce champ est obligatoire. Entrez un numéro de carte valide (15-19 chiffres).
                             </p>
                           )}
@@ -1326,7 +1331,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[11px] font-mono text-slate-700 block mb-1 font-bold">
+                            <label className="text-[11px] font-mono text-slate-300 block mb-1 font-bold">
                               Expiration (MM/AA) *
                             </label>
                             <input
@@ -1339,23 +1344,23 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                 setTouched((prev) => ({ ...prev, cardExpiry: true }));
                               }}
                               onBlur={() => setTouched((prev) => ({ ...prev, cardExpiry: true }))}
-                              className={`w-full bg-white border rounded-xl px-3 py-2.5 text-xs text-slate-900 font-mono outline-none transition-all shadow-2xs ${
+                              className={`w-full bg-[#071426] border rounded-xl px-3 py-2.5 text-xs text-white placeholder-slate-500 font-mono outline-none transition-all ${
                                 touched.cardExpiry
                                   ? isCardExpiryValid
-                                    ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                    : 'border-rose-500 bg-rose-50/30'
-                                  : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                                    ? 'border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]'
+                                    : 'border-rose-500 bg-rose-950/20'
+                                  : 'border-slate-800 focus:border-[#00E5FF]'
                               }`}
                             />
                             {touched.cardExpiry && !isCardExpiryValid && (
-                              <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                              <p className="text-[10px] text-rose-400 mt-1 font-sans">
                                 Champ obligatoire (MM/AA).
                               </p>
                             )}
                           </div>
 
                           <div>
-                            <label className="text-[11px] font-mono text-slate-700 block mb-1 font-bold">
+                            <label className="text-[11px] font-mono text-slate-300 block mb-1 font-bold">
                               CVC / CVV *
                             </label>
                             <input
@@ -1368,16 +1373,16 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                                 setTouched((prev) => ({ ...prev, cardCvc: true }));
                               }}
                               onBlur={() => setTouched((prev) => ({ ...prev, cardCvc: true }))}
-                              className={`w-full bg-white border rounded-xl px-3 py-2.5 text-xs text-slate-900 font-mono outline-none transition-all shadow-2xs ${
+                              className={`w-full bg-[#071426] border rounded-xl px-3 py-2.5 text-xs text-white placeholder-slate-500 font-mono outline-none transition-all ${
                                 touched.cardCvc
                                   ? isCardCvcValid
-                                    ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-200'
-                                    : 'border-rose-500 bg-rose-50/30'
-                                  : 'border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+                                    ? 'border-[#22C55E] focus:ring-1 focus:ring-[#22C55E]'
+                                    : 'border-rose-500 bg-rose-950/20'
+                                  : 'border-slate-800 focus:border-[#00E5FF]'
                               }`}
                             />
                             {touched.cardCvc && !isCardCvcValid && (
-                              <p className="text-[10px] text-rose-600 mt-1 font-sans">
+                              <p className="text-[10px] text-rose-400 mt-1 font-sans">
                                 Champ obligatoire (3-4 chiffres).
                               </p>
                             )}
@@ -1388,28 +1393,28 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 
                   </div>
 
-                  {/* CTA Spectacular Button */}
+                  {/* CTA Button */}
                   <div className="pt-2">
                     <button
                       type="submit"
                       disabled={!isFormValid}
-                      className={`w-full py-4 px-6 rounded-2xl font-mono text-sm font-black tracking-wide shadow-xl transition-all transform flex items-center justify-center gap-2.5 ${
+                      className={`w-full py-4 px-6 rounded-2xl font-mono text-sm font-bold tracking-wide shadow-xl transition-all transform flex items-center justify-center gap-2.5 ${
                         isFormValid
-                          ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white shadow-blue-500/30 hover:scale-[1.01] active:scale-[0.98] cursor-pointer'
-                          : 'bg-slate-200 text-slate-400 cursor-not-allowed border border-slate-300 shadow-none'
+                          ? 'bg-amber-400 hover:bg-amber-300 text-[#030B16] shadow-amber-500/20 active:scale-[0.98] cursor-pointer'
+                          : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700 shadow-none'
                       }`}
                     >
-                      <Lock className="w-4 h-4 fill-current shrink-0" />
+                      <Lock className="w-4 h-4 fill-current shrink-0 text-[#030B16]" />
                       <span>
                         {isFormValid
                           ? `PAYER MAINTENANT — ${formatFcfa(SUBSCRIPTION_PRICE_FCFA)}`
                           : 'REMPLISSEZ TOUS LES CHAMPS POUR PAYER'}
                       </span>
-                      {isFormValid && <ArrowRight className="w-4 h-4 shrink-0" />}
+                      {isFormValid && <ArrowRight className="w-4 h-4 shrink-0 text-[#030B16]" />}
                     </button>
 
-                    <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-slate-500 font-sans">
-                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-sans">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#22C55E]" />
                       <span>Paiement sécurisé · Validation instantanée · Support 24/7</span>
                     </div>
                   </div>

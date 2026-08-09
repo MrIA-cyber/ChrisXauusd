@@ -280,7 +280,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-xl max-h-[92vh] overflow-y-auto shadow-2xl relative text-slate-900 dark:text-white font-sans my-auto cursor-default"
+        className="bg-[#071426] border border-slate-800 rounded-3xl w-full max-w-xl max-h-[92vh] overflow-y-auto shadow-2xl relative text-white font-sans my-auto cursor-default"
       >
         {/* Header with Royal Blue & Pure White Theme */}
         <div className="relative bg-gradient-to-r from-slate-950 via-blue-900 to-indigo-950 text-white p-6 sm:p-8 text-center overflow-hidden border-b border-blue-500/40">
@@ -368,14 +368,14 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 overflow-x-auto no-scrollbar">
+        <div className="flex border-b border-slate-800 bg-[#030B16] overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => setActiveTab('PHOTO')}
-            className={`flex-1 min-w-[100px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+            className={`px-3 py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer shrink-0 sm:flex-1 whitespace-nowrap ${
               activeTab === 'PHOTO'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
-                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                ? 'border-[#00E5FF] text-[#00E5FF] bg-[#071426]'
+                : 'border-transparent text-slate-400 hover:text-white'
             }`}
           >
             <Camera className="w-3.5 h-3.5" />
@@ -385,10 +385,10 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('INFO')}
-            className={`flex-1 min-w-[100px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+            className={`px-3 py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer shrink-0 sm:flex-1 whitespace-nowrap ${
               activeTab === 'INFO'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
-                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                ? 'border-[#00E5FF] text-[#00E5FF] bg-[#071426]'
+                : 'border-transparent text-slate-400 hover:text-white'
             }`}
           >
             <User className="w-3.5 h-3.5" />
@@ -398,23 +398,23 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('TRADING')}
-            className={`flex-1 min-w-[120px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+            className={`px-3 py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer shrink-0 sm:flex-1 whitespace-nowrap ${
               activeTab === 'TRADING'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
-                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                ? 'border-[#00E5FF] text-[#00E5FF] bg-[#071426]'
+                : 'border-transparent text-slate-400 hover:text-white'
             }`}
           >
-            <Briefcase className="w-3.5 h-3.5 text-blue-600" />
+            <Briefcase className="w-3.5 h-3.5 text-[#00E5FF]" />
             <span>Trading VIP</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('PREF')}
-            className={`flex-1 min-w-[110px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+            className={`px-3 py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer shrink-0 sm:flex-1 whitespace-nowrap ${
               activeTab === 'PREF'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
-                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                ? 'border-[#00E5FF] text-[#00E5FF] bg-[#071426]'
+                : 'border-transparent text-slate-400 hover:text-white'
             }`}
           >
             <Sliders className="w-3.5 h-3.5" />
@@ -424,13 +424,13 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('CALENDAR')}
-            className={`flex-1 min-w-[130px] py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+            className={`px-3 py-3 text-xs font-bold font-mono text-center flex items-center justify-center gap-1.5 border-b-2 transition-all cursor-pointer shrink-0 sm:flex-1 whitespace-nowrap ${
               activeTab === 'CALENDAR'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-900'
-                : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                ? 'border-[#00E5FF] text-[#00E5FF] bg-[#071426]'
+                : 'border-transparent text-slate-400 hover:text-white'
             }`}
           >
-            <Calendar className="w-3.5 h-3.5 text-blue-600" />
+            <Calendar className="w-3.5 h-3.5 text-[#00E5FF]" />
             <span>Calendrier Macro</span>
           </button>
         </div>

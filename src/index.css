@@ -51,6 +51,7 @@
     -webkit-text-size-adjust: 100%;
     background-color: #030B16;
     color: #F8FAFC;
+    font-size: 100%;
   }
 
   body {
@@ -63,29 +64,40 @@
     -webkit-font-smoothing: antialiased;
     word-break: break-word;
     overflow-wrap: anywhere;
-    font-size: 0.9375rem; /* 15px baseline for optimal readability */
+    font-size: clamp(0.8125rem, 0.3vw + 0.75rem, 0.9375rem); /* Proportional fluid baseline (13px - 15px) */
     line-height: 1.5;
   }
 
-  /* Responsive card, container and touch control guidelines */
+  /* Proportional Fluid UI Containers & Controls System */
   .app-card {
-    border-radius: clamp(12px, 2vw, 20px);
-    padding: clamp(0.875rem, 2.5vw, 1.5rem);
+    border-radius: clamp(10px, 1.8vw, 20px);
+    padding: clamp(0.75rem, 2vw, 1.5rem);
     background-color: rgba(7, 20, 38, 0.85);
     border: 1px solid rgba(0, 229, 255, 0.18);
   }
 
   .app-button {
-    min-height: 44px;
-    padding-left: clamp(0.875rem, 2vw, 1.25rem);
-    padding-right: clamp(0.875rem, 2vw, 1.25rem);
-    font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
+    min-height: clamp(38px, 5vh, 46px);
+    padding-left: clamp(0.75rem, 1.8vw, 1.25rem);
+    padding-right: clamp(0.75rem, 1.8vw, 1.25rem);
+    font-size: clamp(0.75rem, 1vw, 0.875rem);
   }
 
   .app-input {
-    min-height: 44px;
-    font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
-    padding: 0.625rem 0.875rem;
+    min-height: clamp(38px, 5vh, 46px);
+    font-size: clamp(0.75rem, 1vw, 0.875rem);
+    padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.625rem, 1.2vw, 0.875rem);
+  }
+
+  /* Fluid Modal overlay & container constraints */
+  .modal-overlay {
+    padding: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .modal-responsive-card {
+    width: clamp(280px, 94vw, 680px);
+    max-height: clamp(80vh, 90vh, 94vh);
+    border-radius: clamp(14px, 2.2vw, 24px);
   }
 
   /* Monospace typography enforcement for numbers, prices, timestamps & financial data */

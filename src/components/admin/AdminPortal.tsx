@@ -280,9 +280,63 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
   const [isLockedOut, setIsLockedOut] = useState(false);
 
   // Layout & Navigation State
-  const [activeTab, setActiveTab] = useState<'DASHBOARD' | 'USERS' | 'SUBSCRIPTIONS' | 'PAYMENTS' | 'STATS' | 'AUDIT' | 'SETTINGS'>('DASHBOARD');
+  const [activeTab, setActiveTab] = useState<'DASHBOARD' | 'USERS' | 'SUBSCRIPTIONS' | 'PAYMENTS' | 'STATS' | 'AUDIT' | 'TWELVEDATA' | 'SETTINGS'>('DASHBOARD');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  // Twelve Data Live Quota State
+  const [twelveDataQuota, setTwelveDataQuota] = useState<{
+    dailyCallsCount: number;
+    realDailyLimit: number;
+    safetyMarginDaily: number;
+    maxDailyCalls: number;
+    remainingDailyCalls: number;
+    percentUsed: number;
+    minutelyCallsCount: number;
+    maxMinutelyCalls: number;
+    isQuotaAvailable: boolean;
+    lastRequestTimestamp: string | null;
+    lastXauusdTimestamp: string | null;
+    apiState: string;
+    lastApiErrorMsg: string | null;
+    status: 'NORMAL' | 'ATTENTION' | 'ALERTE' | 'BLOQUÉ';
+  }>({
+    dailyCallsCount: 0,
+    realDailyLimit: 800,
+    safetyMarginDaily: 100,
+    maxDailyCalls: 700,
+    remainingDailyCalls: 700,
+    percentUsed: 0,
+    minutelyCallsCount: 0,
+    maxMinutelyCalls: 7,
+    isQuotaAvailable: true,
+    lastRequestTimestamp: null,
+    lastXauusdTimestamp: null,
+    apiState: 'CONNECTED',
+    lastApiErrorMsg: null,
+    status: 'NORMAL',
+  });
+
+  // Fetch Twelve Data Quota Status periodically
+  useEffect(() => {
+    const fetchQuotaStatus = async () => {
+      try {
+        const res = await fetch('/api/admin/twelve-data-status');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.quotaStatus) {
+            setTwelveDataQuota(data.quotaStatus);
+          }
+        }
+      } catch (err) {
+        console.warn('Erreur lors de la mise à jour du quota Twelve Data admin:', err);
+      }
+    };
+
+    fetchQuotaStatus();
+    const interval = setInterval(fetchQuotaStatus, 8000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Application Data State
   const [users, setUsers] = useState<AdminUserRecord[]>(() => {
@@ -871,6 +925,30 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
             </button>
 
             <button
+              onClick={() => setActiveTab('TWELVEDATA')}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-bold transition-all ${
+                activeTab === 'TWELVEDATA'
+                  ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Activity className="w-4 h-4 shrink-0" />
+                {!isSidebarCollapsed && <span>Quota Twelve Data</span>}
+              </div>
+              {!isSidebarCollapsed && (
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                  twelveDataQuota.status === 'NORMAL' ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40' :
+                  twelveDataQuota.status === 'ATTENTION' ? 'bg-amber-950 text-amber-300 border border-amber-500/40' :
+                  twelveDataQuota.status === 'ALERTE' ? 'bg-orange-950 text-orange-300 border border-orange-500/40' :
+                  'bg-rose-950 text-rose-300 border border-rose-500/40'
+                }`}>
+                  {twelveDataQuota.status}
+                </span>
+              )}
+            </button>
+
+            <button
               onClick={() => setActiveTab('SETTINGS')}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-all ${
                 activeTab === 'SETTINGS'
@@ -925,6 +1003,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                     {activeTab === 'PAYMENTS' && 'Historique des Transactions'}
                     {activeTab === 'STATS' && 'Statistiques & Ratios de Conversion'}
                     {activeTab === 'AUDIT' && 'Journaux d\'Audit Sécurisés'}
+                    {activeTab === 'TWELVEDATA' && 'Supervision Quota Twelve Data & Intégrité XAU/USD'}
                     {activeTab === 'SETTINGS' && 'Paramètres de Sécurité'}
                   </span>
                 </h1>
@@ -1770,6 +1849,179 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                   </div>
 
                 </div>
+              </div>
+            )}
+
+            {/* 8. TWELVE DATA QUOTA & DATA INTEGRITY CONTROL MODULE */}
+            {activeTab === 'TWELVEDATA' && (
+              <div className="space-y-6 font-mono">
+                
+                {/* Header Status Banner */}
+                <div className={`border p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 ${
+                  twelveDataQuota.status === 'NORMAL' ? 'bg-emerald-950/40 border-emerald-500/40' :
+                  twelveDataQuota.status === 'ATTENTION' ? 'bg-amber-950/40 border-amber-500/40' :
+                  twelveDataQuota.status === 'ALERTE' ? 'bg-orange-950/40 border-orange-500/40' :
+                  'bg-rose-950/40 border-rose-500/40'
+                }`}>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <Activity className={`w-5 h-5 ${
+                        twelveDataQuota.status === 'NORMAL' ? 'text-emerald-400' :
+                        twelveDataQuota.status === 'ATTENTION' ? 'text-amber-400' :
+                        twelveDataQuota.status === 'ALERTE' ? 'text-orange-400' :
+                        'text-rose-400'
+                      }`} />
+                      <h2 className="font-bold text-white text-base">Supervision du Quota Twelve Data (Production)</h2>
+                    </div>
+                    <p className="text-xs text-slate-300 font-sans">
+                      Contrôle strict des requêtes XAU/USD, marges de sécurité et protection contre le dépassement.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-slate-400 font-sans">Statut du Quota :</span>
+                    <span className={`px-3 py-1 rounded-xl text-xs font-bold uppercase border shadow-md ${
+                      twelveDataQuota.status === 'NORMAL' ? 'bg-emerald-500 text-slate-950 border-emerald-400' :
+                      twelveDataQuota.status === 'ATTENTION' ? 'bg-amber-400 text-slate-950 border-amber-300' :
+                      twelveDataQuota.status === 'ALERTE' ? 'bg-orange-500 text-white border-orange-400' :
+                      'bg-rose-600 text-white border-rose-400 animate-pulse'
+                    }`}>
+                      {twelveDataQuota.status}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Grid of Key Metrics */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  
+                  {/* Metric 1: Appels Utilisés */}
+                  <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2">
+                    <span className="text-slate-400 text-xs">Appels Utilisés Aujourd'hui</span>
+                    <div className="flex items-baseline justify-between font-mono">
+                      <span className="text-2xl font-black text-white">{twelveDataQuota.dailyCallsCount}</span>
+                      <span className="text-xs text-slate-400">/ {twelveDataQuota.maxDailyCalls} max</span>
+                    </div>
+                    <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          twelveDataQuota.percentUsed >= 85 ? 'bg-rose-500' :
+                          twelveDataQuota.percentUsed >= 60 ? 'bg-amber-400' :
+                          'bg-emerald-500'
+                        }`}
+                        style={{ width: `${Math.min(100, twelveDataQuota.percentUsed)}%` }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans">
+                      Limite interne: {twelveDataQuota.maxDailyCalls} requêtes
+                    </p>
+                  </div>
+
+                  {/* Metric 2: Appels Restants */}
+                  <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2">
+                    <span className="text-slate-400 text-xs">Appels Restants</span>
+                    <div className="flex items-baseline justify-between font-mono">
+                      <span className="text-2xl font-black text-amber-400">{twelveDataQuota.remainingDailyCalls}</span>
+                      <span className="text-xs text-slate-400">disponibles</span>
+                    </div>
+                    <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+                      <div className="bg-amber-400 h-full rounded-full" style={{ width: `${100 - twelveDataQuota.percentUsed}%` }} />
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans">
+                      Marge de sécurité: {twelveDataQuota.safetyMarginDaily} requêtes
+                    </p>
+                  </div>
+
+                  {/* Metric 3: Pourcentage Utilisé */}
+                  <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2">
+                    <span className="text-slate-400 text-xs">Pourcentage Utilisé</span>
+                    <div className="flex items-baseline justify-between font-mono">
+                      <span className="text-2xl font-black text-white">{twelveDataQuota.percentUsed}%</span>
+                      <span className="text-xs text-slate-400">du quota total</span>
+                    </div>
+                    <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+                      <div className="bg-blue-500 h-full rounded-full" style={{ width: `${Math.min(100, twelveDataQuota.percentUsed)}%` }} />
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans">
+                      Seuil d'alerte: 85% du quota
+                    </p>
+                  </div>
+
+                  {/* Metric 4: Limite Minute */}
+                  <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2">
+                    <span className="text-slate-400 text-xs">Débit par Minute (60s)</span>
+                    <div className="flex items-baseline justify-between font-mono">
+                      <span className="text-2xl font-black text-white">{twelveDataQuota.minutelyCallsCount}</span>
+                      <span className="text-xs text-slate-400">/ {twelveDataQuota.maxMinutelyCalls} max</span>
+                    </div>
+                    <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+                      <div className="bg-purple-500 h-full rounded-full" style={{ width: `${(twelveDataQuota.minutelyCallsCount / twelveDataQuota.maxMinutelyCalls) * 100}%` }} />
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans">
+                      Fenêtre glissante de 60 secondes
+                    </p>
+                  </div>
+
+                </div>
+
+                {/* Timestamps & Technical Details Box */}
+                <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-4">
+                  <h3 className="font-bold text-white text-sm flex items-center gap-2 border-b border-slate-800 pb-3">
+                    <Clock className="w-4 h-4 text-amber-400" />
+                    <span>Horodatages & Traçabilité Réseau Twelve Data</span>
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs font-sans">
+                    <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                      <span className="text-slate-400 font-mono text-[11px]">Dernière Requête HTTP :</span>
+                      <p className="font-mono text-white font-bold text-xs">
+                        {twelveDataQuota.lastRequestTimestamp ? new Date(twelveDataQuota.lastRequestTimestamp).toLocaleString('fr-FR') : 'Aucune requête aujourd\'hui'}
+                      </p>
+                    </div>
+
+                    <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                      <span className="text-slate-400 font-mono text-[11px]">Dernière Donnée XAU/USD Réelle :</span>
+                      <p className="font-mono text-emerald-400 font-bold text-xs">
+                        {twelveDataQuota.lastXauusdTimestamp ? new Date(twelveDataQuota.lastXauusdTimestamp).toLocaleString('fr-FR') : 'Donnée fraîche disponible'}
+                      </p>
+                    </div>
+
+                    <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                      <span className="text-slate-400 font-mono text-[11px]">État de la Connexion API :</span>
+                      <p className="font-mono text-amber-300 font-bold text-xs flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>{twelveDataQuota.apiState}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rules & Commercial Readiness Checklist */}
+                <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 space-y-3 font-sans text-xs">
+                  <h3 className="font-bold text-white text-sm font-mono flex items-center gap-2 border-b border-slate-800 pb-3">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    <span>Règles d'Intégrité Commerciale & Protection Anti-Quota</span>
+                  </h3>
+
+                  <div className="space-y-2 text-slate-300">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>0% Fictive / Simulated Data :</strong> Aucun prix ou bougie factice n'est généré. Tout trade publié provient exclusivement de Twelve Data.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Limite de publication dynamique :</strong> L'application publie autant de setups valides que possible tant que le quota le permet.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Protection par Marge de Sécurité :</strong> Une réserve de 100 requêtes est conservée pour garantir la continuité du flux en direct.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Protection des Clés Secrets :</strong> La clé TWELVE_DATA_API_KEY est hébergée sur le serveur Express et masquée aux navigateurs.</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             )}
 

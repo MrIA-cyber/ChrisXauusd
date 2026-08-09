@@ -146,8 +146,8 @@ export const TradeJournalTable: React.FC<TradeJournalTableProps> = ({
                   onClick={() => setFilter('ALL')}
                   className={`px-2.5 py-1 rounded-lg border transition-all ${
                     filter === 'ALL'
-                      ? 'bg-blue-600 text-white font-bold border-blue-700'
-                      : 'bg-[var(--card-bg)] text-slate-600 dark:text-slate-300 border-[var(--border-color)] hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-[#00E5FF] text-[#030B16] font-bold border-[#00E5FF]'
+                      : 'bg-[var(--card-bg)] text-slate-400 border-[var(--border-color)] hover:text-white'
                   }`}
                 >
                   Tous ({trades.length})
