@@ -38,43 +38,44 @@ export const GlobalRankingCard: React.FC = () => {
       <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-cyan-500/10 rounded-full blur-xl pointer-events-none" />
 
       {/* Header Badge & Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800 relative z-10">
-        <div className="flex items-start sm:items-center gap-3">
-          <div className="p-3 rounded-2xl bg-slate-800/80 border border-amber-400/40 text-amber-400 shrink-0 relative">
-            <Award className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400" />
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-800 relative z-10">
+        <div className="flex items-start gap-2.5 sm:gap-3.5 min-w-0 flex-1">
+          <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-800/80 border border-amber-400/40 text-amber-400 shrink-0 relative mt-0.5">
+            <Award className="w-5 h-5 sm:w-7 sm:h-7 text-amber-400" />
             <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 animate-pulse"></span>
             </span>
           </div>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-400/40 uppercase flex items-center gap-1">
-                <Globe className="w-3 h-3 text-amber-400" /> POSITIONNEMENT EN TEMPS RÉEL
+          <div className="min-w-0 flex-1 space-y-1.5">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-400/40 uppercase flex items-center gap-1 shrink-0">
+                <Globe className="w-3 h-3 text-amber-400 shrink-0" /> POSITIONNEMENT EN TEMPS RÉEL
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5">
-                <Radio className="w-3 h-3 text-emerald-400 animate-pulse" /> SYNC LIVE {lastSyncTime}
+              <span className="px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5 shrink-0">
+                <Radio className="w-3 h-3 text-emerald-400 animate-pulse shrink-0" /> SYNC LIVE {lastSyncTime}
               </span>
             </div>
-            <h3 className="text-base sm:text-xl font-mono font-black text-white uppercase tracking-wide mt-1 flex items-center gap-2">
+            <h3 className="text-sm sm:text-lg md:text-xl font-mono font-black text-white uppercase tracking-wide leading-snug">
               ChrisXauusd Gold Scalping Terminal
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
               Évaluation dynamique calculée en temps réel via la latence serveur, le taux de réussite et les métriques d'exécution.
             </p>
           </div>
         </div>
 
         {/* Global Rank Badge Display */}
-        <div className="bg-slate-900 border border-amber-500/40 rounded-xl p-3 flex items-center gap-3 shrink-0 self-start md:self-auto shadow-md relative">
-          <div className="text-right">
-            <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center justify-end gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Rang Global Spécialisé Gold
+        <div className="bg-slate-900/90 border border-amber-500/40 rounded-xl p-3 flex items-center justify-between gap-2.5 w-full lg:w-auto shadow-md relative">
+          <div className="min-w-0 flex-1">
+            <div className="text-[9px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-0.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="truncate">Rang Global Spécialisé Gold</span>
             </div>
-            <div className="text-sm sm:text-lg font-mono font-black text-amber-300">
-              TOP #1 AFRIQUE / TOP #3 MONDIAL
+            <div className="text-xs sm:text-base md:text-lg font-mono font-black text-amber-300 leading-snug">
+              TOP #1 AFRIQUE <span className="text-slate-500 text-xs font-normal">/</span> TOP #3 MONDIAL
             </div>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center font-mono font-black text-amber-300 text-lg sm:text-xl shrink-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center font-mono font-black text-amber-300 text-base sm:text-xl shrink-0 shadow-inner">
             #1
           </div>
         </div>
@@ -129,19 +130,22 @@ export const GlobalRankingCard: React.FC = () => {
       </div>
 
       {/* Progress Scores Bars */}
-      <div className="space-y-3 bg-slate-950/50 p-3.5 rounded-xl border border-slate-800/80">
-        <h4 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
-          <span className="flex items-center gap-1.5">
-            <BarChart3 className="w-3.5 h-3.5 text-amber-400" /> Évaluation Comparative selon les Standards Institutionnels
-          </span>
-          <span className="text-[10px] text-amber-400 font-normal">Score Global : 99.2/100</span>
-        </h4>
+      <div className="space-y-3 bg-slate-950/50 p-3 sm:p-3.5 rounded-xl border border-slate-800/80">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-2 border-b border-slate-800/60">
+          <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-slate-200 uppercase tracking-wide">
+            <BarChart3 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span>Évaluation Standards Institutionnels</span>
+          </div>
+          <div className="text-[10px] sm:text-[11px] font-mono font-bold text-amber-400 bg-amber-500/10 border border-amber-400/30 px-2 py-0.5 rounded-md self-start sm:self-auto shrink-0">
+            Score Global : 99.2/100
+          </div>
+        </div>
 
         {/* Bar 1: Algorithmic Precision */}
         <div className="space-y-1">
-          <div className="flex justify-between text-xs font-mono">
-            <span className="text-slate-300">Précision des Signaux M1/M5 Order Block</span>
-            <span className="font-bold text-amber-300">99 / 100</span>
+          <div className="flex justify-between items-center text-[11px] sm:text-xs font-mono gap-2">
+            <span className="text-slate-300 truncate">Précision des Signaux M1/M5 Order Block</span>
+            <span className="font-bold text-amber-300 shrink-0">99 / 100</span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden p-0.5 border border-slate-700">
             <div className="bg-gradient-to-r from-amber-500 to-amber-300 h-full rounded-full w-[99%]" />
@@ -150,9 +154,9 @@ export const GlobalRankingCard: React.FC = () => {
 
         {/* Bar 2: System Stability & Anti-Slippage */}
         <div className="space-y-1">
-          <div className="flex justify-between text-xs font-mono">
-            <span className="text-slate-300">Stabilité & Détection des Pièges de Volatilité (NFP / CPI / Fed)</span>
-            <span className="font-bold text-cyan-300">98 / 100</span>
+          <div className="flex justify-between items-center text-[11px] sm:text-xs font-mono gap-2">
+            <span className="text-slate-300 truncate">Stabilité & Protection Volatilité (NFP / CPI)</span>
+            <span className="font-bold text-cyan-300 shrink-0">98 / 100</span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden p-0.5 border border-slate-700">
             <div className="bg-gradient-to-r from-cyan-500 to-cyan-300 h-full rounded-full w-[98%]" />
@@ -161,9 +165,9 @@ export const GlobalRankingCard: React.FC = () => {
 
         {/* Bar 3: UX & Mobile Accessibility */}
         <div className="space-y-1">
-          <div className="flex justify-between text-xs font-mono">
-            <span className="text-slate-300">Interface Membre VIP, Réactivité & Pouch Notifications</span>
-            <span className="font-bold text-emerald-300">99 / 100</span>
+          <div className="flex justify-between items-center text-[11px] sm:text-xs font-mono gap-2">
+            <span className="text-slate-300 truncate">Interface VIP & Push Notifications</span>
+            <span className="font-bold text-emerald-300 shrink-0">99 / 100</span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden p-0.5 border border-slate-700">
             <div className="bg-gradient-to-r from-emerald-500 to-emerald-300 h-full rounded-full w-[99%]" />
