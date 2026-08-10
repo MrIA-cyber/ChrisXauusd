@@ -33,7 +33,7 @@ export const ChrisXauusdLogoIcon: React.FC<ChrisXauusdLogoIconProps> = ({
         return 'bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 border border-amber-300 shadow-lg shadow-amber-500/20';
       case 'dark':
       default:
-        return 'bg-gradient-to-br from-[#0B0F19] via-[#0F172A] to-[#030712] border border-amber-500/30 shadow-lg shadow-black/60';
+        return 'bg-gradient-to-br from-[#0B0F19] via-[#0F172A] to-[#030712] border border-amber-500/40 shadow-lg shadow-black/60';
     }
   };
 
@@ -43,103 +43,99 @@ export const ChrisXauusdLogoIcon: React.FC<ChrisXauusdLogoIconProps> = ({
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full p-[6%]"
+        className="w-full h-full p-[8%]"
       >
         <defs>
-          {/* Gold Metallic Gradients */}
+          {/* Metallic Gold Gradients */}
           <linearGradient id="cxGoldPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFE899" />
-            <stop offset="35%" stopColor="#F59E0B" />
+            <stop offset="0%" stopColor="#FFF3B0" />
+            <stop offset="30%" stopColor="#F59E0B" />
             <stop offset="70%" stopColor="#D97706" />
-            <stop offset="100%" stopColor="#92400E" />
+            <stop offset="100%" stopColor="#78350F" />
           </linearGradient>
 
-          <linearGradient id="cxGoldAccent" x1="100%" y1="0%" x2="0%" y2="100%">
+          <linearGradient id="cxGoldHighlight" x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#FEF08A" />
             <stop offset="50%" stopColor="#F59E0B" />
-            <stop offset="100%" stopColor="#B45309" />
+            <stop offset="100%" stopColor="#FFF7ED" />
           </linearGradient>
 
-          {/* Emerald Green Precision Vector Gradient */}
-          <linearGradient id="cxEmeraldVector" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#059669" />
-            <stop offset="50%" stopColor="#10B981" />
-            <stop offset="100%" stopColor="#6EE7B7" />
+          <linearGradient id="cxGoldDark" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#B45309" />
+            <stop offset="100%" stopColor="#451A03" />
           </linearGradient>
 
-          {/* Glow Filters */}
-          <filter id="cxGlowEmerald" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#10B981" floodOpacity="0.7" />
-          </filter>
-
+          {/* Gold Glow Filter */}
           <filter id="cxGlowGold" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#F59E0B" floodOpacity="0.6" />
+            <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#F59E0B" floodOpacity="0.7" />
           </filter>
         </defs>
 
-        {/* --- 1. GOLDEN CROWN AT TOP --- */}
-        <path
-          d="M 38 12 L 44 19 L 50 10 L 56 19 L 62 12 L 60 23 L 40 23 Z"
-          fill="url(#cxGoldPrimary)"
-          filter="url(#cxGlowGold)"
-        />
-        <circle cx="38" cy="10" r="1.5" fill="#FFE899" />
-        <circle cx="50" cy="8" r="2" fill="#FFE899" />
-        <circle cx="62" cy="10" r="1.5" fill="#FFE899" />
-
-        {/* --- 2. REALISTIC CHARGING GOLDEN BULL (FACING RIGHT) --- */}
+        {/* --- 1. CHARGING METALLIC GOLD BULL (FACING RIGHT) --- */}
         <g filter="url(#cxGlowGold)">
-          {/* Back & Muscular Hump */}
+          {/* Main Muscular Torso & Hump */}
           <path
-            d="M 22 52 C 26 42, 36 36, 48 38 C 56 39, 64 34, 72 32 C 76 31, 80 34, 82 38 C 84 42, 80 46, 74 48 C 66 50, 60 54, 52 58 C 42 62, 30 62, 22 52 Z"
+            d="M 18 54 C 22 40, 34 33, 48 35 C 56 36, 64 30, 72 28 C 77 27, 81 30, 83 34 C 84 38, 80 42, 74 44 C 65 46, 59 50, 51 54 C 41 58, 27 58, 18 54 Z"
             fill="url(#cxGoldPrimary)"
           />
-          {/* Head & Powerful Sharp Horns Pointing Forward Right */}
+          
+          {/* 3D Highlight Curve on Back */}
           <path
-            d="M 70 34 C 74 28, 82 22, 88 20 C 86 26, 80 30, 76 34 Z"
-            fill="url(#cxGoldAccent)"
+            d="M 24 46 C 30 38, 42 35, 52 36 C 60 37, 68 31, 74 29 C 71 33, 62 38, 52 40 C 40 42, 30 44, 24 46 Z"
+            fill="url(#cxGoldHighlight)"
+            opacity="0.85"
+          />
+
+          {/* Horns Pointing Forward Right */}
+          <path
+            d="M 70 30 C 75 22, 84 14, 91 12 C 89 20, 81 25, 76 30 Z"
+            fill="url(#cxGoldHighlight)"
           />
           <path
-            d="M 68 38 C 72 34, 80 30, 86 28 C 84 32, 78 36, 74 40 Z"
-            fill="#FEF08A"
+            d="M 68 34 C 73 28, 81 22, 87 20 C 85 25, 78 29, 74 34 Z"
+            fill="url(#cxGoldPrimary)"
           />
-          {/* Legs charging forward */}
+
+          {/* Charging Legs */}
           <path
-            d="M 26 50 L 22 68 L 28 68 L 34 56 Z"
+            d="M 22 52 L 16 70 L 23 70 L 30 57 Z"
             fill="url(#cxGoldPrimary)"
           />
           <path
-            d="M 44 56 L 40 74 L 46 74 L 52 60 Z"
-            fill="url(#cxGoldAccent)"
+            d="M 30 54 L 26 72 L 32 72 L 38 58 Z"
+            fill="url(#cxGoldDark)"
           />
           <path
-            d="M 60 52 L 66 70 L 72 68 L 68 48 Z"
+            d="M 46 54 L 40 74 L 47 74 L 53 58 Z"
+            fill="url(#cxGoldHighlight)"
+          />
+          <path
+            d="M 60 48 L 66 68 L 72 66 L 67 44 Z"
             fill="url(#cxGoldPrimary)"
           />
         </g>
 
-        {/* --- 3. ASCENDING 3D METALLIC GOLD BAR CHART COLUMNS --- */}
-        <g>
-          <rect x="22" y="78" width="7" height="12" rx="2" fill="url(#cxGoldAccent)" opacity="0.8" />
-          <rect x="33" y="70" width="7" height="20" rx="2" fill="url(#cxGoldAccent)" />
-          <rect x="44" y="62" width="7" height="28" rx="2" fill="url(#cxGoldPrimary)" />
-          <rect x="55" y="52" width="7" height="38" rx="2" fill="url(#cxGoldPrimary)" />
-          <rect x="66" y="42" width="7" height="48" rx="2" fill="url(#cxGoldPrimary)" filter="url(#cxGlowGold)" />
-          <rect x="77" y="30" width="7" height="60" rx="2" fill="url(#cxEmeraldVector)" filter="url(#cxGlowEmerald)" />
+        {/* --- 2. ASCENDING 3D METALLIC GOLD BAR COLUMNS --- */}
+        <g filter="url(#cxGlowGold)">
+          <rect x="36" y="76" width="6" height="12" rx="1.5" fill="url(#cxGoldDark)" />
+          <rect x="46" y="68" width="6" height="20" rx="1.5" fill="url(#cxGoldPrimary)" />
+          <rect x="56" y="58" width="6" height="30" rx="1.5" fill="url(#cxGoldPrimary)" />
+          <rect x="66" y="46" width="6" height="42" rx="1.5" fill="url(#cxGoldHighlight)" />
+          <rect x="76" y="32" width="6" height="56" rx="1.5" fill="url(#cxGoldHighlight)" />
         </g>
 
-        {/* --- 4. BREAKOUT ASCENDING TRENDLINE & ARROW --- */}
+        {/* --- 3. ASCENDING BREAKOUT ARROW & TRENDLINE --- */}
         <path
-          d="M 16 84 L 84 24"
-          stroke="url(#cxEmeraldVector)"
+          d="M 14 84 L 82 24"
+          stroke="url(#cxGoldHighlight)"
           strokeWidth="3.5"
           strokeLinecap="round"
-          filter="url(#cxGlowEmerald)"
+          filter="url(#cxGlowGold)"
         />
         <path
-          d="M 76 22 L 88 22 L 88 34 Z"
-          fill="url(#cxEmeraldVector)"
-          filter="url(#cxGlowEmerald)"
+          d="M 74 20 L 88 20 L 88 34 Z"
+          fill="url(#cxGoldHighlight)"
+          filter="url(#cxGlowGold)"
         />
       </svg>
     </div>
