@@ -50,6 +50,10 @@ html.theme-jaune {
 }
 
 @layer base {
+  *, ::before, ::after {
+    box-sizing: border-box;
+  }
+
   :root {
     --hourly-font: 'Calligraffiti', cursive, sans-serif;
     --theme-accent: #FF7900;

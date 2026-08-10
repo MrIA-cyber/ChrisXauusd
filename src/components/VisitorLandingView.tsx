@@ -109,19 +109,19 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
   }, [isCarouselPaused]);
 
   return (
-    <div className="space-y-4 py-2 font-sans max-w-2xl mx-auto px-1 sm:px-0">
+    <div className="space-y-4 py-2 font-sans w-full max-w-2xl mx-auto px-2 sm:px-4 min-w-0">
       
       {/* 1. HERO HEADER — Clean, focused, uncluttered */}
-      <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xs relative overflow-hidden space-y-4 text-center">
+      <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 sm:p-6 shadow-xs relative overflow-hidden space-y-4 text-center min-w-0">
         
-        <div className="relative z-10 space-y-2.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-mono text-[10px] font-bold uppercase">
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-            <span>Terminal Institutionnel • XAU/USD</span>
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+        <div className="relative z-10 space-y-2.5 min-w-0">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-mono text-[9px] sm:text-[10px] font-bold uppercase max-w-full truncate">
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+            <span className="truncate">Terminal Institutionnel • XAU/USD</span>
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
           </div>
 
-          <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white font-mono tracking-tight leading-snug">
+          <h1 className="text-base sm:text-xl font-black text-slate-900 dark:text-white font-mono tracking-tight leading-snug break-words">
             Signaux XAU/USD à Haute Probabilité
           </h1>
 
@@ -134,37 +134,37 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
           <div className="bg-slate-50 dark:bg-[#060D1E] p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
             <div className="text-[10px] text-slate-400 font-sans">Taux de Réussite</div>
-            <div className="text-xs font-black text-emerald-500 mt-0.5">88.4% Verified</div>
+            <div className="text-[11px] sm:text-xs font-black text-emerald-500 mt-0.5 truncate">88.4% Verified</div>
           </div>
           <div className="bg-slate-50 dark:bg-[#060D1E] p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
             <div className="text-[10px] text-slate-400 font-sans">Ratio Risque/Rend.</div>
-            <div className="text-xs font-black text-amber-500 mt-0.5">1 : 2.50</div>
+            <div className="text-[11px] sm:text-xs font-black text-amber-500 mt-0.5 truncate">1 : 2.50</div>
           </div>
           <div className="bg-slate-50 dark:bg-[#060D1E] p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
             <div className="text-[10px] text-slate-400 font-sans">Fréquence</div>
-            <div className="text-xs font-black text-blue-500 mt-0.5">3 - 5 / jour</div>
+            <div className="text-[11px] sm:text-xs font-black text-blue-500 mt-0.5 truncate">3 - 5 / jour</div>
           </div>
           <div className="bg-slate-50 dark:bg-[#060D1E] p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
             <div className="text-[10px] text-slate-400 font-sans">Exécution</div>
-            <div className="text-xs font-black text-purple-500 mt-0.5">&lt; 1 sec Instant</div>
+            <div className="text-[11px] sm:text-xs font-black text-purple-500 mt-0.5 truncate">&lt; 1 sec Instant</div>
           </div>
         </div>
 
-        {/* SINGLE Main Action Call-To-Action (No clutter) */}
-        <div className="pt-2 flex items-center gap-2">
+        {/* Action Call-To-Action Buttons — Responsive Stack on Mobile */}
+        <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
           <button
             onClick={onOpenSubscribeModal}
-            className="flex-1 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer font-mono active:scale-98"
+            className="w-full sm:w-auto flex-1 py-3 px-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs sm:text-xs rounded-xl shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer font-mono active:scale-98 text-center"
           >
-            <Sparkles className="w-4 h-4 text-slate-950" />
-            <span>REJOINDRE L'ESPACE VIP (700 000 FCFA/MOIS)</span>
+            <Sparkles className="w-4 h-4 text-slate-950 shrink-0" />
+            <span className="leading-tight">REJOINDRE L'ESPACE VIP (700 000 FCFA/MOIS)</span>
           </button>
           
           <button
             onClick={onOpenLoginModal}
-            className="py-3 px-3.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer font-mono shrink-0"
+            className="w-full sm:w-auto py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs sm:text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer font-mono shrink-0 text-center"
           >
-            <LogIn className="w-3.5 h-3.5 text-amber-500" />
+            <LogIn className="w-3.5 h-3.5 text-amber-500 shrink-0" />
             <span>CONNEXION</span>
           </button>
         </div>
