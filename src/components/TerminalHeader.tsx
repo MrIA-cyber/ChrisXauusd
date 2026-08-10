@@ -249,39 +249,39 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3 w-full min-w-0">
         
         {/* Left: Branding (Logo & App Name preserved), Symbol Badge & Live Status */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 min-w-0">
           <div
             {...handlers}
-            className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer select-none relative group"
+            className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer select-none relative group min-w-0"
             title="ChrisXauusd Terminal"
           >
             <div className="relative shrink-0">
-              <ChrisXauusdLogoIcon className="w-7 h-7 sm:w-8.5 sm:h-8.5" />
+              <ChrisXauusdLogoIcon className="w-9 h-9 sm:w-10 sm:h-10" />
               {isPressing && (
-                <svg className="absolute -inset-1 w-[36px] h-[36px] sm:w-[42px] sm:h-[42px] pointer-events-none z-20">
+                <svg className="absolute -inset-1 w-[44px] h-[44px] sm:w-[48px] sm:h-[48px] pointer-events-none z-20">
                   <circle
-                    cx="18"
-                    cy="18"
-                    r="15"
+                    cx="22"
+                    cy="22"
+                    r="18"
                     fill="none"
                     stroke="#F59E0B"
                     strokeWidth="2.5"
-                    strokeDasharray="115"
-                    strokeDashoffset={115 - (115 * progress) / 100}
+                    strokeDasharray="113"
+                    strokeDashoffset={113 - (113 * progress) / 100}
                     strokeLinecap="round"
                   />
                 </svg>
               )}
             </div>
 
-            <div>
-              <div className="flex items-center gap-1 sm:gap-1.5">
-                <h1 className="text-xs sm:text-base font-extrabold tracking-tight text-[var(--text-primary)] flex items-center gap-1 font-sans">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
+                <h1 className="text-sm sm:text-lg font-black tracking-tight text-[var(--text-primary)] flex items-center gap-1 font-sans leading-none">
                   <span>CHRIS<span className="text-amber-500 font-black">XAUUSD</span></span>
                 </h1>
                 
                 {/* Badge XAU/USD */}
-                <span className="px-1.5 py-0.2 rounded text-[8px] sm:text-[9px] font-mono font-bold bg-blue-50 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-300 dark:border-blue-500/30 uppercase">
+                <span className="px-1 sm:px-1.5 py-0.2 rounded text-[8px] sm:text-[9px] font-mono font-bold bg-blue-50 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-300 dark:border-blue-500/30 uppercase shrink-0">
                   XAU/USD
                 </span>
 
@@ -291,7 +291,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                 </span>
 
                 {/* LIVE Status Indicator */}
-                <span className="inline-flex items-center gap-0.5 px-1 sm:px-1.5 py-0.2 rounded-full text-[8px] sm:text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                <span className="inline-flex items-center gap-0.5 px-1 sm:px-1.5 py-0.2 rounded-full text-[8px] sm:text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
                   <span className="w-1.2 h-1.2 rounded-full bg-emerald-500 animate-pulse" />
                   LIVE
                 </span>
@@ -859,47 +859,47 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
 
         </div>
 
-        {/* Right Section: Clean Single MENU Button for Mobile (< md) */}
-        <div className="flex md:hidden items-center gap-1.5 shrink-0" ref={mobileMenuRef}>
+        {/* Right Section: Compact Secondary MENU Button for Mobile (< md) */}
+        <div className="flex md:hidden items-center gap-1 shrink-0" ref={mobileMenuRef}>
           
           {/* VIP Badge icon shortcut if logged in */}
           {isSubscriberActive && onOpenProfileModal && (
             <button
               type="button"
               onClick={onOpenProfileModal}
-              className="flex items-center gap-1 bg-amber-500/20 border border-amber-500/40 text-amber-400 px-1.5 py-1 rounded-lg text-[10px] font-mono font-bold shrink-0"
+              className="flex items-center gap-1 bg-amber-500/20 border border-amber-500/40 text-amber-400 px-1 py-0.5 rounded-md text-[8px] font-mono font-bold shrink-0"
               title="Mon Profil VIP"
             >
-              <div className="w-4 h-4 rounded-full overflow-hidden bg-amber-500 text-slate-950 flex items-center justify-center text-[8px] font-black shrink-0">
+              <div className="w-3.5 h-3.5 rounded-full overflow-hidden bg-amber-500 text-slate-950 flex items-center justify-center text-[7px] font-black shrink-0">
                 {userSession?.avatarUrl ? (
                   <img src={userSession.avatarUrl} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <span>V</span>
                 )}
               </div>
-              <span className="text-[9px] font-extrabold text-amber-300">J-{subscription.daysRemaining}</span>
+              <span className="text-[8px] font-extrabold text-amber-300">J-{subscription.daysRemaining}</span>
             </button>
           )}
 
-          {/* Single Mobile MENU Button */}
+          {/* Compact Mobile MENU Button */}
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-            className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-400 px-2.5 py-1 rounded-lg text-xs font-mono font-black shadow-xs transition-all active:scale-95 cursor-pointer relative shrink-0"
+            className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-400 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shadow-xs transition-all active:scale-95 cursor-pointer relative shrink-0"
             title="Menu CHRISXAUUSD"
           >
             {isMobileMenuOpen ? (
-              <X className="w-4 h-4 text-slate-950 shrink-0" />
+              <X className="w-3 h-3 text-slate-950 shrink-0" />
             ) : (
-              <SlidersHorizontal className="w-3.5 h-3.5 text-slate-950 shrink-0" />
+              <SlidersHorizontal className="w-3 h-3 text-slate-950 shrink-0" />
             )}
             <span>MENU</span>
 
             {/* Unread dot indicator on Mobile MENU button */}
             {unreadCount > 0 && !isMobileMenuOpen && (
-              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+              <span className="absolute -top-1 -right-1 flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
               </span>
             )}
           </button>
