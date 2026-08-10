@@ -1,7 +1,58 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   TIME-BASED THEMES SYSTEM (00h-08h BLEU + Alex Brush, 08h-16h ORANGE + Calligraffiti, 16h-00h JAUNE + Lovers Quarrel)
+   ========================================================================== */
+
+/* Theme A: BLEU (00:00 - 07:59) — Facebook-inspired Deep Navy/Royal Blue */
+html.theme-bleu {
+  --hourly-font: 'Alex Brush', cursive, sans-serif;
+  --theme-accent: #1877F2;
+  --theme-accent-hover: #166FE5;
+  --theme-accent-glow: rgba(24, 119, 242, 0.3);
+  --theme-bg-main: #040E20;
+  --theme-bg-card: #091A3A;
+  --theme-bg-hover: #0E2550;
+  --theme-border-card: rgba(24, 119, 242, 0.28);
+  --theme-header-bg: rgba(4, 14, 32, 0.94);
+  --theme-badge-bg: rgba(24, 119, 242, 0.16);
+  --theme-badge-text: #60A5FA;
+}
+
+/* Theme B: ORANGE (08:00 - 15:59) — Orange Cameroun-inspired Warm Obsidian/Rich Orange */
+html.theme-orange {
+  --hourly-font: 'Calligraffiti', cursive, sans-serif;
+  --theme-accent: #FF7900;
+  --theme-accent-hover: #E06A00;
+  --theme-accent-glow: rgba(255, 121, 0, 0.3);
+  --theme-bg-main: #0D0803;
+  --theme-bg-card: #1C1106;
+  --theme-bg-hover: #2B1B0A;
+  --theme-border-card: rgba(255, 121, 0, 0.28);
+  --theme-header-bg: rgba(13, 8, 3, 0.94);
+  --theme-badge-bg: rgba(255, 121, 0, 0.16);
+  --theme-badge-text: #FB923C;
+}
+
+/* Theme C: JAUNE (16:00 - 23:59) — MTN-inspired Obsidian/Vibrant Gold Yellow */
+html.theme-jaune {
+  --hourly-font: 'Lovers Quarrel', cursive, sans-serif;
+  --theme-accent: #FFCC00;
+  --theme-accent-hover: #E6B800;
+  --theme-accent-glow: rgba(255, 204, 0, 0.3);
+  --theme-bg-main: #0E0C02;
+  --theme-bg-card: #1E1B05;
+  --theme-bg-hover: #2E2A08;
+  --theme-border-card: rgba(255, 204, 0, 0.28);
+  --theme-header-bg: rgba(14, 12, 2, 0.94);
+  --theme-badge-bg: rgba(255, 204, 0, 0.16);
+  --theme-badge-text: #FACC15;
+}
+
 @layer base {
   :root {
+    --hourly-font: 'Calligraffiti', cursive, sans-serif;
+    --theme-accent: #FF7900;
     --bg-main: #030B16;
     --bg-obsidian: #030B16;
     --bg-card: #071426;
@@ -100,9 +151,14 @@
     border-radius: clamp(14px, 2.2vw, 24px);
   }
 
-  /* Monospace typography enforcement for numbers, prices, timestamps & financial data */
-  .font-mono-numbers, .font-mono, .price-display, .ticket-number {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* Hourly Decorative Typography class */
+  .font-hourly {
+    font-family: var(--hourly-font), 'Plus Jakarta Sans', sans-serif !important;
+  }
+
+  /* Strict Monospace typography enforcement for numbers, prices, timestamps & financial data */
+  .font-mono-numbers, .font-mono, .price-display, .ticket-number, .signal-data {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
     font-variant-numeric: tabular-nums lining-nums;
   }
 }

@@ -65,6 +65,7 @@ import { ChrisBioBubble } from './components/ChrisBioBubble';
 import { InstallPwaModal } from './components/InstallPwaModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { ScalpingEbookPdfModal } from './components/ScalpingEbookPdfModal';
+import { ChrisMerchandiseModal } from './components/ChrisMerchandiseModal';
 import { DeviceConflictModal } from './components/DeviceConflictModal';
 import { GlobalRankingCard } from './components/GlobalRankingCard';
 import { MobileBottomNav, ActiveTabType } from './components/MobileBottomNav';
@@ -78,7 +79,31 @@ import { SetupDetailModal } from './components/SetupDetailModal';
 import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn, Calendar, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
 
+import { getHourlyThemeConfig } from './utils/hourlyTheme';
+
 export default function App() {
+  // Hourly Theme System (00h-08h BLEU, 08h-16h ORANGE, 16h-00h JAUNE)
+  const [hourlyConfig, setHourlyConfig] = useState(getHourlyThemeConfig());
+
+  useEffect(() => {
+    const updateHourlyTheme = () => {
+      const config = getHourlyThemeConfig();
+      setHourlyConfig(config);
+      const root = document.documentElement;
+      root.classList.remove('theme-bleu', 'theme-orange', 'theme-jaune');
+      root.classList.add(config.className);
+    };
+
+    updateHourlyTheme();
+    const interval = setInterval(updateHourlyTheme, 30000);
+    window.addEventListener('focus', updateHourlyTheme);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', updateHourlyTheme);
+    };
+  }, []);
+
   // Theme State ('light' | 'dark')
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('chrisxauusd_theme');
@@ -149,6 +174,7 @@ export default function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [profileModalTab, setProfileModalTab] = useState<'PHOTO' | 'INFO' | 'TRADING' | 'PREF' | 'CALENDAR'>('PHOTO');
   const [isEbookModalOpen, setIsEbookModalOpen] = useState<boolean>(false);
+  const [isMerchandiseModalOpen, setIsMerchandiseModalOpen] = useState<boolean>(false);
 
   // Single Device Licensing Enforcement State (1 abonnement = 1 compte = 1 appareil)
   const [isDeviceConflictModalOpen, setIsDeviceConflictModalOpen] = useState<boolean>(false);
@@ -802,6 +828,7 @@ export default function App() {
         onToggleTheme={handleToggleTheme}
         onOpenInstallModal={() => setIsInstallModalOpen(true)}
         onOpenEbookModal={() => setIsEbookModalOpen(true)}
+        onOpenMerchandiseModal={() => setIsMerchandiseModalOpen(true)}
       />
 
       {/* 4. Live Price Banner */}
@@ -970,6 +997,12 @@ export default function App() {
       <ScalpingEbookPdfModal
         isOpen={isEbookModalOpen}
         onClose={() => setIsEbookModalOpen(false)}
+      />
+
+      {/* Gamme Objets Publicitaires (Stylo & Cahier ChrisXAUUSD) */}
+      <ChrisMerchandiseModal
+        isOpen={isMerchandiseModalOpen}
+        onClose={() => setIsMerchandiseModalOpen(false)}
       />
 
       {/* Single Device Policy Modal (1 abonnement = 1 compte = 1 appareil) */}

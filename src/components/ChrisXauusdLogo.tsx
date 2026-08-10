@@ -43,7 +43,7 @@ export const ChrisXauusdLogoIcon: React.FC<ChrisXauusdLogoIconProps> = ({
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full p-[8%]"
+        className="w-full h-full p-[6%]"
       >
         <defs>
           {/* Gold Metallic Gradients */}
@@ -60,13 +60,6 @@ export const ChrisXauusdLogoIcon: React.FC<ChrisXauusdLogoIconProps> = ({
             <stop offset="100%" stopColor="#B45309" />
           </linearGradient>
 
-          {/* Deep Midnight Navy Gradients */}
-          <linearGradient id="cxNavyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#38BDF8" />
-            <stop offset="50%" stopColor="#1E3A8A" />
-            <stop offset="100%" stopColor="#0F172A" />
-          </linearGradient>
-
           {/* Emerald Green Precision Vector Gradient */}
           <linearGradient id="cxEmeraldVector" x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#059669" />
@@ -74,102 +67,80 @@ export const ChrisXauusdLogoIcon: React.FC<ChrisXauusdLogoIconProps> = ({
             <stop offset="100%" stopColor="#6EE7B7" />
           </linearGradient>
 
-          {/* Glow & Shadow Filters */}
+          {/* Glow Filters */}
           <filter id="cxGlowEmerald" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#10B981" floodOpacity="0.7" />
+            <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#10B981" floodOpacity="0.7" />
           </filter>
 
           <filter id="cxGlowGold" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="1" stdDeviation="2" floodColor="#F59E0B" floodOpacity="0.5" />
+            <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#F59E0B" floodOpacity="0.6" />
           </filter>
         </defs>
 
-        {/* SUBTLE BACKGROUND GEOMETRIC PATTERN (Financial Grid Lines) */}
-        <g opacity="0.12">
-          <line x1="10" y1="50" x2="90" y2="50" stroke="#F59E0B" strokeWidth="0.75" strokeDasharray="2 3" />
-          <line x1="50" y1="10" x2="50" y2="90" stroke="#F59E0B" strokeWidth="0.75" strokeDasharray="2 3" />
-          <circle cx="50" cy="50" r="36" stroke="#F59E0B" strokeWidth="0.75" strokeDasharray="3 3" />
-        </g>
-
-        {/* --- GEOMETRIC MONOGRAM 'CX' --- */}
-
-        {/* 1. LETTER 'C' - Faceted Gold Crescent */}
+        {/* --- 1. GOLDEN CROWN AT TOP --- */}
         <path
-          d="M 56 20 
-             C 32 20, 18 34, 18 50 
-             C 18 66, 32 80, 56 80 
-             L 56 68 
-             C 39 68, 30 59, 30 50 
-             C 30 41, 39 32, 56 32 
-             Z"
+          d="M 38 12 L 44 19 L 50 10 L 56 19 L 62 12 L 60 23 L 40 23 Z"
           fill="url(#cxGoldPrimary)"
           filter="url(#cxGlowGold)"
         />
+        <circle cx="38" cy="10" r="1.5" fill="#FFE899" />
+        <circle cx="50" cy="8" r="2" fill="#FFE899" />
+        <circle cx="62" cy="10" r="1.5" fill="#FFE899" />
 
-        {/* Inner Gold Highlight Facet on 'C' */}
-        <path
-          d="M 56 20 
-             C 34 20, 22 34, 22 50 
-             C 22 52, 22.2 54, 22.5 56 
-             C 24 43, 34 32, 56 32 
-             Z"
-          fill="url(#cxGoldAccent)"
-          opacity="0.9"
-        />
+        {/* --- 2. REALISTIC CHARGING GOLDEN BULL (FACING RIGHT) --- */}
+        <g filter="url(#cxGlowGold)">
+          {/* Back & Muscular Hump */}
+          <path
+            d="M 22 52 C 26 42, 36 36, 48 38 C 56 39, 64 34, 72 32 C 76 31, 80 34, 82 38 C 84 42, 80 46, 74 48 C 66 50, 60 54, 52 58 C 42 62, 30 62, 22 52 Z"
+            fill="url(#cxGoldPrimary)"
+          />
+          {/* Head & Powerful Sharp Horns Pointing Forward Right */}
+          <path
+            d="M 70 34 C 74 28, 82 22, 88 20 C 86 26, 80 30, 76 34 Z"
+            fill="url(#cxGoldAccent)"
+          />
+          <path
+            d="M 68 38 C 72 34, 80 30, 86 28 C 84 32, 78 36, 74 40 Z"
+            fill="#FEF08A"
+          />
+          {/* Legs charging forward */}
+          <path
+            d="M 26 50 L 22 68 L 28 68 L 34 56 Z"
+            fill="url(#cxGoldPrimary)"
+          />
+          <path
+            d="M 44 56 L 40 74 L 46 74 L 52 60 Z"
+            fill="url(#cxGoldAccent)"
+          />
+          <path
+            d="M 60 52 L 66 70 L 72 68 L 68 48 Z"
+            fill="url(#cxGoldPrimary)"
+          />
+        </g>
 
-        {/* 2. LETTER 'X' - Descending Midnight Ray */}
-        <path
-          d="M 46 22 
-             L 74 78 
-             L 84 78 
-             L 56 22 
-             Z"
-          fill="url(#cxNavyGradient)"
-          stroke="#38BDF8"
-          strokeWidth="0.5"
-          opacity="0.9"
-        />
+        {/* --- 3. ASCENDING 3D METALLIC GOLD BAR CHART COLUMNS --- */}
+        <g>
+          <rect x="22" y="78" width="7" height="12" rx="2" fill="url(#cxGoldAccent)" opacity="0.8" />
+          <rect x="33" y="70" width="7" height="20" rx="2" fill="url(#cxGoldAccent)" />
+          <rect x="44" y="62" width="7" height="28" rx="2" fill="url(#cxGoldPrimary)" />
+          <rect x="55" y="52" width="7" height="38" rx="2" fill="url(#cxGoldPrimary)" />
+          <rect x="66" y="42" width="7" height="48" rx="2" fill="url(#cxGoldPrimary)" filter="url(#cxGlowGold)" />
+          <rect x="77" y="30" width="7" height="60" rx="2" fill="url(#cxEmeraldVector)" filter="url(#cxGlowEmerald)" />
+        </g>
 
-        {/* 3. LETTER 'X' - Ascending Financial Bullish Vector (Emerald + Gold Arrow) */}
-        {/* Main Shaft from bottom left to top right */}
+        {/* --- 4. BREAKOUT ASCENDING TRENDLINE & ARROW --- */}
         <path
-          d="M 38 78 
-             L 76 26"
+          d="M 16 84 L 84 24"
           stroke="url(#cxEmeraldVector)"
-          strokeWidth="7"
+          strokeWidth="3.5"
           strokeLinecap="round"
           filter="url(#cxGlowEmerald)"
         />
-
-        {/* Gold Accent Overlay Shaft */}
         <path
-          d="M 38 78 
-             L 60 48"
-          stroke="url(#cxGoldPrimary)"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-
-        {/* Ascending Market Arrow Tip (Flèche Ascendante - Precision Entry) */}
-        <path
-          d="M 64 22 L 82 22 L 82 40 Z"
+          d="M 76 22 L 88 22 L 88 34 Z"
           fill="url(#cxEmeraldVector)"
           filter="url(#cxGlowEmerald)"
         />
-
-        {/* 4. EMERALD PRECISION SPARK (Center Intersection Diamond) */}
-        <polygon
-          points="56,42 62,48 56,54 50,48"
-          fill="#34D399"
-          filter="url(#cxGlowEmerald)"
-        />
-        <polygon
-          points="56,44 60,48 56,52 52,48"
-          fill="#FFFFFF"
-        />
-
-        {/* 5. TOP RIGHT ACCENT DOT (XAU Precision Market Indicator) */}
-        <circle cx="82" cy="18" r="3" fill="#34D399" filter="url(#cxGlowEmerald)" />
       </svg>
     </div>
   );
@@ -211,12 +182,7 @@ export const ChrisXauusdHorizontalLogo: React.FC<ChrisXauusdHorizontalLogoProps>
         {showTagline && (
           <div className="flex items-center gap-1.5 mt-1">
             <span className="text-[10px] font-mono font-bold text-amber-500/90 tracking-wider uppercase">
-              Signaux Or XAU/USD
-            </span>
-            <span className="text-slate-500 text-[10px]">•</span>
-            <span className="text-[10px] font-mono font-bold text-emerald-500 flex items-center gap-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              PRECISION
+              SIGNALS • ANALYSES • PROFITS
             </span>
           </div>
         )}
@@ -239,7 +205,7 @@ export const ChrisXauusdHomeLogo: React.FC = () => {
       {/* Brand Badge */}
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold tracking-widest uppercase">
         <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-        <span>Nouveau Branding Officiel</span>
+        <span>Branding Officiel Gold</span>
       </div>
 
       {/* Crafted Monogram Icon (~90px desktop, ~70px mobile) */}
@@ -253,8 +219,8 @@ export const ChrisXauusdHomeLogo: React.FC = () => {
             XAUUSD
           </span>
         </h1>
-        <p className="text-xs sm:text-sm font-bold text-amber-400/90 uppercase tracking-[0.25em] font-mono">
-          SIGNAUX DE TRADING OR & HAUTE PRÉCISION
+        <p className="text-xs sm:text-sm font-bold text-amber-400/90 uppercase tracking-[0.2em] font-mono">
+          SIGNALS • ANALYSES • PROFITS
         </p>
       </div>
 

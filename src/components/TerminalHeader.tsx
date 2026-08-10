@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing, Calendar, BookOpen, Newspaper, Info, Settings, Check, Trash2, TrendingUp, TrendingDown, ShieldAlert, SlidersHorizontal, Brain, X } from 'lucide-react';
+import { Volume2, VolumeX, Zap, Calculator, Clock, Globe, LogIn, LogOut, Sparkles, Users, CheckCircle2, ChevronDown, Sun, Moon, Database, Download, Bell, BellOff, BellRing, Calendar, BookOpen, Newspaper, Info, Settings, Check, Trash2, TrendingUp, TrendingDown, ShieldAlert, SlidersHorizontal, Brain, X, Gift } from 'lucide-react';
 import { MarketSession, AuthUser, UserSubscription } from '../types';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
 import { useLongPress } from '../lib/useLongPress';
 import { getNotificationPermission, requestWebNotificationPermission, sendWebPushNotification } from '../lib/notificationService';
 import { soundService } from '../lib/audioService';
 import { NotificationModal } from './NotificationModal';
+import { getHourlyThemeConfig } from '../utils/hourlyTheme';
 
 const AIPredictiveSentimentModule = React.lazy(() =>
   import('./AIPredictiveSentimentModule').then((m) => ({ default: m.AIPredictiveSentimentModule }))
@@ -33,6 +34,7 @@ interface TerminalHeaderProps {
   onToggleTheme?: () => void;
   onOpenInstallModal?: () => void;
   onOpenEbookModal?: () => void;
+  onOpenMerchandiseModal?: () => void;
 }
 
 interface AlertFeedItem {
@@ -105,7 +107,9 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   onToggleTheme,
   onOpenInstallModal,
   onOpenEbookModal,
+  onOpenMerchandiseModal,
 }) => {
+  const hourlyConfig = getHourlyThemeConfig();
   const [currentTime, setCurrentTime] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isInfosMenuOpen, setIsInfosMenuOpen] = useState<boolean>(false);
@@ -266,7 +270,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
             <div>
               <div className="flex items-center gap-1 sm:gap-1.5">
                 <h1 className="text-xs sm:text-base font-extrabold tracking-tight text-[var(--text-primary)] flex items-center gap-1 font-sans">
-                  <span>ChrisXauusd</span>
+                  <span>CHRIS<span className="text-amber-500 font-black">XAUUSD</span></span>
                 </h1>
                 
                 {/* Badge XAU/USD */}
@@ -284,6 +288,17 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                   <span className="w-1.2 h-1.2 rounded-full bg-emerald-500 animate-pulse" />
                   LIVE
                 </span>
+
+                {/* Hourly Theme Badge & Merchandise Link */}
+                <button
+                  type="button"
+                  onClick={onOpenMerchandiseModal}
+                  className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[8px] sm:text-[9px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer"
+                  title="Voir la gamme d'objets publicitaires (Stylo & Cahier) & Thèmes Horaires"
+                >
+                  <Sparkles className="w-2.5 h-2.5 text-amber-500" />
+                  <span>THÈME {hourlyConfig.timeRange} : {hourlyConfig.fontName}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -756,6 +771,25 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     IA
                   </span>
                 </button>
+
+                {/* Gamme Objets Publicitaires (Stylo & Cahier) */}
+                {onOpenMerchandiseModal && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onOpenMerchandiseModal();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 dark:text-amber-300 flex items-center justify-between transition-colors font-medium cursor-pointer"
+                  >
+                    <span className="flex items-center gap-1.5 text-[10px] whitespace-nowrap">
+                      <Gift className="w-3.5 h-3.5 text-amber-500 shrink-0" /> Objets ChrisXAUUSD
+                    </span>
+                    <span className="text-[8px] sm:text-[9px] px-1.5 py-0.2 rounded font-bold bg-amber-500 text-slate-950 shrink-0 whitespace-nowrap">
+                      STYLO & CAHIER
+                    </span>
+                  </button>
+                )}
 
                 {/* Generate Signal */}
                 <button
