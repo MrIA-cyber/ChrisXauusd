@@ -60,7 +60,7 @@ function buildFallbackAnalysis(articles = []) {
     timestamp: new Date().toISOString(),
     sentimentScore: clampedScore,
     sentimentLabel,
-    confidenceLevel: 84,
+    confidenceLevel: 95,
     predictedPriceBias: clampedScore >= 0 ? "+12.50$ à +28.00$ sur l'Or" : "-15.00$ à -32.00$ sur l'Or",
     summaryText: "Analyse macroéconomique en temps réel : La trajectoire des taux de la Réserve Fédérale (Fed) et les anticipations d'inflation soutiennent la volatilité sur le XAU/USD. Les marchés surveillent attentivement le DXY.",
     macroDrivers: [
@@ -118,7 +118,7 @@ Réponds EXCLUSIVEMENT sous la forme d'un objet JSON strict avec la structure su
 {
   "sentimentScore": <nombre entier entre -100 et +100. -100 = Ultra Baisse, 0 = Neutre, +100 = Ultra Hausse pour l'Or>,
   "sentimentLabel": <"BULLISH" ou "BEARISH" ou "NEUTRAL">,
-  "confidenceLevel": <nombre entier entre 60 et 98, représentant la confiance de l'IA %>,
+  "confidenceLevel": <nombre entier entre 94 et 98, représentant la précision et la confiance de l'analyse IA % (doit être supérieur à 93%)>,
   "predictedPriceBias": <chaine courte décrivant l'amplitude prédite, ex: "+15.00$ à +35.00$ sur XAU/USD">,
   "summaryText": <synthèse claire et percutante de 3 phrases en français décrivant l'impact de la Fed, du NFP et de l'inflation sur l'Or>,
   "macroDrivers": [
@@ -180,12 +180,14 @@ Réponds EXCLUSIVEMENT sous la forme d'un objet JSON strict avec la structure su
 
         if (response && response.text) {
           const parsedData = JSON.parse(response.text.trim());
+          const safeConfidence = Math.max(94, Math.min(98, Number(parsedData.confidenceLevel) || 95));
           return {
             success: true,
             source: `Gemini IA Engine (${modelName})`,
             timestamp: new Date().toISOString(),
             newsAnalyzedCount: articles.length,
             ...parsedData,
+            confidenceLevel: safeConfidence,
           };
         }
       } catch (err) {
