@@ -7,7 +7,7 @@ import { useLongPress } from '../lib/useLongPress';
 import { getNotificationPermission, requestWebNotificationPermission, sendWebPushNotification } from '../lib/notificationService';
 import { soundService } from '../lib/audioService';
 import { NotificationModal } from './NotificationModal';
-import { getHourlyThemeConfig } from '../utils/hourlyTheme';
+import { getHourlyThemeConfig, ALL_THEMES, ThemeOverrideMode } from '../utils/hourlyTheme';
 
 const AIPredictiveSentimentModule = React.lazy(() =>
   import('./AIPredictiveSentimentModule').then((m) => ({ default: m.AIPredictiveSentimentModule }))
@@ -35,6 +35,8 @@ interface TerminalHeaderProps {
   onOpenInstallModal?: () => void;
   onOpenEbookModal?: () => void;
   onOpenMerchandiseModal?: () => void;
+  themeOverride?: ThemeOverrideMode;
+  onSelectThemeOverride?: (mode: ThemeOverrideMode) => void;
 }
 
 interface AlertFeedItem {
@@ -108,11 +110,14 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   onOpenInstallModal,
   onOpenEbookModal,
   onOpenMerchandiseModal,
+  themeOverride = 'auto' as ThemeOverrideMode,
+  onSelectThemeOverride,
 }) => {
-  const hourlyConfig = getHourlyThemeConfig();
+  const hourlyConfig = getHourlyThemeConfig(themeOverride);
   const [currentTime, setCurrentTime] = useState<string>('');
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isInfosMenuOpen, setIsInfosMenuOpen] = useState<boolean>(false);
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState<boolean>(false);
   const [isNotifPopoverOpen, setIsNotifPopoverOpen] = useState<boolean>(false);
   const [isNotifModalOpen, setIsNotifModalOpen] = useState<boolean>(false);
   const [isAIMacroModalOpen, setIsAIMacroModalOpen] = useState<boolean>(false);
@@ -133,6 +138,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
 
   const infosMenuRef = useRef<HTMLDivElement>(null);
   const optionsMenuRef = useRef<HTMLDivElement>(null);
+  const themeMenuRef = useRef<HTMLDivElement>(null);
   const notifCenterRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
@@ -187,6 +193,9 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
       if (optionsMenuRef.current && !optionsMenuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
       }
+      if (themeMenuRef.current && !themeMenuRef.current.contains(event.target as Node)) {
+        setIsThemeMenuOpen(false);
+      }
       if (notifCenterRef.current && !notifCenterRef.current.contains(event.target as Node)) {
         setIsNotifPopoverOpen(false);
       }
@@ -199,12 +208,13 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
       if (e.key === 'Escape') {
         setIsInfosMenuOpen(false);
         setIsMenuOpen(false);
+        setIsThemeMenuOpen(false);
         setIsNotifPopoverOpen(false);
         setIsMobileMenuOpen(false);
       }
     };
 
-    if (isInfosMenuOpen || isMenuOpen || isNotifPopoverOpen || isMobileMenuOpen) {
+    if (isInfosMenuOpen || isMenuOpen || isThemeMenuOpen || isNotifPopoverOpen || isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('touchstart', handleClickOutside);
       window.addEventListener('keydown', handleKeyDown);
@@ -296,16 +306,106 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                   LIVE
                 </span>
 
-                {/* Hourly Theme Badge & Merchandise Link */}
-                <button
-                  type="button"
-                  onClick={onOpenMerchandiseModal}
-                  className="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[8px] sm:text-[9px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 transition-all cursor-pointer"
-                  title="Voir la gamme d'objets publicitaires (Stylo & Cahier) & Thèmes Horaires"
-                >
-                  <Sparkles className="w-2.5 h-2.5 text-amber-500" />
-                  <span>THÈME {hourlyConfig.timeRange} : {hourlyConfig.fontName}</span>
-                </button>
+                {/* Hourly Theme Badge & Interactive Switcher Popover */}
+                <div ref={themeMenuRef} className="relative hidden sm:inline-block">
+                  <button
+                    type="button"
+                    onClick={() => setIsThemeMenuOpen((prev) => !prev)}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-mono font-bold bg-[var(--cyan-electric)]/10 text-[var(--cyan-electric)] border border-[var(--cyan-electric)]/30 hover:bg-[var(--cyan-electric)]/20 transition-all cursor-pointer shadow-2xs"
+                    title="Changer de Thème (Bleu, Orange, Jaune, Mode Auto) & Boutique"
+                  >
+                    <Sparkles className="w-2.5 h-2.5 text-[var(--cyan-electric)] animate-pulse" />
+                    <span>THÈME {hourlyConfig.timeRange} : {hourlyConfig.fontName}</span>
+                    <ChevronDown className={`w-3 h-3 text-[var(--cyan-electric)] transition-transform duration-200 ${isThemeMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {isThemeMenuOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-72 bg-[var(--bg-card)] border border-[var(--border-card)] rounded-2xl shadow-2xl z-50 p-3 space-y-2 text-slate-100 font-sans backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150">
+                      <div className="flex items-center justify-between pb-2 border-b border-[var(--border-card)]">
+                        <span className="text-[10px] font-mono font-extrabold uppercase text-slate-300 tracking-wider flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-[var(--cyan-electric)]" />
+                          SYSTÈME DE 3 THÈMES
+                        </span>
+                        <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-[var(--cyan-electric)]/20 text-[var(--cyan-electric)]">
+                          {hourlyConfig.name}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1">
+                        {/* Auto Mode Option */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (onSelectThemeOverride) onSelectThemeOverride('auto');
+                            setIsThemeMenuOpen(false);
+                          }}
+                          className={`w-full p-2 rounded-xl text-left font-mono text-xs flex items-center justify-between transition-all cursor-pointer ${
+                            themeOverride === 'auto'
+                              ? 'bg-[var(--cyan-electric)]/20 border border-[var(--cyan-electric)]/40 text-white font-bold'
+                              : 'hover:bg-[var(--bg-card-hover)] text-slate-300 border border-transparent'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-3.5 h-3.5 text-slate-400" />
+                            <div>
+                              <div className="font-bold text-xs">🕒 Mode Horaires Auto</div>
+                              <div className="text-[9px] text-slate-400 font-sans">Changement auto selon l'heure GMT</div>
+                            </div>
+                          </div>
+                          {themeOverride === 'auto' && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                        </button>
+
+                        {/* 3 Themes List */}
+                        {(['bleu', 'orange', 'jaune'] as const).map((id) => {
+                          const t = ALL_THEMES[id];
+                          const isSelected = themeOverride === id || (themeOverride === 'auto' && hourlyConfig.id === id);
+
+                          return (
+                            <button
+                              key={id}
+                              type="button"
+                              onClick={() => {
+                                if (onSelectThemeOverride) onSelectThemeOverride(id);
+                                setIsThemeMenuOpen(false);
+                              }}
+                              className={`w-full p-2 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between ${
+                                isSelected
+                                  ? 'bg-slate-800/90 border border-slate-700 shadow-xs'
+                                  : 'hover:bg-[var(--bg-card-hover)] border border-transparent'
+                              }`}
+                            >
+                              <div className="min-w-0 pr-2">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: t.colorHex }} />
+                                  <span className="text-xs font-bold text-white">{t.name}</span>
+                                  <span className="text-[9px] font-mono text-slate-400">({t.timeRange})</span>
+                                </div>
+                                <div className="text-[11px] mt-0.5 font-medium truncate" style={{ fontFamily: t.fontFamily, color: t.colorHex }}>
+                                  Police : {t.fontName}
+                                </div>
+                              </div>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="pt-2 border-t border-[var(--border-card)]">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsThemeMenuOpen(false);
+                            if (onOpenMerchandiseModal) onOpenMerchandiseModal();
+                          }}
+                          className="w-full py-1.5 px-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-[10px] font-bold font-mono flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                        >
+                          <Gift className="w-3 h-3 text-amber-400" />
+                          <span>Boutique Objets (Stylo & Cahier)</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

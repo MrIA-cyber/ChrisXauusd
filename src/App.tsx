@@ -80,15 +80,20 @@ import { SetupDetailModal } from './components/SetupDetailModal';
 import { Zap, Ticket, ShieldCheck, Lock, Sparkles, Clock, CheckCircle2, ArrowRight, LogIn, Calendar, BookOpen } from 'lucide-react';
 import { motion } from 'motion/react';
 
-import { getHourlyThemeConfig } from './utils/hourlyTheme';
+import { getHourlyThemeConfig, ThemeOverrideMode } from './utils/hourlyTheme';
 
 export default function App() {
-  // Hourly Theme System (00h-08h BLEU, 08h-16h ORANGE, 16h-00h JAUNE)
-  const [hourlyConfig, setHourlyConfig] = useState(getHourlyThemeConfig());
+  // Hourly Theme System (00h-08h BLEU, 08h-16h ORANGE, 16h-00h JAUNE + Override)
+  const [themeOverride, setThemeOverride] = useState<ThemeOverrideMode>(() => {
+    const saved = localStorage.getItem('chrisxauusd_theme_override');
+    return (saved as ThemeOverrideMode) || 'auto';
+  });
+
+  const [hourlyConfig, setHourlyConfig] = useState(() => getHourlyThemeConfig(themeOverride));
 
   useEffect(() => {
     const updateHourlyTheme = () => {
-      const config = getHourlyThemeConfig();
+      const config = getHourlyThemeConfig(themeOverride);
       setHourlyConfig(config);
       const root = document.documentElement;
       root.classList.remove('theme-bleu', 'theme-orange', 'theme-jaune');
@@ -96,14 +101,19 @@ export default function App() {
     };
 
     updateHourlyTheme();
-    const interval = setInterval(updateHourlyTheme, 30000);
+    const interval = setInterval(updateHourlyTheme, 15000);
     window.addEventListener('focus', updateHourlyTheme);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener('focus', updateHourlyTheme);
     };
-  }, []);
+  }, [themeOverride]);
+
+  const handleSelectThemeOverride = (mode: ThemeOverrideMode) => {
+    setThemeOverride(mode);
+    localStorage.setItem('chrisxauusd_theme_override', mode);
+  };
 
   // Theme State ('light' | 'dark')
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -830,6 +840,8 @@ export default function App() {
         onOpenInstallModal={() => setIsInstallModalOpen(true)}
         onOpenEbookModal={() => setIsEbookModalOpen(true)}
         onOpenMerchandiseModal={() => setIsMerchandiseModalOpen(true)}
+        themeOverride={themeOverride}
+        onSelectThemeOverride={handleSelectThemeOverride}
       />
 
       {/* 4. Live Price Banner */}
@@ -1010,6 +1022,8 @@ export default function App() {
       <ChrisMerchandiseModal
         isOpen={isMerchandiseModalOpen}
         onClose={() => setIsMerchandiseModalOpen(false)}
+        themeOverride={themeOverride}
+        onSelectThemeOverride={handleSelectThemeOverride}
       />
 
       {/* Single Device Policy Modal (1 abonnement = 1 compte = 1 appareil) */}

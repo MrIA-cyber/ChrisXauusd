@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Force Font Families globally */
+body, html {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.font-sans {
+  font-family: var(--font-sans) !important;
+}
+
 /* ==========================================================================
    TIME-BASED THEMES SYSTEM (00h-08h BLEU + Alex Brush, 08h-16h ORANGE + Calligraffiti, 16h-00h JAUNE + Lovers Quarrel)
    ========================================================================== */
@@ -9,14 +28,28 @@ html.theme-bleu {
   --hourly-font: 'Alex Brush', cursive, sans-serif;
   --theme-accent: #1877F2;
   --theme-accent-hover: #166FE5;
-  --theme-accent-glow: rgba(24, 119, 242, 0.3);
+  --theme-accent-glow: rgba(24, 119, 242, 0.35);
   --theme-bg-main: #040E20;
   --theme-bg-card: #091A3A;
   --theme-bg-hover: #0E2550;
-  --theme-border-card: rgba(24, 119, 242, 0.28);
+  --theme-border-card: rgba(24, 119, 242, 0.35);
   --theme-header-bg: rgba(4, 14, 32, 0.94);
   --theme-badge-bg: rgba(24, 119, 242, 0.16);
   --theme-badge-text: #60A5FA;
+
+  --bg-main: #040E20;
+  --bg-obsidian: #040E20;
+  --bg-card: #091A3A;
+  --bg-card-hover: #0E2550;
+  --border-card: rgba(24, 119, 242, 0.35);
+  --header-bg: rgba(4, 14, 32, 0.94);
+  --dropdown-bg: #091A3A;
+  --bg-card-glass: rgba(9, 26, 58, 0.88);
+  --border-glass: rgba(24, 119, 242, 0.35);
+  --border-gold-soft: rgba(24, 119, 242, 0.4);
+  --cyan-electric: #1877F2;
+  --gold-primary: #3B82F6;
+  --gold-glow: rgba(24, 119, 242, 0.25);
 }
 
 /* Theme B: ORANGE (08:00 - 15:59) — Orange Cameroun-inspired Warm Obsidian/Rich Orange */
@@ -24,14 +57,28 @@ html.theme-orange {
   --hourly-font: 'Calligraffiti', cursive, sans-serif;
   --theme-accent: #FF7900;
   --theme-accent-hover: #E06A00;
-  --theme-accent-glow: rgba(255, 121, 0, 0.3);
+  --theme-accent-glow: rgba(255, 121, 0, 0.35);
   --theme-bg-main: #0D0803;
   --theme-bg-card: #1C1106;
   --theme-bg-hover: #2B1B0A;
-  --theme-border-card: rgba(255, 121, 0, 0.28);
+  --theme-border-card: rgba(255, 121, 0, 0.35);
   --theme-header-bg: rgba(13, 8, 3, 0.94);
   --theme-badge-bg: rgba(255, 121, 0, 0.16);
   --theme-badge-text: #FB923C;
+
+  --bg-main: #0D0803;
+  --bg-obsidian: #0D0803;
+  --bg-card: #1C1106;
+  --bg-card-hover: #2B1B0A;
+  --border-card: rgba(255, 121, 0, 0.35);
+  --header-bg: rgba(13, 8, 3, 0.94);
+  --dropdown-bg: #1C1106;
+  --bg-card-glass: rgba(28, 17, 6, 0.88);
+  --border-glass: rgba(255, 121, 0, 0.35);
+  --border-gold-soft: rgba(255, 121, 0, 0.4);
+  --cyan-electric: #FF7900;
+  --gold-primary: #F97316;
+  --gold-glow: rgba(255, 121, 0, 0.25);
 }
 
 /* Theme C: JAUNE (16:00 - 23:59) — MTN-inspired Obsidian/Vibrant Gold Yellow */
@@ -39,14 +86,28 @@ html.theme-jaune {
   --hourly-font: 'Lovers Quarrel', cursive, sans-serif;
   --theme-accent: #FFCC00;
   --theme-accent-hover: #E6B800;
-  --theme-accent-glow: rgba(255, 204, 0, 0.3);
+  --theme-accent-glow: rgba(255, 204, 0, 0.35);
   --theme-bg-main: #0E0C02;
   --theme-bg-card: #1E1B05;
   --theme-bg-hover: #2E2A08;
-  --theme-border-card: rgba(255, 204, 0, 0.28);
+  --theme-border-card: rgba(255, 204, 0, 0.35);
   --theme-header-bg: rgba(14, 12, 2, 0.94);
   --theme-badge-bg: rgba(255, 204, 0, 0.16);
   --theme-badge-text: #FACC15;
+
+  --bg-main: #0E0C02;
+  --bg-obsidian: #0E0C02;
+  --bg-card: #1E1B05;
+  --bg-card-hover: #2E2A08;
+  --border-card: rgba(255, 204, 0, 0.35);
+  --header-bg: rgba(14, 12, 2, 0.94);
+  --dropdown-bg: #1E1B05;
+  --bg-card-glass: rgba(30, 27, 5, 0.88);
+  --border-glass: rgba(255, 204, 0, 0.35);
+  --border-gold-soft: rgba(255, 204, 0, 0.4);
+  --cyan-electric: #FFCC00;
+  --gold-primary: #EAB308;
+  --gold-glow: rgba(255, 204, 0, 0.25);
 }
 
 @layer base {
@@ -58,46 +119,46 @@ html.theme-jaune {
     transition: color 500ms ease, background-color 500ms ease, border-color 500ms ease, font-family 500ms ease, fill 500ms ease, stroke 500ms ease;
     --hourly-font: 'Calligraffiti', cursive, sans-serif;
     --theme-accent: #FF7900;
-    --bg-main: #030B16;
-    --bg-obsidian: #030B16;
-    --bg-card: #071426;
-    --bg-card-hover: #0A1E38;
+    --bg-main: #0D0803;
+    --bg-obsidian: #0D0803;
+    --bg-card: #1C1106;
+    --bg-card-hover: #2B1B0A;
     --text-primary: #F8FAFC;
     --text-secondary: #94A3B8;
     --text-muted: #64748B;
-    --border-card: rgba(0, 229, 255, 0.15);
-    --header-bg: rgba(3, 11, 22, 0.92);
-    --dropdown-bg: #071426;
+    --border-card: rgba(255, 121, 0, 0.35);
+    --header-bg: rgba(13, 8, 3, 0.94);
+    --dropdown-bg: #1C1106;
 
-    --bg-card-dark: #071426;
-    --bg-card-glass: rgba(7, 20, 38, 0.85);
-    --border-glass: rgba(0, 229, 255, 0.2);
-    --border-gold-soft: rgba(0, 229, 255, 0.35);
-    --cyan-electric: #00E5FF;
-    --gold-primary: #00E5FF;
-    --gold-glow: rgba(0, 229, 255, 0.2);
+    --bg-card-dark: #1C1106;
+    --bg-card-glass: rgba(28, 17, 6, 0.88);
+    --border-glass: rgba(255, 121, 0, 0.35);
+    --border-gold-soft: rgba(255, 121, 0, 0.4);
+    --cyan-electric: #FF7900;
+    --gold-primary: #F97316;
+    --gold-glow: rgba(255, 121, 0, 0.25);
     --green-bull: #22C55E;
     --red-bear: #EF4444;
   }
 
   html.dark {
-    --bg-main: #030B16;
-    --bg-obsidian: #030B16;
+    --bg-main: var(--bg-main);
+    --bg-obsidian: var(--bg-obsidian);
     --text-primary: #F8FAFC;
     --text-secondary: #94A3B8;
     --text-muted: #64748B;
-    --bg-card: #071426;
-    --bg-card-hover: #0A1E38;
-    --border-card: rgba(0, 229, 255, 0.15);
-    --header-bg: rgba(3, 11, 22, 0.92);
-    --dropdown-bg: #071426;
+    --bg-card: var(--bg-card);
+    --bg-card-hover: var(--bg-card-hover);
+    --border-card: var(--border-card);
+    --header-bg: var(--header-bg);
+    --dropdown-bg: var(--dropdown-bg);
 
-    --bg-card-glass: rgba(7, 20, 38, 0.85);
-    --border-glass: rgba(0, 229, 255, 0.2);
-    --border-gold-soft: rgba(0, 229, 255, 0.35);
-    --cyan-electric: #00E5FF;
-    --gold-primary: #00E5FF;
-    --gold-glow: rgba(0, 229, 255, 0.2);
+    --bg-card-glass: var(--bg-card-glass);
+    --border-glass: var(--border-glass);
+    --border-gold-soft: var(--border-gold-soft);
+    --cyan-electric: var(--cyan-electric);
+    --gold-primary: var(--gold-primary);
+    --gold-glow: var(--gold-glow);
     --green-bull: #22C55E;
     --red-bear: #EF4444;
   }
@@ -105,16 +166,16 @@ html.theme-jaune {
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    background-color: #030B16;
+    background-color: var(--bg-main);
     color: #F8FAFC;
     font-size: 16px;
     transition: color 500ms ease, background-color 500ms ease, border-color 500ms ease, font-family 500ms ease, fill 500ms ease, stroke 500ms ease;
   }
 
   body {
-    background-color: #030B16;
+    background-color: var(--bg-main);
     color: #F8FAFC;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-sans);
     overflow-x: hidden;
     transition: color 500ms ease, background-color 500ms ease, border-color 500ms ease, font-family 500ms ease, fill 500ms ease, stroke 500ms ease;
     text-rendering: optimizeLegibility;

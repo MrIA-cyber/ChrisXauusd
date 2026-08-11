@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
 import { X, Sparkles, ShieldCheck, PenTool, BookOpen, Check, ExternalLink, Award, Gift } from 'lucide-react';
 import { ChrisXauusdLogoIcon } from './ChrisXauusdLogo';
-import { getHourlyThemeConfig } from '../utils/hourlyTheme';
+import { getHourlyThemeConfig, ThemeOverrideMode } from '../utils/hourlyTheme';
 
 interface ChrisMerchandiseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  themeOverride?: ThemeOverrideMode;
+  onSelectThemeOverride?: (mode: ThemeOverrideMode) => void;
 }
 
 export const ChrisMerchandiseModal: React.FC<ChrisMerchandiseModalProps> = ({
   isOpen,
   onClose,
+  themeOverride = 'auto' as ThemeOverrideMode,
+  onSelectThemeOverride,
 }) => {
-  const currentHourlyConfig = getHourlyThemeConfig();
+  const currentHourlyConfig = getHourlyThemeConfig(themeOverride);
   const [selectedVariant, setSelectedVariant] = useState<'bleu' | 'orange' | 'jaune'>(currentHourlyConfig.id);
 
   if (!isOpen) return null;
+
+  const handleSelectVariant = (variant: 'bleu' | 'orange' | 'jaune') => {
+    setSelectedVariant(variant);
+    if (onSelectThemeOverride) {
+      onSelectThemeOverride(variant);
+    }
+  };
+
 
   const themesData = {
     bleu: {
@@ -105,7 +117,7 @@ export const ChrisMerchandiseModal: React.FC<ChrisMerchandiseModalProps> = ({
                 return (
                   <button
                     key={v}
-                    onClick={() => setSelectedVariant(v)}
+                    onClick={() => handleSelectVariant(v)}
                     className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                       isSelected
                         ? `${t.border} bg-slate-900 shadow-lg ring-1 ring-amber-400/50`
