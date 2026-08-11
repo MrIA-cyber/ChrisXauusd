@@ -89,9 +89,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
         {/* Card Header Badge */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/80">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+            <span className={`w-2 h-2 rounded-full ${displaySetup ? 'bg-amber-500 animate-ping' : 'bg-slate-400'}`} />
             <span className="text-xs font-extrabold uppercase font-mono text-slate-900 dark:text-white tracking-wider">
-              {activeSetup ? 'SETUP ACTIF EN COURS' : 'DERNIER SETUP PUBLIÉ'}
+              {displaySetup ? (activeSetup ? 'SETUP ACTIF EN COURS' : 'DERNIER SETUP PUBLIÉ') : 'STATUS: NO TRADE'}
             </span>
           </div>
 
@@ -179,8 +179,50 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           </div>
         ) : (
-          <div className="py-8 text-center text-slate-500 font-mono text-xs">
-            Aucun setup actif pour le moment.
+          <div className="py-6 px-3 sm:px-4 space-y-4 text-center cursor-default font-sans">
+            <div className="inline-flex items-center gap-2 bg-slate-100 dark:bg-[#060D1E] text-slate-800 dark:text-slate-200 border-2 border-slate-300 dark:border-slate-700 px-3.5 sm:px-4 py-2 rounded-2xl font-mono font-black text-xs sm:text-sm shadow-inner">
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-slate-500" />
+              <span>STATUS : NO TRADE — CONDITIONS NON RÉUNIES</span>
+            </div>
+
+            <div className="space-y-1.5 max-w-md mx-auto">
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white uppercase font-mono tracking-wide">
+                Attente de Confluence Algorithmique (Score &lt; 5/5)
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed font-sans">
+                Le protocole algorithmique ChrisXauusd exige la validation stricte des 5 piliers de confirmation SMC/ICT. Lorsque les conditions ne sont pas réunies à 100%, le terminal reste en NO TRADE pour garantir un taux de réussite optimal (90% – 94%).
+              </p>
+            </div>
+
+            <div className="bg-slate-50 dark:bg-[#060D1E] p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-left font-mono text-[10px] sm:text-[11px] space-y-2 max-w-md mx-auto">
+              <div className="text-slate-400 font-bold uppercase pb-1 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <span>Diagnostic Algorithmique M5</span>
+                <span className="text-amber-500 font-bold">En Recherche</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-0.5 text-slate-600 dark:text-slate-300">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                  <span>Structure BOS/CHoCH : Neutre</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                  <span>Zone Order Block : Non atteinte</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                  <span>RSI / MACD : Incomplet</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                  <span>Filtre Session : OK ({activeSession.name})</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-bold bg-emerald-500/10 py-1.5 px-3 rounded-xl inline-block border border-emerald-500/20">
+              🛡️ Zero Risque · Exécution Uniquement en Hautes Confluences
+            </div>
           </div>
         )}
 

@@ -304,6 +304,35 @@ export async function approveUserSubscriptionInFirestore(
 }
 
 /**
+ * Admin Action: Update User Subscription Expiration & Status in Firestore
+ */
+export async function updateUserSubscriptionExpirationInFirestore(
+  userId: string,
+  newExpirationDateIso: string,
+  newStatus: 'ACTIVE' | 'EXPIRED' | 'VISITOR' | 'PENDING_VERIFICATION' | 'EXPIRING_SOON' = 'ACTIVE'
+): Promise<void> {
+  try {
+    const subRef = doc(db, SUBSCRIPTIONS_COLLECTION, userId);
+    const expTime = new Date(newExpirationDateIso).getTime();
+    const nowTime = Date.now();
+    const daysRemaining = Math.max(0, Math.ceil((expTime - nowTime) / (1000 * 3600 * 24)));
+
+    await setDoc(
+      subRef,
+      {
+        expirationDate: newExpirationDateIso,
+        status: daysRemaining > 0 ? newStatus : 'EXPIRED',
+        daysRemaining: daysRemaining,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error('Error updating user subscription expiration in Firestore:', error);
+  }
+}
+
+/**
  * Admin Action: Reject / Revoke User Subscription in Firestore
  */
 export async function rejectUserSubscriptionInFirestore(userId: string): Promise<void> {

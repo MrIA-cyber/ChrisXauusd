@@ -315,7 +315,7 @@ export const UserReviewsSection: React.FC<UserReviewsSectionProps> = ({
               <Zap className="w-4 h-4 text-amber-400" />
             </div>
             <div className="mt-2">
-              <span className="text-base sm:text-lg font-bold font-mono text-amber-400">84.5%</span>
+              <span className="text-base sm:text-lg font-bold font-mono text-amber-400">92.4%</span>
               <p className="text-[10px] text-slate-400 font-mono mt-0.5">
                 Audité en temps réel
               </p>

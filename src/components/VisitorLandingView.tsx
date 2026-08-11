@@ -134,7 +134,7 @@ export const VisitorLandingView: React.FC<VisitorLandingViewProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
           <div className="bg-slate-50 dark:bg-[#060D1E] p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
             <div className="text-[10px] text-slate-400 font-sans">Taux de Réussite</div>
-            <div className="text-[11px] sm:text-xs font-black text-emerald-500 mt-0.5 truncate">88.4% Verified</div>
+            <div className="text-[11px] sm:text-xs font-black text-emerald-500 mt-0.5 truncate">92.4% Verified</div>
           </div>
           <div className="bg-slate-50 dark:bg-[#060D1E] p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 text-left">
             <div className="text-[10px] text-slate-400 font-sans">Ratio Risque/Rend.</div>

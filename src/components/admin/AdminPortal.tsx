@@ -57,6 +57,7 @@ import {
   approveUserSubscriptionInFirestore,
   rejectUserSubscriptionInFirestore,
   deleteUserSubscriptionFromFirestore,
+  updateUserSubscriptionExpirationInFirestore,
   FirestoreSubscriptionRecord,
 } from '../../lib/firebase';
 
@@ -96,7 +97,7 @@ export interface AuditLogRecord {
   timestamp: string;
   adminEmail: string;
   ipAddress: string;
-  action: 'PROLONG_SUB' | 'SUSPEND_USER' | 'REACTIVATE_USER' | 'DELETE_USER' | 'CREATE_USER' | 'EDIT_USER' | 'RESET_OTP' | 'EXPORT_DATA';
+  action: 'PROLONG_SUB' | 'REDUCE_SUB' | 'SUSPEND_USER' | 'REACTIVATE_USER' | 'DELETE_USER' | 'CREATE_USER' | 'EDIT_USER' | 'RESET_OTP' | 'EXPORT_DATA';
   targetUser: string;
   details: string;
 }
@@ -597,17 +598,29 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
     showToast('Session administrateur fermée en toute sécurité.', 'info');
   };
 
-  // Subscription Extend Handler
-  const handleExtendSubscription = (user: AdminUserRecord, daysToAdd: number) => {
+  // Subscription Extend / Reduce Handler
+  const handleExtendSubscription = async (user: AdminUserRecord, daysDelta: number) => {
+    if (!daysDelta || isNaN(daysDelta)) return;
+
     const now = new Date();
     const currentExp = new Date(user.expirationDate);
-    const baseDate = currentExp > now ? currentExp : now;
 
-    const newExp = new Date(baseDate.getTime() + daysToAdd * 24 * 3600 * 1000);
-    const updatedStatus = daysToAdd > 0 ? 'ACTIVE' : user.status;
+    let newExp: Date;
+    if (daysDelta > 0) {
+      // Extending: base date is max(currentExp, now)
+      const baseDate = currentExp && !isNaN(currentExp.getTime()) && currentExp > now ? currentExp : now;
+      newExp = new Date(baseDate.getTime() + daysDelta * 24 * 3600 * 1000);
+    } else {
+      // Reducing: base date is currentExp
+      const baseDate = currentExp && !isNaN(currentExp.getTime()) ? currentExp : now;
+      newExp = new Date(baseDate.getTime() + daysDelta * 24 * 3600 * 1000); // daysDelta is negative
+    }
+
+    const isNowOrFuture = newExp > now;
+    const updatedStatus = isNowOrFuture ? 'ACTIVE' : 'EXPIRED';
 
     // Add new transaction record if extension is >= 30 days
-    if (daysToAdd >= 30) {
+    if (daysDelta >= 30) {
       const newTx: PaymentTransactionRecord = {
         id: `tx-${Date.now().toString().slice(-4)}`,
         txRef: `RENEW-${Date.now().toString().slice(-6)}`,
@@ -628,15 +641,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
               ...u,
               expirationDate: newExp.toISOString(),
               status: updatedStatus,
-              totalPaidFcfa: u.totalPaidFcfa + (daysToAdd >= 30 ? SUBSCRIPTION_PRICE_FCFA : 0),
+              totalPaidFcfa: daysDelta >= 30 ? u.totalPaidFcfa + SUBSCRIPTION_PRICE_FCFA : u.totalPaidFcfa,
             }
           : u
       )
     );
 
-    const msg = `Abonnement de ${user.name} prolongé de +${daysToAdd} jours. Expire le ${newExp.toLocaleDateString('fr-FR')}`;
-    showToast(msg, 'success');
-    logAudit('PROLONG_SUB', `${user.name} (${user.id})`, `Extension de +${daysToAdd} jours. Date : ${newExp.toISOString()}`);
+    // Sync with Firestore
+    await updateUserSubscriptionExpirationInFirestore(user.id, newExp.toISOString(), updatedStatus);
+
+    const formattedDate = formatDateFr(newExp.toISOString());
+    if (daysDelta > 0) {
+      const msg = `✅ Abonnement de ${user.name} prolongé de +${daysDelta} jours. (Expire le ${formattedDate})`;
+      showToast(msg, 'success');
+      logAudit('PROLONG_SUB', `${user.name} (${user.id})`, `Extension de +${daysDelta} jours. Date : ${newExp.toISOString()}`);
+    } else {
+      const absDays = Math.abs(daysDelta);
+      const msg = `🔻 Abonnement de ${user.name} réduit de -${absDays} jour(s). (Expire le ${formattedDate})`;
+      showToast(msg, 'info');
+      logAudit('REDUCE_SUB', `${user.name} (${user.id})`, `Réduction de -${absDays} jours. Date : ${newExp.toISOString()}`);
+    }
+
     setSelectedUserForEdit(null);
   };
 
@@ -2377,46 +2402,109 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onExitAdmin }) => {
                 </div>
               </div>
 
+              {/* Prolonger (+) */}
               <div className="space-y-2">
-                <label className="text-slate-300 font-bold block">Prolonger rapidement de :</label>
-                <div className="grid grid-cols-3 gap-2">
+                <label className="text-emerald-400 font-bold flex items-center justify-between text-xs">
+                  <span>➕ Prolonger l'accès (+) :</span>
+                  <span className="text-[10px] text-slate-400 font-normal">Ajoute des jours à l'expiration</span>
+                </label>
+                <div className="grid grid-cols-4 gap-2">
                   <button
+                    type="button"
+                    onClick={() => handleExtendSubscription(selectedUserForEdit, 7)}
+                    className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 py-2 rounded-xl font-bold border border-emerald-500/40 transition-all text-center cursor-pointer active:scale-95"
+                  >
+                    +7j
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => handleExtendSubscription(selectedUserForEdit, 15)}
-                    className="bg-slate-800 hover:bg-slate-700 text-slate-100 py-2 rounded-xl font-bold border border-slate-700"
+                    className="bg-emerald-900/90 hover:bg-emerald-800 text-emerald-200 py-2 rounded-xl font-bold border border-emerald-500/50 transition-all text-center cursor-pointer active:scale-95"
                   >
-                    +15 jours
+                    +15j
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleExtendSubscription(selectedUserForEdit, 30)}
-                    className="bg-amber-500 hover:bg-amber-400 text-slate-950 py-2 rounded-xl font-bold shadow-md shadow-amber-500/20"
+                    className="bg-amber-500 hover:bg-amber-400 text-slate-950 py-2 rounded-xl font-bold shadow-md shadow-amber-500/20 transition-all text-center cursor-pointer active:scale-95"
                   >
-                    +30 jours
+                    +30j (1M)
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleExtendSubscription(selectedUserForEdit, 90)}
-                    className="bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-xl font-bold shadow-md"
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-xl font-bold shadow-md transition-all text-center cursor-pointer active:scale-95"
                   >
-                    +90 jours
+                    +90j (3M)
                   </button>
                 </div>
               </div>
 
+              {/* Réduire (-) */}
               <div className="space-y-2 pt-2 border-t border-slate-800">
-                <label className="text-slate-300 font-bold block">Saisir un nombre de jours personnalisé :</label>
-                <div className="flex gap-2">
+                <label className="text-rose-400 font-bold flex items-center justify-between text-xs">
+                  <span>➖ Réduire l'accès (-) :</span>
+                  <span className="text-[10px] text-slate-400 font-normal">Retire des jours à l'expiration</span>
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleExtendSubscription(selectedUserForEdit, -5)}
+                    className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 py-2 rounded-xl font-bold border border-rose-500/40 transition-all text-center cursor-pointer active:scale-95"
+                  >
+                    -5j
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleExtendSubscription(selectedUserForEdit, -10)}
+                    className="bg-rose-950/80 hover:bg-rose-900 text-rose-300 py-2 rounded-xl font-bold border border-rose-500/40 transition-all text-center cursor-pointer active:scale-95"
+                  >
+                    -10j
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleExtendSubscription(selectedUserForEdit, -15)}
+                    className="bg-rose-900/90 hover:bg-rose-800 text-rose-200 py-2 rounded-xl font-bold border border-rose-500/50 transition-all text-center cursor-pointer active:scale-95"
+                  >
+                    -15j
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleExtendSubscription(selectedUserForEdit, -30)}
+                    className="bg-rose-700 hover:bg-rose-600 text-white py-2 rounded-xl font-bold shadow-md transition-all text-center cursor-pointer active:scale-95"
+                  >
+                    -30j (1M)
+                  </button>
+                </div>
+              </div>
+
+              {/* Ajustement personnalisé */}
+              <div className="space-y-2 pt-2 border-t border-slate-800">
+                <label className="text-slate-300 font-bold block text-xs">Ajustement sur mesure (Nombre de jours) :</label>
+                <div className="flex gap-2 items-center">
                   <input
                     type="number"
                     min="1"
                     max="365"
                     value={customExtendDays}
-                    onChange={(e) => setCustomExtendDays(parseInt(e.target.value) || 0)}
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
+                    onChange={(e) => setCustomExtendDays(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="w-24 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-center font-bold text-sm"
                   />
                   <button
+                    type="button"
                     onClick={() => handleExtendSubscription(selectedUserForEdit, customExtendDays)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl"
+                    className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-2 rounded-xl text-xs flex items-center justify-center gap-1 transition-all cursor-pointer active:scale-95 shadow-md"
                   >
-                    Valider
+                    <span>➕ Ajouter</span>
+                    <span className="font-mono">+{customExtendDays}j</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleExtendSubscription(selectedUserForEdit, -customExtendDays)}
+                    className="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-2 rounded-xl text-xs flex items-center justify-center gap-1 transition-all cursor-pointer active:scale-95 shadow-md"
+                  >
+                    <span>➖ Réduire</span>
+                    <span className="font-mono">-{customExtendDays}j</span>
                   </button>
                 </div>
               </div>
