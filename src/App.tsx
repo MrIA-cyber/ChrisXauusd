@@ -65,6 +65,7 @@ import { ChrisBioBubble } from './components/ChrisBioBubble';
 import { InstallPwaModal } from './components/InstallPwaModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { ScalpingEbookPdfModal } from './components/ScalpingEbookPdfModal';
+import { EconomicCalendarModal } from './components/EconomicCalendarModal';
 import { ChrisMerchandiseModal } from './components/ChrisMerchandiseModal';
 import { DeviceConflictModal } from './components/DeviceConflictModal';
 import { GlobalRankingCard } from './components/GlobalRankingCard';
@@ -174,6 +175,7 @@ export default function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [profileModalTab, setProfileModalTab] = useState<'PHOTO' | 'INFO' | 'TRADING' | 'PREF' | 'CALENDAR'>('PHOTO');
   const [isEbookModalOpen, setIsEbookModalOpen] = useState<boolean>(false);
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState<boolean>(false);
   const [isMerchandiseModalOpen, setIsMerchandiseModalOpen] = useState<boolean>(false);
 
   // Single Device Licensing Enforcement State (1 abonnement = 1 compte = 1 appareil)
@@ -234,8 +236,7 @@ export default function App() {
   };
 
   const handleOpenCalendar = () => {
-    setProfileModalTab('CALENDAR');
-    setIsProfileModalOpen(true);
+    setIsCalendarModalOpen(true);
   };
 
   const handleOpenProfile = () => {
@@ -997,6 +998,12 @@ export default function App() {
       <ScalpingEbookPdfModal
         isOpen={isEbookModalOpen}
         onClose={() => setIsEbookModalOpen(false)}
+      />
+
+      {/* Real Macro Economic Calendar Modal */}
+      <EconomicCalendarModal
+        isOpen={isCalendarModalOpen}
+        onClose={() => setIsCalendarModalOpen(false)}
       />
 
       {/* Gamme Objets Publicitaires (Stylo & Cahier ChrisXAUUSD) */}

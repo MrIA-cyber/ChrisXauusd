@@ -245,38 +245,38 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
   const isSubscriberActive = subscription.status === 'ACTIVE' || subscription.status === 'EXPIRING_SOON';
 
   return (
-    <header className="bg-[var(--header-bg)] border-b border-[var(--border-card)] text-[var(--text-primary)] px-2 sm:px-3 py-1 sm:py-1.5 shadow-xs backdrop-blur-xl sticky top-0 z-40 transition-colors duration-300 font-sans w-full box-border">
+    <header className="bg-[var(--header-bg)] border-b border-[var(--border-card)] text-[var(--text-primary)] px-1.5 sm:px-3 py-1 sm:py-1.5 shadow-xs backdrop-blur-xl sticky top-0 z-40 transition-colors duration-300 font-sans w-full box-border">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-3 w-full min-w-0">
         
         {/* Left: Branding (Logo & App Name preserved), Symbol Badge & Live Status */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 min-w-0">
+        <div className="header-brand-logo-container flex items-center gap-2 sm:gap-2.5 shrink-0 min-w-0 -ml-1 sm:-ml-2">
           <div
             {...handlers}
-            className="flex items-center gap-1.5 sm:gap-2.5 cursor-pointer select-none relative group min-w-0"
+            className="header-brand-logo flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none relative group min-w-0 self-center"
             title="ChrisXauusd Terminal"
           >
-            <div className="relative shrink-0">
-              <ChrisXauusdLogoIcon className="w-9 h-9 sm:w-10 sm:h-10" />
+            <div className="relative shrink-0 flex items-center justify-center">
+              <ChrisXauusdLogoIcon className="w-10 h-10 sm:w-12 sm:h-12 drop-shadow-md" />
               {isPressing && (
-                <svg className="absolute -inset-1 w-[44px] h-[44px] sm:w-[48px] sm:h-[48px] pointer-events-none z-20">
+                <svg className="absolute -inset-1 w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] pointer-events-none z-20">
                   <circle
-                    cx="22"
-                    cy="22"
-                    r="18"
+                    cx="24"
+                    cy="24"
+                    r="20"
                     fill="none"
                     stroke="#F59E0B"
                     strokeWidth="2.5"
-                    strokeDasharray="113"
-                    strokeDashoffset={113 - (113 * progress) / 100}
+                    strokeDasharray="125"
+                    strokeDashoffset={125 - (125 * progress) / 100}
                     strokeLinecap="round"
                   />
                 </svg>
               )}
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 flex flex-col justify-center">
               <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
-                <h1 className="text-sm sm:text-lg font-black tracking-tight text-[var(--text-primary)] flex items-center gap-1 font-sans leading-none">
+                <h1 className="text-base sm:text-xl font-black tracking-tight text-[var(--text-primary)] flex items-center gap-1 font-sans leading-none">
                   <span>CHRIS<span className="text-amber-500 font-black">XAUUSD</span></span>
                 </h1>
                 
@@ -859,7 +859,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
 
         </div>
 
-        {/* Right Section: Compact Secondary MENU Button for Mobile (< md) */}
+        {/* Right Section: Secondary MENU Button for Mobile (< md) */}
         <div className="flex md:hidden items-center gap-1 shrink-0" ref={mobileMenuRef}>
           
           {/* VIP Badge icon shortcut if logged in */}
@@ -867,7 +867,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
             <button
               type="button"
               onClick={onOpenProfileModal}
-              className="flex items-center gap-1 bg-amber-500/20 border border-amber-500/40 text-amber-400 px-1 py-0.5 rounded-md text-[8px] font-mono font-bold shrink-0"
+              className="flex items-center gap-0.5 bg-amber-500/20 border border-amber-500/40 text-amber-400 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold shrink-0 h-6"
               title="Mon Profil VIP"
             >
               <div className="w-3.5 h-3.5 rounded-full overflow-hidden bg-amber-500 text-slate-950 flex items-center justify-center text-[7px] font-black shrink-0">
@@ -877,41 +877,41 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                   <span>V</span>
                 )}
               </div>
-              <span className="text-[8px] font-extrabold text-amber-300">J-{subscription.daysRemaining}</span>
+              <span className="text-[9px] font-extrabold text-amber-300">J-{subscription.daysRemaining}</span>
             </button>
           )}
 
-          {/* Compact Mobile MENU Button */}
+          {/* Micro Mobile MENU Button with scale-[0.85] and 44x44px accessible touch target */}
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-            className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-400 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shadow-xs transition-all active:scale-95 cursor-pointer relative shrink-0"
+            className="flex items-center gap-0.5 bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-400 px-2 py-0.5 rounded text-[9px] font-mono font-black shadow-xs transition-all active:scale-90 cursor-pointer relative shrink-0 h-6 scale-[0.85] origin-center before:absolute before:-inset-2 before:content-['']"
             title="Menu CHRISXAUUSD"
           >
             {isMobileMenuOpen ? (
-              <X className="w-3 h-3 text-slate-950 shrink-0" />
+              <X className="w-2.5 h-2.5 text-slate-950 shrink-0" />
             ) : (
-              <SlidersHorizontal className="w-3 h-3 text-slate-950 shrink-0" />
+              <SlidersHorizontal className="w-2.5 h-2.5 text-slate-950 shrink-0" />
             )}
-            <span>MENU</span>
+            <span className="text-[9px] font-black tracking-tight">MENU</span>
 
             {/* Unread dot indicator on Mobile MENU button */}
             {unreadCount > 0 && !isMobileMenuOpen && (
-              <span className="absolute -top-1 -right-1 flex h-2 w-2">
+              <span className="absolute -top-0.5 -right-0.5 flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500" />
               </span>
             )}
           </button>
 
-          {/* Comprehensive Mobile Menu Overlay Dropdown */}
+          {/* Ultra-compact Mobile Menu Overlay Dropdown Window */}
           {isMobileMenuOpen && (
-            <div className="absolute right-1 top-full mt-1.5 w-[calc(100vw-0.75rem)] max-w-sm bg-slate-900 border border-slate-700/80 text-white rounded-2xl shadow-2xl p-3 z-50 space-y-2.5 font-mono text-xs backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150 box-border">
+            <div className="absolute right-0 top-full mt-1 w-64 max-w-[calc(100vw-2rem)] bg-slate-900/95 border border-slate-700/80 text-white rounded-lg shadow-2xl p-2 z-50 space-y-1.5 font-mono text-[11px] backdrop-blur-xl animate-in fade-in slide-in-from-top-1 duration-150 box-border">
               
               {/* Header / Profile Status */}
-              <div className="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-between">
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs shrink-0 overflow-hidden">
+              <div className="p-1.5 rounded-md bg-slate-800/90 border border-slate-700/80 flex items-center justify-between">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-[9px] shrink-0 overflow-hidden">
                     {userSession?.avatarUrl ? (
                       <img src={userSession.avatarUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -919,11 +919,11 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     )}
                   </div>
                   <div className="min-w-0">
-                    <div className="font-bold text-xs text-white truncate">
+                    <div className="font-bold text-[11px] text-white truncate leading-tight">
                       {userSession?.name || 'Membre CHRISXAUUSD'}
                     </div>
-                    <div className="text-[10px] text-amber-400 font-bold">
-                      {isSubscriberActive ? `VIP Actif (J-${subscription.daysRemaining})` : 'Compte Visiteur'}
+                    <div className="text-[9px] text-amber-400 font-bold leading-tight">
+                      {isSubscriberActive ? `VIP (J-${subscription.daysRemaining})` : 'Visiteur'}
                     </div>
                   </div>
                 </div>
@@ -934,9 +934,9 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                       setIsMobileMenuOpen(false);
                       onOpenSubscribeModal();
                     }}
-                    className="px-2 py-1 rounded bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-[10px] shrink-0"
+                    className="px-1.5 py-0.5 rounded bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-[9px] shrink-0"
                   >
-                    REJOINDRE VIP
+                    VIP
                   </button>
                 ) : onOpenProfileModal ? (
                   <button
@@ -944,7 +944,7 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                       setIsMobileMenuOpen(false);
                       onOpenProfileModal();
                     }}
-                    className="px-2 py-1 rounded bg-slate-700 hover:bg-slate-600 text-amber-300 font-bold text-[10px] shrink-0"
+                    className="px-1.5 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-amber-300 font-bold text-[9px] shrink-0"
                   >
                     Profil
                   </button>
@@ -952,23 +952,23 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
               </div>
 
               {/* Quick Settings Bar: Theme, Sound, Push */}
-              <div className="grid grid-cols-3 gap-1.5 text-[10px] font-bold">
+              <div className="grid grid-cols-3 gap-1 text-[9px] font-bold">
                 {/* Theme Toggle */}
                 {onToggleTheme && (
                   <button
                     onClick={() => {
                       onToggleTheme();
                     }}
-                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center gap-1 text-slate-200 cursor-pointer"
+                    className="py-1 px-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700/80 flex items-center justify-center gap-1 text-slate-200 cursor-pointer h-7"
                   >
                     {theme === 'dark' ? (
                       <>
-                        <Sun className="w-3.5 h-3.5 text-amber-400" />
+                        <Sun className="w-2.5 h-2.5 text-amber-400" />
                         <span>Clair</span>
                       </>
                     ) : (
                       <>
-                        <Moon className="w-3.5 h-3.5 text-blue-400" />
+                        <Moon className="w-2.5 h-2.5 text-blue-400" />
                         <span>Sombre</span>
                       </>
                     )}
@@ -981,33 +981,33 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     onToggleSound();
                     if (!soundEnabled) soundService.playNewSignalSound(true);
                   }}
-                  className={`p-1.5 rounded-lg border flex items-center justify-center gap-1 cursor-pointer ${
+                  className={`py-1 px-1 rounded border flex items-center justify-center gap-1 cursor-pointer h-7 ${
                     soundEnabled
                       ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
-                      : 'bg-slate-800 border-slate-700 text-slate-400'
+                      : 'bg-slate-800 border-slate-700/80 text-slate-400'
                   }`}
                 >
-                  {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-400" /> : <VolumeX className="w-3.5 h-3.5 text-slate-400" />}
-                  <span>Son {soundEnabled ? 'ON' : 'OFF'}</span>
+                  {soundEnabled ? <Volume2 className="w-2.5 h-2.5 text-emerald-400" /> : <VolumeX className="w-2.5 h-2.5 text-slate-400" />}
+                  <span>{soundEnabled ? 'Son ON' : 'Muet'}</span>
                 </button>
 
                 {/* Push Toggle */}
                 <button
                   onClick={() => handleTogglePush()}
-                  className={`p-1.5 rounded-lg border flex items-center justify-center gap-1 cursor-pointer ${
+                  className={`py-1 px-1 rounded border flex items-center justify-center gap-1 cursor-pointer h-7 ${
                     pushEnabled && notifPermission === 'granted'
                       ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
-                      : 'bg-slate-800 border-slate-700 text-slate-400'
+                      : 'bg-slate-800 border-slate-700/80 text-slate-400'
                   }`}
                 >
-                  <Bell className="w-3.5 h-3.5" />
+                  <Bell className="w-2.5 h-2.5" />
                   <span>Push {pushEnabled && notifPermission === 'granted' ? 'ON' : 'OFF'}</span>
                 </button>
               </div>
 
               {/* Navigation Options Group */}
-              <div className="space-y-1 pt-1 border-t border-slate-800">
-                <div className="text-[9px] uppercase text-slate-400 font-extrabold px-1 tracking-wider">
+              <div className="space-y-0.5 pt-1 border-t border-slate-800">
+                <div className="text-[8px] uppercase text-slate-400 font-extrabold px-1 tracking-wider mb-0.5">
                   Menu & Ressources
                 </div>
 
@@ -1017,14 +1017,14 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     setIsMobileMenuOpen(false);
                     setIsNotifModalOpen(true);
                   }}
-                  className="w-full text-left p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
+                  className="w-full text-left py-1 px-1.5 rounded bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 text-slate-100 flex items-center justify-between transition-colors font-semibold cursor-pointer h-7"
                 >
-                  <span className="flex items-center gap-2">
-                    <BellRing className="w-4 h-4 text-amber-400 shrink-0" /> Alertes XAU/USD
+                  <span className="flex items-center gap-1.5 text-[10px]">
+                    <BellRing className="w-3 h-3 text-amber-400 shrink-0" /> Alertes XAU/USD
                   </span>
                   {unreadCount > 0 && (
-                    <span className="px-1.5 py-0.5 rounded-full bg-red-500 text-white font-extrabold text-[9px]">
-                      {unreadCount} non lues
+                    <span className="px-1 py-0.2 rounded-full bg-red-500 text-white font-black text-[8px]">
+                      {unreadCount}
                     </span>
                   )}
                 </button>
@@ -1036,13 +1036,13 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                       setIsMobileMenuOpen(false);
                       onOpenEbookModal();
                     }}
-                    className="w-full text-left p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
+                    className="w-full text-left py-1 px-1.5 rounded bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 text-slate-100 flex items-center justify-between transition-colors font-semibold cursor-pointer h-7"
                   >
-                    <span className="flex items-center gap-2">
-                      <BookOpen className="w-4 h-4 text-amber-400 shrink-0" /> Livre Scalping (PDF)
+                    <span className="flex items-center gap-1.5 text-[10px]">
+                      <BookOpen className="w-3 h-3 text-amber-400 shrink-0" /> Livre Scalping
                     </span>
-                    <span className="text-[9px] text-amber-300 bg-amber-500/20 px-1.5 py-0.5 rounded font-bold">
-                      EBOOK
+                    <span className="text-[8px] text-amber-300 bg-amber-500/20 px-1 py-0.2 rounded font-bold">
+                      PDF
                     </span>
                   </button>
                 )}
@@ -1054,13 +1054,13 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                       setIsMobileMenuOpen(false);
                       onOpenCalendar();
                     }}
-                    className="w-full text-left p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
+                    className="w-full text-left py-1 px-1.5 rounded bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 text-slate-100 flex items-center justify-between transition-colors font-semibold cursor-pointer h-7"
                   >
-                    <span className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-blue-400 shrink-0" /> Calendrier Économique
+                    <span className="flex items-center gap-1.5 text-[10px]">
+                      <Calendar className="w-3 h-3 text-blue-400 shrink-0" /> Calendrier Éco
                     </span>
-                    <span className="text-[9px] text-blue-300 bg-blue-500/20 px-1.5 py-0.5 rounded font-bold">
-                      FED / CPI
+                    <span className="text-[8px] text-blue-300 bg-blue-500/20 px-1 py-0.2 rounded font-bold">
+                      FED
                     </span>
                   </button>
                 )}
@@ -1071,33 +1071,15 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     setIsMobileMenuOpen(false);
                     setIsAIMacroModalOpen(true);
                   }}
-                  className="w-full text-left p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
+                  className="w-full text-left py-1 px-1.5 rounded bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 text-slate-100 flex items-center justify-between transition-colors font-semibold cursor-pointer h-7"
                 >
-                  <span className="flex items-center gap-2">
-                    <Brain className="w-4 h-4 text-cyan-400 shrink-0" /> IA Prédictive & Sentiment
+                  <span className="flex items-center gap-1.5 text-[10px]">
+                    <Brain className="w-3 h-3 text-cyan-400 shrink-0" /> IA Prédictive
                   </span>
-                  <span className="text-[9px] text-cyan-300 bg-cyan-500/20 px-1.5 py-0.5 rounded font-bold">
+                  <span className="text-[8px] text-cyan-300 bg-cyan-500/20 px-1 py-0.2 rounded font-bold">
                     MACRO
                   </span>
                 </button>
-
-                {/* Objets Publicitaires */}
-                {onOpenMerchandiseModal && (
-                  <button
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      onOpenMerchandiseModal();
-                    }}
-                    className="w-full text-left p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 text-slate-100 flex items-center justify-between transition-colors font-medium cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Gift className="w-4 h-4 text-amber-400 shrink-0" /> Objets ChrisXAUUSD
-                    </span>
-                    <span className="text-[9px] text-amber-300 bg-amber-500/20 px-1.5 py-0.5 rounded font-bold">
-                      STYLO & CAHIER
-                    </span>
-                  </button>
-                )}
 
                 {/* PWA Installer */}
                 {onOpenInstallModal && (
@@ -1106,12 +1088,12 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                       setIsMobileMenuOpen(false);
                       onOpenInstallModal();
                     }}
-                    className="w-full text-left p-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 flex items-center justify-between transition-colors font-medium cursor-pointer"
+                    className="w-full text-left py-1 px-1.5 rounded bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 flex items-center justify-between transition-colors font-semibold cursor-pointer h-7"
                   >
-                    <span className="flex items-center gap-2">
-                      <Download className="w-4 h-4 text-amber-400 shrink-0" /> Installer l'Application
+                    <span className="flex items-center gap-1.5 text-[10px]">
+                      <Download className="w-3 h-3 text-amber-400 shrink-0" /> Installer l'App
                     </span>
-                    <span className="text-[9px] text-slate-950 bg-amber-400 px-1.5 py-0.5 rounded font-black">
+                    <span className="text-[8px] text-slate-950 bg-amber-400 px-1 py-0.2 rounded font-black">
                       PWA
                     </span>
                   </button>
@@ -1119,26 +1101,16 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
               </div>
 
               {/* Account Actions */}
-              <div className="pt-1.5 border-t border-slate-800 space-y-1">
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    onManualGenerateSignal();
-                  }}
-                  className="w-full text-left p-2 rounded-xl hover:bg-slate-800 text-blue-400 flex items-center gap-2 font-medium cursor-pointer"
-                >
-                  <Zap className="w-4 h-4 text-blue-400 shrink-0" /> Émettre un Signal
-                </button>
-
+              <div className="pt-1 border-t border-slate-800 space-y-0.5">
                 {!isSubscriberActive && (
                   <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       onOpenLoginModal();
                     }}
-                    className="w-full text-left p-2 rounded-xl hover:bg-slate-800 text-amber-400 flex items-center gap-2 font-medium cursor-pointer"
+                    className="w-full text-left py-1 px-1.5 rounded hover:bg-slate-800 text-amber-400 flex items-center gap-1.5 font-semibold cursor-pointer h-6 text-[10px]"
                   >
-                    <LogIn className="w-4 h-4 text-amber-400 shrink-0" /> Connexion Membre
+                    <LogIn className="w-3 h-3 text-amber-400 shrink-0" /> Connexion Membre
                   </button>
                 )}
 
@@ -1147,9 +1119,9 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                     setIsMobileMenuOpen(false);
                     onChangeProfile();
                   }}
-                  className="w-full text-left p-2 rounded-xl hover:bg-slate-800 text-slate-300 flex items-center gap-2 font-medium cursor-pointer"
+                  className="w-full text-left py-1 px-1.5 rounded hover:bg-slate-800 text-slate-300 flex items-center gap-1.5 font-semibold cursor-pointer h-6 text-[10px]"
                 >
-                  <Users className="w-4 h-4 text-slate-400 shrink-0" /> Changer de Profil
+                  <Users className="w-3 h-3 text-slate-400 shrink-0" /> Changer de Profil
                 </button>
 
                 {isSubscriberActive && (
@@ -1158,9 +1130,9 @@ export const TerminalHeader: React.FC<TerminalHeaderProps> = ({
                       setIsMobileMenuOpen(false);
                       onLogout();
                     }}
-                    className="w-full text-left p-2 rounded-xl hover:bg-rose-950/40 text-rose-400 flex items-center gap-2 font-medium border-t border-slate-800 pt-2 cursor-pointer"
+                    className="w-full text-left py-1 px-1.5 rounded hover:bg-rose-950/40 text-rose-400 flex items-center gap-1.5 font-semibold border-t border-slate-800 pt-1 cursor-pointer h-6 text-[10px]"
                   >
-                    <LogOut className="w-4 h-4 text-rose-400 shrink-0" /> Se déconnecter
+                    <LogOut className="w-3 h-3 text-rose-400 shrink-0" /> Se déconnecter
                   </button>
                 )}
               </div>

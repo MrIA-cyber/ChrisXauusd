@@ -81,12 +81,12 @@ export const LegalFooter: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => toggleSection(section.id)}
-                    className="w-full flex items-center justify-between px-3 py-2 text-left cursor-pointer transition-colors hover:bg-blue-50/50 select-none gap-2"
+                    className="w-full min-h-[44px] flex items-center justify-between px-3.5 py-2.5 text-left cursor-pointer transition-colors hover:bg-blue-50/50 select-none gap-2"
                   >
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       {section.icon}
-                      <span className="text-[13px] sm:text-[14px] font-semibold text-slate-800 truncate">
-                        <span className="text-slate-500 font-bold mr-1">{section.number}</span>
+                      <span className="text-xs sm:text-sm font-bold text-slate-800 truncate">
+                        <span className="text-slate-500 font-black mr-1.5">{section.number}</span>
                         {section.title}
                       </span>
                     </div>
@@ -98,7 +98,7 @@ export const LegalFooter: React.FC = () => {
                   </button>
 
                   {isOpen && (
-                    <div className="px-3 pb-2.5 pt-1 text-[12px] text-slate-600 leading-relaxed border-t border-slate-100 bg-white">
+                    <div className="px-3.5 pb-3 pt-1.5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white">
                       {section.content}
                     </div>
                   )}
