@@ -2,10 +2,9 @@
  * server.js
  * Serveur backend Express principal pour ChrisXauusd avec connexion MongoDB et Cron Job
  */
-
 import express from 'express';
+import cors from 'cors';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
